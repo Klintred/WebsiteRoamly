@@ -1,0 +1,33 @@
+.navbar{
+    background-color: var(--background-color);
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.nav-links ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links ul li {
+    padding: 0 1rem;
+}
+
+.nav-links ul li a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.nav-links ul li a:hover {
+    color: var(--primary-color);
+}
+

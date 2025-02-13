@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/login.css"; // Import login styles
-import loginImage from "../assets/images/loginimage.png"; // Ensure the path is correct
+import loginImage from "../../public/assets/images/loginimage.png"; // Ensure the path is correct
 import LoginCard from "../components/Cards/LoginCard";
 
 const LoginPage = () => {
