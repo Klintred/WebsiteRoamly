@@ -85,7 +85,6 @@ p{
     margin-bottom: 0.5rem;
 }
 
-.logo img{
-    height: 40px;
-    width: auto;
+.container{
+    margin: 0 20px;
 }

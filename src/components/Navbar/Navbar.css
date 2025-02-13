@@ -5,15 +5,21 @@
     padding: 1rem 0;
     justify-content: space-between;
     align-items: center;
+    margin: 0 20px;
+    position: relative;
 }
 
 .nav-links {
-    display: none;
-    justify-content: space-between;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    height: 100%;
+    height: 100vh;
     list-style: none;
     gap: 12px;
+    background-color: var(--background-color);
+    top: 0;
+    width: 100%;
 
 }
 
@@ -22,6 +28,7 @@
     color: var(--text-color);
     font-weight: 700;
     transition: color 0.3s ease;
+    width: 100%;
   }
   
 .nav-links ul li a {
@@ -34,5 +41,11 @@
 }
 
 .menu-icon{
-    height: 24px;
+    font-size: 24px; 
+    color: var(--primary-color);
+}
+
+.logo img{
+    height: 40px;
+    width: auto;
 }
