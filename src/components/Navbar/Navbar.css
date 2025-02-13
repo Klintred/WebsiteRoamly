@@ -1,27 +1,29 @@
-.navbar{
+.navbar-mobile{
     background-color: var(--background-color);
+    display: flex;
+    flex-direction: row;
+    padding: 1rem 0;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .nav-links {
-    display: flex;
+    display: none;
     justify-content: space-between;
     align-items: center;
     height: 100%;
-}
-
-.nav-links ul {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     list-style: none;
-    margin: 0;
-    padding: 0;
+    gap: 12px;
+
 }
 
-.nav-links ul li {
-    padding: 0 1rem;
-}
-
+.nav-link {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 700;
+    transition: color 0.3s ease;
+  }
+  
 .nav-links ul li a {
     text-decoration: none;
     color: var(--text-color);
@@ -31,3 +33,6 @@
     color: var(--primary-color);
 }
 
+.menu-icon{
+    height: 24px;
+}
