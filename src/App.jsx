@@ -1,8 +1,14 @@
-import React from "react";
-import LoginPage from "./pages/LoginPage";
+import React from 'react';
+import AppRouter from './Router';
+import './styles/global.css';
 
 function App() {
-  return <LoginPage />;
+  return (
+    <div className="App">
+      <AppRouter />
+    </div>
+  );
+
 }
 
 export default App;
