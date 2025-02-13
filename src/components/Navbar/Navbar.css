@@ -14,13 +14,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
     list-style: none;
     gap: 12px;
     background-color: var(--background-color);
-    top: 0;
+    top: 100%; /* Places it right below the navbar */
+    left: 0;
     width: 100%;
-
+    max-height: calc(100vh - 60px); /* Adjust based on your navbar height */
+    overflow-y: auto; /* Prevent overflow and add scrolling if necessary */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    z-index: 10;
 }
 
 .nav-link {
@@ -28,7 +32,6 @@
     color: var(--text-color);
     font-weight: 700;
     transition: color 0.3s ease;
-    width: 100%;
   }
   
 .nav-links ul li a {
@@ -48,4 +51,9 @@
 .logo img{
     height: 40px;
     width: auto;
+}
+
+ul{
+    margin: 0;
+    padding: 0;
 }
