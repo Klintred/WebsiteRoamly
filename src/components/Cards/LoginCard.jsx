@@ -5,16 +5,15 @@ import PrimaryButton from "../Buttons/PrimaryButton";
 const LoginCard = () => {
   return (
     <div className="login-box">
-      <h1 className="logo">Roamly</h1>
+      {/* Roamly Logo Image */}
+      <img src="/assets/images/fulllogo.png" alt="Roamly Logo" className="logo-image" />
 
       {/* Buttons */}
       <div className="button-group">
         <PrimaryButton text="Login" />
         <PrimaryButton text="Register" variant="secondary" />
+        <PrimaryButton text="Continue as a guest" variant="guest" />
       </div>
-
-      {/* Guest Login */}
-      <p className="guest-text">Continue as a guest</p>
     </div>
   );
 };

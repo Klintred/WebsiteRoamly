@@ -1,19 +1,19 @@
-/* Ensure Footer Spans Full Width */
+/* Footer */
 .footer {
-  width: 100vw !important; /* Force full viewport width */
+  width: 100vw !important; /* Full width */
   position: relative;
   left: 0;
   right: 0;
   padding: 20px;
-  background: var(--primary-color); /* Using predefined primary color */
-  color: var(--background-color); /* Ensuring contrast */
+  background: var(--primary-color);
+  color: var(--background-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   text-align: center;
   box-sizing: border-box;
-  margin: 0 !important; /* Remove any unwanted margins */
+  margin: 0 !important;
 }
 
 /* Ensure Content Inside Footer is Centered */
@@ -25,10 +25,27 @@
 }
 
 /* Footer Logo */
-.footer-logo {
+.footer-logo-image {
+  width: 150px; /* Adjust width as needed */
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Social Icons - Now Above Links */
+.social-icons {
+  display: flex;
+  gap: 15px;
   font-size: 20px;
-  font-weight: bold;
+  margin-bottom: 15px; /* Add space below the icons */
+}
+
+.social-icons i {
+  cursor: pointer;
   color: var(--background-color);
+}
+
+.social-icons i:hover {
+  color: var(--accent-color);
 }
 
 /* Footer Links */
@@ -36,7 +53,6 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-top: 10px;
 }
 
 .footer a {
@@ -46,22 +62,5 @@
 
 .footer a:hover {
   text-decoration: underline;
-  color: var(--accent-color); /* Adding an accent hover effect */
-}
-
-/* Social Icons */
-.social-icons {
-  display: flex;
-  gap: 15px;
-  font-size: 20px;
-  margin-top: 10px;
-}
-
-.social-icons i {
-  cursor: pointer;
-  color: var(--background-color);
-}
-
-.social-icons i:hover {
-  color: var(--accent-color); /* Change color on hover */
+  color: var(--accent-color);
 }

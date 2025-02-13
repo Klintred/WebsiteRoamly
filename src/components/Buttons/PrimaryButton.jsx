@@ -1,10 +1,16 @@
 import React from "react";
-import "../../styles/global.css"; // Ensure global styles are available
+import "./Buttons.css"; // Import button styles
 
 const PrimaryButton = ({ text, onClick, variant = "primary" }) => {
   return (
     <button
-      className={`btn ${variant === "secondary" ? "register-btn" : "login-btn"}`}
+      className={`btn ${
+        variant === "secondary"
+          ? "register-btn"
+          : variant === "guest"
+          ? "guest-btn"
+          : "login-btn"
+      }`}
       onClick={onClick}
     >
       {text}

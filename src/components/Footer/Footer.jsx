@@ -1,11 +1,12 @@
 import React from "react";
-import "./Footer.css"; // Import footer-specific styles
+import "./Footer.css"; // Import footer styles
 
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <h2 className="footer-logo">Roamly</h2>
+        {/* Roamly Logo */}
+        <img src="/assets/images/fulllogoWhite.png" alt="Roamly Logo" className="footer-logo-image" />
         <div className="footer-links">
           <a href="#">Home</a>
           <a href="#">Features</a>
@@ -14,15 +15,16 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-content">
-        <div className="footer-links">
-          <a href="#">User stories</a>
-          <a href="#">Terms of service</a>
-          <a href="#">Privacy policy</a>
-        </div>
+        {/* Move Social Icons ABOVE the Links */}
         <div className="social-icons">
           <i className="fab fa-facebook"></i>
           <i className="fab fa-instagram"></i>
           <i className="fab fa-twitter"></i>
+        </div>
+        <div className="footer-links">
+          <a href="#">User stories</a>
+          <a href="#">Terms of service</a>
+          <a href="#">Privacy policy</a>
         </div>
       </div>
     </footer>

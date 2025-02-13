@@ -41,18 +41,34 @@
   }
   
   /* Logo */
-  .logo {
-    font-size: 30px;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 20px;
+  /* Style for logo inside the login card */
+  /* Style for logo inside the login card */
+.logo-image {
+    width: 180px; /* Adjust width as needed */
+    display: block;
+    margin: 20px auto;
+    margin-bottom: 40px; /* Increased space below logo */
+  }
+  
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Increase spacing between buttons */
+    padding-bottom: 25px; /* Added spacing below buttons */
+  }
+  
+  /* Style for logo inside the footer */
+  .footer-logo-image {
+    width: 150px; /* Adjust width as needed */
+    display: block;
+    margin-bottom: 10px;
   }
   
   /* Guest Login */
   .guest-text {
     color: var(--text-color);
     font-weight: bold;
-    margin-top: 15px;
-    cursor: pointer;
+    margin-top: 20px; /* Increased spacing above */
+    padding-bottom: 30px; /* Increased space below */
   }
   

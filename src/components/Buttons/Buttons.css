@@ -1,0 +1,44 @@
+/* Buttons */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  /* Login Button */
+  .login-btn {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+  }
+  
+  /* Register Button */
+  .register-btn {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+  }
+  
+  /* Guest Button (No Background, Black Text) */
+  .guest-btn {
+    background: none;
+    color: var(--text-color);
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    padding: 10px;
+  }
+  
+  /* Guest Button Hover Effect */
+  .guest-btn:hover {
+    opacity: 0.8;
+  }
+  

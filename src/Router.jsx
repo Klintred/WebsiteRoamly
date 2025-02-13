@@ -1,19 +1,33 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import Navbar from './components/Navbar/Navbar';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import Navbar from "./components/Navbar/Navbar";
 
+const AppLayout = () => {
+  const location = useLocation(); // Get the current route
 
-const AppRouter = () => {
+  // Check if the current route is the login page
+  const isLoginPage = location.pathname === "/login";
+
   return (
-    <Router>
-      <Navbar />
+    <>
+      {/* Only show Navbar if NOT on the login page */}
+      {!isLoginPage && <Navbar />}
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
+    </>
+  );
+};
+
+const AppRouter = () => {
+  return (
+    <Router>
+      <AppLayout />
     </Router>
   );
 };
