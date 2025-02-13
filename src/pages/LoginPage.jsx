@@ -1,9 +1,11 @@
 import React from "react";
 import "../styles/login.css"; // Import login styles
-import loginImage from "../../public/assets/images/loginimage.png"; // Ensure the path is correct
 import LoginCard from "../components/Cards/LoginCard";
+import Footer from "../components/Footer/Footer"; // Import Footer
 
 const LoginPage = () => {
+  const loginImage = "/assets/images/loginimage.png"; // Correct way to use image in public/
+
   return (
     <div className="login-container">
       {/* Background Image */}
@@ -15,6 +17,9 @@ const LoginPage = () => {
       <div className="login-content">
         <LoginCard />
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
