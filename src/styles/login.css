@@ -38,13 +38,6 @@
     text-align: center;
   }
   
-  /* Logo */
-  .logo {
-    font-size: 30px;
-    font-weight: bold;
-    color: #3b3b98;
-    margin-bottom: 20px;
-  }
   
   /* Guest Login */
   .guest-text {
@@ -54,26 +47,4 @@
     cursor: pointer;
   }
   
-  /* Footer */
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    font-size: 12px;
-  }
-  
-  .footer-links {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .footer a {
-    color: #666;
-    text-decoration: none;
-  }
-  
-  .footer a:hover {
-    text-decoration: underline;
-  }
-  
+ 
