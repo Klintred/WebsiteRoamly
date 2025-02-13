@@ -1,18 +1,20 @@
 import React from "react";
-import "../styles/login.css"; // Import login styles
-import loginImage from "../assets/images/loginimage.png"; // Ensure the path is correct
+import "../styles/login.css"; // Import styles
+import loginImage from "../assets/images/loginimage.png"; // Ensure correct path
 import LoginCard from "../components/Cards/LoginCard";
 
 const LoginPage = () => {
   return (
     <div className="login-container">
       {/* Background Image */}
-      <div className="login-image">
+      <div className="login-background">
         <img src={loginImage} alt="Login Background" />
       </div>
 
-      {/* Login Card Component */}
-      <LoginCard />
+      {/* Centered Login Box */}
+      <div className="login-content">
+        <LoginCard />
+      </div>
     </div>
   );
 };
