@@ -5,6 +5,7 @@
     padding: 1rem 0;
     justify-content: space-between;
     align-items: center;
+    margin: 0 20px;
 }
 
 .nav-links {
@@ -34,5 +35,6 @@
 }
 
 .menu-icon{
-    height: 24px;
+    font-size: 24px; 
+    color: var(--primary-color);
 }

@@ -89,3 +89,7 @@ p{
     height: 40px;
     width: auto;
 }
+
+.container{
+    margin: 0 20px;
+}
