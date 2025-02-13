@@ -1,0 +1,68 @@
+.home-page {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    text-align: center;
+  }
+
+  .filter-button {
+    margin-right: 20px;
+    padding: 10px 20px;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .filter-button:hover {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+  }
+  
+  .filter-button.active {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+  }
+  
+  
+  .search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    width: 90%;
+  }
+  
+  .search-button {
+    padding: 8px 12px;
+    margin-left: 10px;
+    border: none;
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .search-button:hover {
+    background-color: var(--secondary-color);
+  }
+  
+  .button-container {
+    margin-bottom: 20px;
+  }
+  
+  .popular-destinations{
+    text-align: left;
+    margin-top: 40px;
+  }
+  .subtext{
+    margin-top: 0px;
+  }
