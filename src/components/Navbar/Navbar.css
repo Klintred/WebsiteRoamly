@@ -2,11 +2,12 @@
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
-    padding: 1rem 0;
     justify-content: space-between;
     align-items: center;
-    margin: 0 20px;
+    padding: 20px;
     position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+
 }
 
 .nav-links {
@@ -22,7 +23,6 @@
     width: 100%;
     max-height: calc(100vh - 60px); /* Adjust based on your navbar height */
     overflow-y: auto; /* Prevent overflow and add scrolling if necessary */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
     z-index: 10;
 }
