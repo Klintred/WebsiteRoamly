@@ -3,28 +3,30 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
     padding: 20px;
     position: relative;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-
+    transition: transform 0.3s ease;
 }
 
-.nav-links {
+.nav-links-container {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    list-style: none;
-    gap: 12px;
     background-color: var(--background-color);
-    top: 100%; /* Places it right below the navbar */
+    top: 110%; /* Places it right below the navbar */
     left: 0;
     width: 100%;
-    max-height: calc(100vh - 60px); /* Adjust based on your navbar height */
-    overflow-y: auto; /* Prevent overflow and add scrolling if necessary */
-    transition: transform 0.3s ease;
-    z-index: 10;
+    display: none;
+}
+
+.nav-links-container.open{
+    display: block;
+}
+
+.nav-links{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
 }
 
 .nav-link {
@@ -32,11 +34,18 @@
     color: var(--text-color);
     font-weight: 700;
     transition: color 0.3s ease;
-  }
-  
+    
+}
+
+.nav-links li{
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px 0;
+}
+
 .nav-links ul li a {
     text-decoration: none;
     color: var(--text-color);
+    padding: 20px;
 }
 
 .nav-links ul li a:hover {
@@ -57,3 +66,4 @@ ul{
     margin: 0;
     padding: 0;
 }
+

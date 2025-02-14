@@ -9,6 +9,7 @@
     --success-color: #4CAF50;
     --error-color: #E74C3C;
     --warning-color: #F39C12;
+    --border-color: #DADADA;
 }
 
 html, body {

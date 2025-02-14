@@ -25,15 +25,24 @@ const Navbar = () => {
         </div>
   
         {/* Navigation Links */}
+<<<<<<< HEAD
         {menuOpen && ( // Menu alleen tonen als menuOpen true is
           <ul className="nav-links">
             <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
+=======
+        <div className={`nav-links-container ${menuOpen ? 'open' : ''}`}>
+          <ul className="nav-links">
+>>>>>>> 9473250 (nav mobile)
             <li><Link to="/my-trips" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
             <li><Link to="/points" className='nav-link' onClick={() => setMenuOpen(false)}>My Points</Link></li>
             <li><Link to="/profile" className='nav-link' onClick={() => setMenuOpen(false)}>Profile</Link></li>
             <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a Trip</Link></li>
           </ul>
+<<<<<<< HEAD
         )}
+=======
+        </div>
+>>>>>>> 9473250 (nav mobile)
       </nav>
     );
 };
