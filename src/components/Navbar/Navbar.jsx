@@ -49,10 +49,7 @@ const Navbar = () => {
             <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a Trip</Link></li>
           </ul>
         </div>
-      </nav>
-
-      // Navbar desktop
-      
+      </nav>      
     );
   };
   
