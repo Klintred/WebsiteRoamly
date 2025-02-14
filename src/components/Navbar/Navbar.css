@@ -1,4 +1,4 @@
-.navbar-mobile{
+.nav-container{
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
@@ -7,29 +7,28 @@
     position: relative;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
+    z-index: 2;
 }
 
-.nav-links-container {
+.nav-links-mobile-container {
     position: absolute;
     background-color: var(--background-color);
-    top: 110%; /* Places it right below the navbar */
+    top: 84px; /* Places it right below the navbar */
     left: 0;
     width: 100%;
     display: none;
+    z-index: 1;
 }
 
-.nav-links-container.open{
+.nav-links-mobile-container.open{
     display: block;
 }
 
-.nav-links{
-    padding: 20px;
+.nav-links-mobile {
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
     list-style: none;
-}
-
-.nav-link {
     text-decoration: none;
     color: var(--text-color);
     font-weight: 700;
@@ -37,24 +36,23 @@
     
 }
 
-.nav-links li{
+.nav-links-mobile li{
     border-bottom: 1px solid var(--border-color);
     padding: 20px 0;
 }
 
-.nav-links ul li a {
+.nav-links-mobile a{
     text-decoration: none;
     color: var(--text-color);
-    padding: 20px;
 }
 
-.nav-links ul li a:hover {
+.nav-links-mobile a:hover {
     color: var(--primary-color);
 }
 
 .menu-icon{
     font-size: 24px; 
-    color: var(--primary-color);
+    color: var(--secondary-color);
 }
 
 .logo img{
@@ -67,3 +65,40 @@ ul{
     padding: 0;
 }
 
+.nav-links-desktop{
+    display: none;
+}
+
+.login{
+    display: none;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .nav-links-desktop, .login {
+        display: flex; /* Show desktop navigation on larger screens */
+    }
+
+    .nav-links-desktop{
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .nav-links-desktop a{
+        text-decoration: none;
+        color: var(--text-color);
+        font-weight: 700;
+        transition: color 0.3s ease;
+    }
+
+    .nav-links-desktop a:hover {
+        color: var(--primary-color);
+    }
+
+    .menu-icon, .nav-links-container {
+        display: none; /* Hide mobile elements on desktop */
+    }
+}
