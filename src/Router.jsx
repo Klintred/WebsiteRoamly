@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 
+
 const AppLayout = () => {
   const location = useLocation(); // Get the current route
 

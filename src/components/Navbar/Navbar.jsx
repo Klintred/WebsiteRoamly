@@ -37,7 +37,10 @@ const Navbar = () => {
           </div>
 
           <div className="login">
-            <Link to="/login" className='nav-link' onClick={() => setMenuOpen(false)}>Login</Link>
+            <Link to="/login" className='nav-link login-icon' onClick={() => setMenuOpen(false)}>
+              <span className="material-symbols-outlined">person</span>
+              <p>Login</p>
+            </Link>
           </div>
         </div>
         {/* Navigation Links */}
