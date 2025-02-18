@@ -35,6 +35,8 @@
   
   /* Login Box */
   .login-box {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 400px; /* Ensure it stays within bounds */
     text-align: center;
@@ -55,6 +57,8 @@
     flex-direction: column;
     gap: 15px; /* Increase spacing between buttons */
     padding-bottom: 25px; /* Added spacing below buttons */
+    width: 100%;
+    align-items: center;
   }
   
   /* Style for logo inside the footer */

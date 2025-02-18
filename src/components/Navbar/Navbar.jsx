@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
+import PrimaryButton from '../Buttons/PrimaryButton';
 import logo from "../../../public/assets/images/logo.png"; // Ensure the path is correct
 
 
@@ -45,8 +46,15 @@ const Navbar = () => {
             <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
             <li><Link to="/points" className='nav-link' onClick={() => setMenuOpen(false)}>My Points</Link></li>
             <li><Link to="/my-trips" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
-            <li><Link to="/profile" className='nav-link' onClick={() => setMenuOpen(false)}>Profile</Link></li>
             <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a Trip</Link></li>
+            <li>
+              <PrimaryButton 
+                text="Profile" 
+                to="/profile" 
+                variant="primary" 
+                onClick={() => setMenuOpen(false)} 
+              />
+            </li>
           </ul>
         </div>
       </nav>      

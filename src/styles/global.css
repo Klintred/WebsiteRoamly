@@ -89,3 +89,22 @@ p{
 .container{
     margin: 0 20px;
 }
+
+.profile-button {
+    padding: 10px 20px;
+    background-color: var(--primary-color); /* Green */
+    color: var(--background-color);
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    transition: background-color 0.3s ease-in-out;
+  }
+  .profile-button .nav-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .profile-button:hover {
+    background-color: #45a049;
+    cursor: pointer;
+  }
