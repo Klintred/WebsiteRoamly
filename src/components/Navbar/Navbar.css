@@ -40,7 +40,9 @@
     border-bottom: 1px solid var(--border-color);
     padding: 20px 0;
 }
-
+.nav-links-mobile li:nth-last-child(1) {
+    border-bottom: none;
+}
 .nav-links-mobile a{
     text-decoration: none;
     color: var(--text-color);
@@ -71,6 +73,11 @@ ul{
 
 .login{
     display: none;
+}
+
+.profile-link{
+    display: flex;
+    justify-content: center;
 }
 
 /* Responsive Design */

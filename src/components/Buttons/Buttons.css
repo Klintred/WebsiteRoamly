@@ -17,7 +17,7 @@
   /* Login Button */
   .login-btn {
     background-color: var(--primary-color);
-    color: var(--background-color);
+    color: var(--background-color) !important;
   }
   
   /* Register Button */
