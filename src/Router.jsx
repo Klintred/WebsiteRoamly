@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
-
+import Footer from "./components/Footer/Footer";
 
 const AppLayout = () => {
   const location = useLocation(); // Get the current route
@@ -21,6 +21,9 @@ const AppLayout = () => {
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
+
+      {/* Only show Footer if NOT on the login page */}
+      {!isLoginPage && <Footer />}
     </>
   );
 };
