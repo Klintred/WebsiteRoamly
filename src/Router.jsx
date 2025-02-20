@@ -5,7 +5,8 @@ import LoginPage from "./pages/LoginPage";
 import TripPlannerPage from "./pages/TripPlannerPage";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
-import HotelDetailPage from './pages/HotelDetailPage';  // Voeg deze regel toe
+import HotelDetailPage from './pages/HotelDetailPage';  
+import PointsPage from './pages/PointsPage';  
 
 
 const AppLayout = () => {
@@ -25,6 +26,7 @@ const AppLayout = () => {
         <Route path="/hotel-detail/:id" element={<HotelDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/trip-planner" element={<TripPlannerPage />} />
+        <Route path="/points" element={<PointsPage />} />
       </Routes>
 
       {/* Only show Footer if NOT on the login page */}

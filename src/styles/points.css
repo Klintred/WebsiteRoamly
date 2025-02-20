@@ -1,0 +1,23 @@
+.points-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.points-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.points-header-text{
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 50%;
+    color: var(--background-color);
+}
+
+.points-header h1, .points-header p{
+    margin: 0;
+}
