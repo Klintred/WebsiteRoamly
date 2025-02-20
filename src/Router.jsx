@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import TripPlannerPage from "./pages/TripPlannerPage";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import HotelDetailPage from './pages/HotelDetailPage';  // Voeg deze regel toe
@@ -23,6 +24,7 @@ const AppLayout = () => {
         <Route path="/home" element={<HomePage />} />
         <Route path="/hotel-detail/:id" element={<HotelDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/trip-planner" element={<TripPlannerPage />} />
       </Routes>
 
       {/* Only show Footer if NOT on the login page */}
