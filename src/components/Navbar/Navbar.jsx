@@ -37,9 +37,9 @@ const Navbar = () => {
           </div>
 
           <div className="login">
-            <Link to="/login" className='nav-link login-icon' onClick={() => setMenuOpen(false)}>
+            <Link to="/profile" className='nav-link login-icon' onClick={() => setMenuOpen(false)}>
               <span className="material-symbols-outlined">person</span>
-              <p>Login</p>
+              <p>Profile</p>
             </Link>
           </div>
         </div>

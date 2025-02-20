@@ -32,7 +32,7 @@
   text-decoration: none;
 }
 
-.footer-links-mobile li{
+.footer-links-mobile li, .footer-links-desktop li{
   list-style-type: none;
   margin-bottom: 6px;
 }
@@ -71,3 +71,18 @@
   justify-content: center;
 }
 
+.footer-links-desktop {
+  display: none;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .footer-links {
+    gap: 60px;
+    justify-content: start;
+  }
+
+  .footer-links-mobile {
+    display: none;
+  }
+}

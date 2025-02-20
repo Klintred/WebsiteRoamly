@@ -33,13 +33,26 @@ const Footer = () => {
             <li><Link to="/points" className='footer-link'>My Points</Link></li>
             <li><Link to="/trip-planner" className='footer-link'>Create a Trip</Link></li>
             <li><Link to="/profile" className='footer-link'>Profile</Link></li>
-            <li><Link to="/login" className='footer-link'>Login</Link></li>
+          </ul>
+          <ul className="footer-links-desktop">
+            <h4 className="footer-links-header">Links</h4>
+            <li><Link to="/home" className='footer-link'>Home</Link></li>
+            <li><Link to="/my-trips" className='footer-link'>My Trips</Link></li>
+            <li><Link to="/points" className='footer-link'>My Points</Link></li>
+            <li><Link to="/trip-planner" className='footer-link'>Create a Trip</Link></li>
+            <li><Link to="/profile" className='footer-link'>Profile</Link></li>
           </ul>
           <ul className="footer-links-mobile">
             <h4 className="footer-links-header">Legal</h4>
             <li><Link to="/terms-of-service" className='footer-link'>Terms of service</Link></li>
             <li><Link to="/privacy-policy" className='footer-link'>Privacy policy</Link></li>
           </ul>
+          <ul className="footer-links-desktop">
+            <h4 className="footer-links-header">Legal</h4>
+            <li><Link to="/terms-of-service" className='footer-link'>Terms of service</Link></li>
+            <li><Link to="/privacy-policy" className='footer-link'>Privacy policy</Link></li>
+          </ul>
+          
 
         </div>
 
