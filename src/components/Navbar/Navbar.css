@@ -1,51 +1,60 @@
-.navbar-mobile{
+.nav-container{
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
     padding: 20px;
     position: relative;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-
+    transition: transform 0.3s ease;
+    z-index: 2;
 }
 
-.nav-links {
+.nav-links-mobile-container {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    list-style: none;
-    gap: 12px;
     background-color: var(--background-color);
-    top: 100%; /* Places it right below the navbar */
+    top: 84px; /* Places it right below the navbar */
     left: 0;
     width: 100%;
-    max-height: calc(100vh - 60px); /* Adjust based on your navbar height */
-    overflow-y: auto; /* Prevent overflow and add scrolling if necessary */
-    transition: transform 0.3s ease;
-    z-index: 10;
+    display: none;
+    z-index: 1;
 }
 
-.nav-link {
+.nav-links-mobile-container.open{
+    display: block;
+}
+
+.nav-links-mobile {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
     text-decoration: none;
     color: var(--text-color);
     font-weight: 700;
     transition: color 0.3s ease;
-  }
-  
-.nav-links ul li a {
+    
+}
+
+.nav-links-mobile li{
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px 0;
+}
+.nav-links-mobile li:nth-last-child(1) {
+    border-bottom: none;
+}
+.nav-links-mobile a{
     text-decoration: none;
     color: var(--text-color);
 }
 
-.nav-links ul li a:hover {
+.nav-links-mobile a:hover {
     color: var(--primary-color);
 }
 
 .menu-icon{
     font-size: 24px; 
-    color: var(--primary-color);
+    color: var(--secondary-color);
 }
 
 .logo img{
@@ -56,4 +65,71 @@
 ul{
     margin: 0;
     padding: 0;
+}
+
+.nav-links-desktop{
+    display: none;
+}
+
+.login{
+    display: none;
+}
+
+.profile-link{
+    display: flex;
+    justify-content: center;
+}
+
+.material-symbols-outlined {
+    font-size: 24px;
+    color: var(--background-color);
+    vertical-align: middle;
+    background-color: var(--secondary-color);
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.nav-link.login-icon p{
+    margin: 0;
+    padding: 0;
+    color: var(--secondary-color);
+}
+
+.nav-link.login-icon{
+    text-decoration: none;
+}
+
+.material-symbols-outlined:hover{
+    background-color: var(--primary-color);
+}
+
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .nav-links-desktop, .login {
+        display: flex; /* Show desktop navigation on larger screens */
+    }
+
+    .nav-links-desktop{
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 28px;
+    }
+
+    .nav-links-desktop a{
+        text-decoration: none;
+        color: var(--text-color);
+        font-weight: 700;
+        transition: color 0.3s ease;
+    }
+
+    .nav-links-desktop a:hover {
+        color: var(--primary-color);
+    }
+
+    .menu-icon, .nav-links-container {
+        display: none; /* Hide mobile elements on desktop */
+    }
 }

@@ -1,8 +1,10 @@
 /* Buttons */
 .btn {
-    display: block;
-    width: 100%;
-    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    padding: 20px;
     font-size: 16px;
     margin-bottom: 10px;
     border: none;
@@ -15,7 +17,7 @@
   /* Login Button */
   .login-btn {
     background-color: var(--primary-color);
-    color: var(--background-color);
+    color: var(--background-color) !important;
   }
   
   /* Register Button */
@@ -41,4 +43,6 @@
   .guest-btn:hover {
     opacity: 0.8;
   }
+
+  
   

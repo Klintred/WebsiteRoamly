@@ -1,30 +1,51 @@
-import React from "react";
-import "./Footer.css"; // Import footer styles
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Footer.css';
+import logo from '../../../public/assets/images/fulllogoWhite.png';
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="footer-content">
-        {/* Roamly Logo */}
-        <img src="/assets/images/fulllogoWhite.png" alt="Roamly Logo" className="footer-logo-image" />
-        <div className="footer-links">
-          <a href="#">Home</a>
-          <a href="#">Features</a>
-          <a href="#">About us</a>
-          <a href="#">Contact</a>
+      <div className="footer-container">
+        <div className="footer-header">
+          {/* Logo */}
+          <div className="footer-logo">
+            <Link to="/">
+              <img src={logo} alt="Logo" />
+            </Link>
+          </div>
+
+          {/* Social Media Icons */}
+          <div className="footer-socials">
+            <a href="https://facebook.com" className="social-icon" aria-label="Facebook"><FaFacebookF /></a>
+            <a href="https://twitter.com" className="social-icon" aria-label="Twitter"><FaTwitter /></a>
+            <a href="https://instagram.com" className="social-icon" aria-label="Instagram"><FaInstagram /></a>
+          </div>
         </div>
-      </div>
-      <div className="footer-content">
-        {/* Move Social Icons ABOVE the Links */}
-        <div className="social-icons">
-          <i className="fab fa-facebook"></i>
-          <i className="fab fa-instagram"></i>
-          <i className="fab fa-twitter"></i>
+
+        {/* Footer Links */}
+        <div className='footer-links'>
+          <ul className="footer-links-mobile">
+            <h4 className="footer-links-header">Links</h4>
+            <li><Link to="/home" className='footer-link'>Home</Link></li>
+            <li><Link to="/my-trips" className='footer-link'>My Trips</Link></li>
+            <li><Link to="/points" className='footer-link'>My Points</Link></li>
+            <li><Link to="/trip-planner" className='footer-link'>Create a Trip</Link></li>
+            <li><Link to="/profile" className='footer-link'>Profile</Link></li>
+            <li><Link to="/login" className='footer-link'>Login</Link></li>
+          </ul>
+          <ul className="footer-links-mobile">
+            <h4 className="footer-links-header">Legal</h4>
+            <li><Link to="/terms-of-service" className='footer-link'>Terms of service</Link></li>
+            <li><Link to="/privacy-policy" className='footer-link'>Privacy policy</Link></li>
+          </ul>
+
         </div>
-        <div className="footer-links">
-          <a href="#">User stories</a>
-          <a href="#">Terms of service</a>
-          <a href="#">Privacy policy</a>
+
+        {/* Footer Copyright */}
+        <div className="footer-copyright">
+          <p className='descriptions'>&copy; {new Date().getFullYear()} Roamly. All Rights Reserved.</p>
         </div>
       </div>
     </footer>
