@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
+import HotelDetailPage from './pages/HotelDetailPage';  // Voeg deze regel toe
+
 
 const AppLayout = () => {
   const location = useLocation(); // Get the current route
@@ -18,6 +20,7 @@ const AppLayout = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
+        <Route path="/hotel-detail/:id" element={<HotelDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
     </>

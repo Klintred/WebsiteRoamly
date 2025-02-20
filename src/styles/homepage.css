@@ -66,3 +66,31 @@
   .subtext{
     margin-top: 0px;
   }
+
+
+  .search-results {
+    display: flex;
+    overflow-x: auto; /* Zorgt voor de mogelijkheid om te scrollen */
+    -webkit-overflow-scrolling: touch; /* Voor een soepelere scrollervaring op mobiele apparaten */
+    gap: 20px;
+    scroll-behavior: smooth; /* Optioneel, zorgt voor een soepel scroll-effect */
+  }
+  
+  .search-results::-webkit-scrollbar {
+    display: none; /* Verbergt de scrollbar */
+  }
+
+.place-image{
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 2px solid var(--success-color);
+}
+
+.place-card{
+
+  border:1px solid var(--text-color);
+  border-radius: 5px;
+}
