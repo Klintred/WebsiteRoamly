@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
 
 const API_KEY = 'AIzaSyBO0gm7S42KuQqgWTO63H-LCWix5488bMU'; // Vervang met je API Key
-const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json/geenrequest";
-const PLACE_DETAILS_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/details/json/geenrequest";
+const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
+const PLACE_DETAILS_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/details/json";
 const PROXY_URL = 'https://api.allorigins.win/raw?url='; // Proxy om CORS te omzeilen
 
 const HomePage = () => {
