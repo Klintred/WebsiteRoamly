@@ -40,23 +40,22 @@ const HomePage = () => {
 
       // Filter hotels op rolstoeltoegankelijkheid
       const filteredHotels = await filterAccessibleHotels(data.results);
+      setPlaces((prevPlaces) => {
+        const allPlaces = [...prevPlaces, ...filteredHotels];
+        const uniquePlaces = allPlaces.filter(
+          (place, index, self) => index === self.findIndex((p) => p.id === place.id)
+        );
+        return uniquePlaces;
+      });
 
-      setPlaces((prevPlaces) => [...prevPlaces, ...filteredHotels]);
-
-      if (data.next_page_token) {
-        setNextPageToken(data.next_page_token);
-      } else {
-        setNextPageToken(null);
-      }
-
+      setNextPageToken(data.next_page_token);
     } catch (error) {
-      console.error("Fout bij ophalen van plaatsen:", error);
       setError(error.message);
     } finally {
       setLoading(false);
-    }
-  };
+    }      
 
+  };
   const filterAccessibleHotels = async (hotels) => {
     const filteredHotels = [];
 
