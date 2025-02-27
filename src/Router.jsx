@@ -24,7 +24,7 @@ const AppLayout = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/hotel-detail/:id" element={<HotelDetailPage />} />
+        <Route path="/place-detail/:id" element={<HotelDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/trip-planner" element={<TripPlannerPage />} />
         <Route path="/points" element={<PointsPage />} />

@@ -2,32 +2,45 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
 
-const API_KEY = 'AIzaSyBO0gm7S42KuQqgWTO63H-LCWix5488bMU'; // Vervang met je API Key
+const API_KEY = 'AIzaSyBO0gm7S42KuQqgWTO63H-LCWix5488bMU'; // Vervang met je eigen API-key
 const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
 const PLACE_DETAILS_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/details/json";
-const PROXY_URL = 'https://api.allorigins.win/raw?url='; // Proxy om CORS te omzeilen
+const PROXY_URL = 'https://api.allorigins.win/raw?url=';
 
 const HomePage = () => {
-  const [searchQuery, setSearchQuery] = useState('hotels in Europe');
-  const [activeButton, setActiveButton] = useState('Hotel');
-  const [places, setPlaces] = useState([]);
+  const [hotels, setHotels] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [nextPageToken, setNextPageToken] = useState(null);
 
   useEffect(() => {
-    fetchPlaces(searchQuery, activeButton);
-  }, [searchQuery, activeButton]);
+    fetchAllPlaces();
+  }, []);
 
-  const fetchPlaces = async (query, type, pageToken = null) => {
+  const fetchAllPlaces = async () => {
     setError(null);
     setLoading(true);
-    if (!pageToken) setPlaces([]);
 
-    const typeParam = type !== 'All' ? `&type=${type.toLowerCase().replace('activity', 'tourist_attraction')}` : '';
-    const pageTokenParam = pageToken ? `&pagetoken=${pageToken}` : '';
+    try {
+      const [hotelData, restaurantData, activityData] = await Promise.all([
+        fetchPlaces('hotels in Europe', 'Hotel'),
+        fetchPlaces('restaurants in Europe', 'Restaurant'),
+        fetchPlaces('things to do in Europe', 'Activity'),
+      ]);
 
-    const apiUrl = `${PLACES_API_BASE_URL}?query=${encodeURIComponent(query)}${typeParam}&key=${API_KEY}${pageTokenParam}`;
+      setHotels(hotelData);
+      setRestaurants(restaurantData);
+      setActivities(activityData);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchPlaces = async (query, type) => {
+    const apiUrl = `${PLACES_API_BASE_URL}?query=${encodeURIComponent(query)}&key=${API_KEY}`;
     const proxiedUrl = `${PROXY_URL}${encodeURIComponent(apiUrl)}`;
 
     try {
@@ -35,30 +48,34 @@ const HomePage = () => {
       const data = await response.json();
 
       if (data.status !== "OK") {
-        throw new Error(data.error_message || "Geen resultaten gevonden.");
+        throw new Error(data.error_message || `Geen resultaten gevonden voor ${type}.`);
       }
 
-      // Filter hotels op rolstoeltoegankelijkheid
-      const filteredHotels = await filterAccessibleHotels(data.results);
-      setPlaces((prevPlaces) => {
-        const allPlaces = [...prevPlaces, ...filteredHotels];
-        const uniquePlaces = allPlaces.filter(
-          (place, index, self) => index === self.findIndex((p) => p.id === place.id)
-        );
-        return uniquePlaces;
-      });
-
-      setNextPageToken(data.next_page_token);
+      return await filterAccessiblePlaces(data.results, type);
     } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }      
-
+      console.error(`Fout bij ophalen van ${type}:`, error);
+      return [];
+    }
   };
+
+  const filterAccessiblePlaces = async (places, type) => {
+    if (type === 'Hotel') {
+      return filterAccessibleHotels(places);
+    } else {
+      return places.map((place) => ({
+        id: place.place_id,
+        name: place.name,
+        address: place.formatted_address,
+        rating: place.rating,
+        photo: place.photos
+          ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${API_KEY}`
+          : 'https://via.placeholder.com/150',
+      }));
+    }
+  };
+
   const filterAccessibleHotels = async (hotels) => {
     const filteredHotels = [];
-
     for (const hotel of hotels) {
       const detailsUrl = `${PLACE_DETAILS_API_BASE_URL}?place_id=${hotel.place_id}&fields=wheelchair_accessible_entrance,name,formatted_address,rating,photos&key=${API_KEY}`;
       const proxiedDetailsUrl = `${PROXY_URL}${encodeURIComponent(detailsUrl)}`;
@@ -79,60 +96,50 @@ const HomePage = () => {
           });
         }
       } catch (error) {
-        console.error("Fout bij ophalen van hotel details:", error);
+        console.error("Fout bij ophalen van details:", error);
       }
     }
-
     return filteredHotels;
   };
 
   return (
     <div className="home-page">
-      <div className="button-container">
-        {['Hotel', 'Restaurant', 'Activity'].map((category) => (
-          <button
-            key={category}
-            className={`filter-button ${activeButton === category ? 'active' : ''}`}
-            onClick={() => setActiveButton(category)}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-
-      <form onSubmit={(e) => { e.preventDefault(); fetchPlaces(searchQuery, activeButton); }} className="search-form">
-        <input
-          type="text"
-          placeholder="Waar wil je heen?"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-        />
-      </form>
+      <h1>Ontdek Europa</h1>
 
       {loading && <p>Zoeken...</p>}
       {error && <p className="error-message">{error}</p>}
 
+      {/* Hotels Sectie */}
+      <h2>Hotels</h2>
       <div className="search-results">
-        {places.length > 0 ? (
-          places.map((place, index) => (
-            <div key={index} className="place-card">
-              <img src={place.photo} alt={place.name} className="place-image" />
-              <h3>{place.name}</h3>
-              <p>{place.address}</p>
-              {place.rating && <p>⭐ {place.rating}</p>}
-              <Link to={`/hotel-detail/${place.id}`}>
-                <button className="view-details-button">Bekijk details</button>
-              </Link>
-            </div>
-          ))
-        ) : (
-          !loading && !error && <p>Geen rolstoeltoegankelijke hotels gevonden.</p>
-        )}
+        {hotels.length > 0 ? hotels.map((place) => <PlaceCard key={place.id} place={place} />) : <p>Geen hotels gevonden.</p>}
       </div>
 
+      {/* Restaurants Sectie */}
+      <h2>Restaurants</h2>
+      <div className="search-results">
+        {restaurants.length > 0 ? restaurants.map((place) => <PlaceCard key={place.id} place={place} />) : <p>Geen restaurants gevonden.</p>}
+      </div>
+
+      {/* Activiteiten Sectie */}
+      <h2>Activiteiten</h2>
+      <div className="search-results">
+        {activities.length > 0 ? activities.map((place) => <PlaceCard key={place.id} place={place} />) : <p>Geen activiteiten gevonden.</p>}
+      </div>
     </div>
   );
 };
 
+const PlaceCard = ({ place }) => (
+  <div className="place-card">
+    <img src={place.photo} alt={place.name} className="place-image" />
+    <h3>{place.name}</h3>
+    <p>{place.address}</p>
+    {place.rating && <p>⭐ {place.rating}</p>}
+    {/* Correcte link naar de detailpagina */}
+    <Link to={`/place-detail/${place.id}`}>
+      <button className="view-details-button">Bekijk details</button>
+    </Link>
+  </div>
+);
 export default HomePage;
