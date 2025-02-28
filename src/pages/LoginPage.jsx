@@ -8,17 +8,20 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
-      {/* Background Image */}
-      <div className="login-background">
-        <img src={loginImage} alt="Login Background" />
+      {/* Wrapper for Image & Login Box */}
+      <div className="login-wrapper">
+        {/* Background Image */}
+        <div className="login-background">
+          <img src={loginImage} alt="Login Background" />
+        </div>
+
+        {/* Login Box */}
+        <div className="login-content">
+          <LoginCard />
+        </div>
       </div>
 
-      {/* Centered Login Box */}
-      <div className="login-content">
-        <LoginCard />
-      </div>
-
-      {/* Footer */}
+      {/* Footer (always stays below everything) */}
       <Footer />
     </div>
   );

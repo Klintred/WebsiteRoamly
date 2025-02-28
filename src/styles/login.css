@@ -1,78 +1,126 @@
-/* Full-Screen Layout */
+/* Ensure the entire page layout fills the screen properly */
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 100vh;
-    width: 100%;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    background-color: var(--background-color);
-  }
-  
-  /* Background Image */
-  .login-background {
-    width: 100%;
-    height: 40vh;
-  }
-  
-  .login-background img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Center Login Box */
-  .login-content {
-    width: 100%;
-    max-width: 400px; /* Fix width */
-    margin: 0 auto; /* Center it */
-    text-align: center;
-    padding: 20px;
-    background: var(--background-color);
-    border-radius: 0;
-  }
-  
-  /* Login Box */
-  .login-box {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px; /* Ensure it stays within bounds */
-    text-align: center;
-  }
-  
-  /* Logo */
-  /* Style for logo inside the login card */
-  /* Style for logo inside the login card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  background-color: var(--background-color);
+}
+
+/* Wrapper for Image and Login Box */
+.login-wrapper {
+  display: flex;
+  flex-direction: column; /* Default: Stack Image on top, Login Below */
+  width: 100vw; /* Ensure full width */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background Image */
+.login-background {
+  width: 100%;
+  height: 40vh; /* Image takes 40% height on mobile */
+  margin: 0; /* Ensures no spacing */
+  padding: 0;
+}
+
+.login-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Login Content (Box) */
+.login-content {
+  width: 100%;
+  max-width: 400px; /* Prevents stretching */
+  text-align: center;
+  padding: 20px;
+  background: var(--background-color);
+}
+
+/* Login Box */
+.login-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Logo inside Login Box */
 .logo-image {
-    width: 180px; /* Adjust width as needed */
-    display: block;
-    margin: 20px auto;
-    margin-bottom: 40px; /* Increased space below logo */
-  }
+  width: 180px;
+  display: block;
+  margin: 20px auto;
+  margin-bottom: 40px;
+}
+
+/* Buttons Group */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Spacing between buttons */
+  padding-bottom: 25px;
+  width: 100%;
+  align-items: center;
+}
+
+/* Guest Login Text */
+.guest-text {
+  color: var(--text-color);
+  font-weight: bold;
+  margin-top: 20px;
+  padding-bottom: 30px;
+}
+
+/* Footer */
+.footer {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background-color: var(--footer-background-color);
+  margin-top: auto; /* Ensures footer always stays at the bottom */
+}
+
+/* ✅ Fix: Ensure Image ALWAYS Hugs Left on Larger Screens */
+@media (min-width: 768px) {
+
   
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Increase spacing between buttons */
-    padding-bottom: 25px; /* Added spacing below buttons */
-    width: 100%;
-    align-items: center;
+  .login-wrapper {
+      display: flex;
+      flex-direction: row; /* Image & login box side by side */
+      align-items: stretch;
+      justify-content: flex-start;
+      width: 100vw; /* Ensure full screen width */
   }
-  
-  /* Style for logo inside the footer */
-  .footer-logo-image {
-    width: 150px; /* Adjust width as needed */
-    display: block;
-    margin-bottom: 10px;
+
+  .login-background {
+      width: 50vw; /* Ensure image always takes half of the screen width */
+      height: 100vh; /* Full height */
+      margin: 0;
+      padding: 0;
+      flex-shrink: 0;
   }
-  
-  /* Guest Login */
-  .guest-text {
-    color: var(--text-color);
-    font-weight: bold;
-    margin-top: 20px; /* Increased spacing above */
-    padding-bottom: 30px; /* Increased space below */
+
+  .login-background img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
   }
-  
+
+  .login-content {
+      width: 50vw; /* Ensure login form takes exactly half of the screen */
+      max-width: none; /* Removes any max-width restrictions */
+      padding: 40px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+}
