@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import "../styles/points.css"; 
 import { Link } from 'react-router-dom';
 import PrimaryButton from '../components/Buttons/PrimaryButton';

@@ -52,11 +52,16 @@
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+.badge-card{
+    width: min-content;
 }
 
 /* media screen for tablet */
 @media (min-width: 768px) {
     .badge-card{
-        width: min-content;
+        
     }
 }
