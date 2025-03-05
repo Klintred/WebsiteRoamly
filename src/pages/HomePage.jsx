@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
+import '../components/Buttons/buttons.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt, faStar} from '@fortawesome/free-solid-svg-icons';
+
 
 const API_KEY = 'AIzaSyBO0gm7S42KuQqgWTO63H-LCWix5488bMU'; // Vervang met je eigen API-key
 const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
@@ -130,16 +134,45 @@ const HomePage = () => {
   );
 };
 
+
+
 const PlaceCard = ({ place }) => (
   <div className="place-card">
-    <img src={place.photo} alt={place.name} className="place-image" />
-    <h3>{place.name}</h3>
-    <p>{place.address}</p>
-    {place.rating && <p>⭐ {place.rating}</p>}
-    {/* Correcte link naar de detailpagina */}
-    <Link to={`/place-detail/${place.id}`}>
-      <button className="view-details-button">Bekijk details</button>
-    </Link>
+    {/* Image now spans full width and touches the top */}
+    <div className="image-container">
+      <img src={place.photo} alt={place.name} className="place-image" />
+      {<span className="accessibility-label">Fully accessible</span>}
+    </div>
+
+    {/* Content below image */}
+    <div className="content">
+      <h3>{place.name}</h3>
+      
+      {/* Location is properly aligned */}
+      <div className="location-container">
+        <FontAwesomeIcon icon={faMapMarkerAlt} className="location-icon" />
+        <span className="location-text">{place.address}</span>
+      </div>
+
+      {/* Star Rating */}
+      {place.rating && (
+        <div className="review-rating">
+          <FontAwesomeIcon icon={faStar} className="star-icon" />
+          <span>{place.rating}</span>
+        </div>
+      )}
+    </div>
+
+    {/* Button stays inside the card */}
+    <div className="button-container">
+      <Link to={`/place-detail/${place.id}`}>
+        <button className="view-details-button">Bekijk details</button>
+      </Link>
+    </div>
   </div>
 );
+
+
+
+
 export default HomePage;
