@@ -112,6 +112,13 @@
       height: 100%;
       object-fit: cover;
       display: block;
+  
+  /* Guest Login */
+  .guest-text {
+    color: var(--text-color);
+    font-weight: bold;
+    margin-top: 20px; /* Increased spacing above */
+    padding-bottom: 30px; /* Increased space below */
   }
 
   .login-content {

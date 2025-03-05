@@ -23,6 +23,10 @@ const LoginPage = () => {
 
       {/* Footer (always stays below everything) */}
       <Footer />
+      {/* Centered Login Box */}
+      <div className="login-content">
+        <LoginCard />
+      </div>
     </div>
   );
 };
