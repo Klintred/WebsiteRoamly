@@ -1,6 +1,6 @@
 .home-page {
   font-family: Arial, sans-serif;
-  margin: 40px;
+  margin: 0 auto;
   text-align: left;
   overflow-x: hidden;
 }
@@ -10,8 +10,7 @@
   font-weight: bold;
   font-size: 1.8rem;
   color: var(--text-color);
-  margin-bottom: 20px;
-  margin-left: 10px;
+  margin: 0 20px;
 }
 
 .search-results {
@@ -24,6 +23,8 @@
   scroll-behavior: smooth;
   padding-left: 10px;
   scrollbar-width: none;
+  padding: 24px 20px;
+  margin-bottom: 20px;
 }
 
 .search-results::-webkit-scrollbar {
@@ -41,10 +42,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden;
   max-width: 320px;
   padding-bottom: 0;
-  padding-top: 10px;
 }
 
 .image-container {
@@ -137,7 +136,7 @@
 }
 
 .place-card:hover {
-  transform: translateY(-5px);
+  transform: scale(1.05);
 }
 
 .place-card h3 {
@@ -149,14 +148,6 @@
 }
 
 @media (max-width: 768px) {
-  .home-page {
-    margin-left: 0px;
-    margin-right: 0px;
-  }
-
-  .home-page h2 {
-    margin-left: 20px;
-  }
 
   .search-results {
     grid-template-columns: repeat(2, 1fr);
@@ -182,14 +173,7 @@
 }
 
 @media (max-width: 1024px) {
-  .home-page {
-    margin-left: 0px;
-    margin-right: 0px;
-  }
 
-  .home-page h2 {
-    margin-left: 20px;
-  }
 
   .search-results {
     grid-template-columns: repeat(4, 1fr);

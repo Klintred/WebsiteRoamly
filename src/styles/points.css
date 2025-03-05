@@ -33,7 +33,7 @@
 
 .reviews-header{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
     gap: 20px;
 }
@@ -46,4 +46,17 @@
     padding: 20px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
+}
+
+.badge-container{
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* media screen for tablet */
+@media (min-width: 768px) {
+    .badge-card{
+        width: min-content;
+    }
 }
