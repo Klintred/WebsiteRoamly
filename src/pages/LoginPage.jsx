@@ -1,7 +1,6 @@
 import React from "react";
 import "../styles/login.css"; // Import login styles
 import LoginCard from "../components/Cards/LoginCard";
-import Footer from "../components/Footer/Footer"; // Import Footer
 
 const LoginPage = () => {
   const loginImage = "/assets/images/loginimage.png"; // Correct way to use image in public/
@@ -19,13 +18,6 @@ const LoginPage = () => {
         <div className="login-content">
           <LoginCard />
         </div>
-      </div>
-
-      {/* Footer (always stays below everything) */}
-      <Footer />
-      {/* Centered Login Box */}
-      <div className="login-content">
-        <LoginCard />
       </div>
     </div>
   );
