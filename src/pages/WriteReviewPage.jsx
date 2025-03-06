@@ -4,7 +4,7 @@ const WriteReviewPage = () => {
 
   return (
    <div>
-
+        
    </div>
   
   );
