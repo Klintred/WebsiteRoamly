@@ -89,7 +89,7 @@ const HotelDetailPage = () => {
             <h2>General Accessibility</h2>
             <p>High accessibility</p>
           </div>
-          <a href="#">See details</a>
+          <a href="../reviews">See details</a>
         </div>
         
         <p><strong>Address:</strong> {hotelDetails.formatted_address}</p>

@@ -8,6 +8,7 @@ import Footer from "./components/Footer/Footer";
 import HotelDetailPage from './pages/HotelDetailPage';  
 import PointsPage from './pages/PointsPage';  
 import MyTrips from './pages/MyTrips';
+import AccessibilityFeedback from "./pages/reviews";
 
 
 const AppLayout = () => {
@@ -29,6 +30,7 @@ const AppLayout = () => {
         <Route path="/trip-planner" element={<TripPlannerPage />} />
         <Route path="/points" element={<PointsPage />} />
         <Route path="/my-trips" element={<MyTrips />} />
+        <Route path="/reviews" element={<AccessibilityFeedback />} />
       </Routes>
 
       {/* Only show Footer if NOT on the login page */}

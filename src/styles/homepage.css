@@ -1,96 +1,256 @@
 .home-page {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    text-align: center;
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  text-align: left;
+  overflow-x: hidden;
+}
+
+.home-page h2 {
+  font-family: 'Acumin Pro', sans-serif;
+  font-weight: bold;
+  font-size: 1.8rem;
+  color: var(--text-color);
+  margin: 0 20px;
+}
+
+.search-results {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  gap: 20px;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+  padding-left: 10px;
+  scrollbar-width: none;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+}
+
+.search-results::-webkit-scrollbar {
+  display: none;
+}
+
+.place-card {
+  flex: 0 0 320px;
+  height: 470px;
+  background: white;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 320px;
+  padding-bottom: 0;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  border: 5px solid #4CAF50;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.place-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.accessibility-label {
+  position: absolute;
+  top: 10px;
+  left: 0px;
+  background: #4CAF50;
+  color: white;
+  font-family: 'Acumin Pro', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  z-index: 10;
+}
+
+h1 {
+  margin-left: 20px;
+  color: var(--primary-color);
+}
+
+.content {
+  padding: 15px 20px;
+  flex-grow: 1;
+}
+
+.location-container,
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.location-icon {
+  color: var(--secondary-color);
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.location-text {
+  line-height: 1.2;
+  vertical-align: middle;
+}
+
+.star-icon {
+  color: var(--secondary-color);
+  font-size: 18px;
+}
+
+.button-container {
+  width: 100%;
+  padding: 10px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.view-details-button {
+  background-color: var(--primary-color);
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  width: 100%;
+  color: white;
+  border: none;
+  padding: 15px 100px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s ease-in-out;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.view-details-button:hover {
+  background-color: #0056b3;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.place-card:hover {
+  transform: scale(1.05);
+}
+
+.place-card h3 {
+  font-family: 'Acumin Pro', sans-serif;
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-top: 10px;
+  color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+
+  .search-results {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .filter-button {
-    margin-right: 20px;
-    padding: 10px 20px;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    border: 1px solid var(--secondary-color);
-    border-radius: 5px;
-    cursor: pointer;
+  .place-card {
+    max-width: 100%;
+    height: auto;
   }
-  
-  .filter-button:hover {
-    background-color: var(--secondary-color);
-    color: var(--background-color);
+
+  .place-image {
+    height: 170px;
   }
-  
-  .filter-button.active {
-    background-color: var(--secondary-color);
-    color: var(--background-color);
+
+  .accessibility-label {
+    font-size: 0.85rem;
+    padding: 6px 10px;
   }
-  
-  
-  .search-form {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
+
+  .view-details-button {
+    padding: 12px 40px;
   }
-  
-  .search-input {
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid var(--primary-color);
-    border-radius: 4px;
-    width: 90%;
-  }
-  
-  .search-button {
-    padding: 8px 12px;
-    margin-left: 10px;
-    border: none;
-    background-color: var(--secondary-color);
-    color: var(--background-color);
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .search-button:hover {
-    background-color: var(--secondary-color);
-  }
-  
-  .button-container {
-    margin-bottom: 20px;
-  }
-  
-  .popular-destinations{
-    text-align: left;
-    margin-top: 40px;
-  }
-  .subtext{
-    margin-top: 0px;
-  }
+}
+
+@media (max-width: 1024px) {
 
 
   .search-results {
-    display: flex;
-    overflow-x: auto; /* Zorgt voor de mogelijkheid om te scrollen */
-    -webkit-overflow-scrolling: touch; /* Voor een soepelere scrollervaring op mobiele apparaten */
-    gap: 20px;
-    scroll-behavior: smooth; /* Optioneel, zorgt voor een soepel scroll-effect */
-  }
-  
-  .search-results::-webkit-scrollbar {
-    display: none; /* Verbergt de scrollbar */
+    grid-template-columns: repeat(4, 1fr);
   }
 
-.place-image{
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    border: 2px solid var(--success-color);
+  .place-card {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .place-image {
+    height: 180px;
+  }
+
+  .view-details-button {
+    padding: 12px 60px;
+  }
 }
 
-.place-card{
 
-  border:1px solid var(--text-color);
-  border-radius: 5px;
+.search-filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 600px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px;
+  font-size: 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.search-input:focus {
+  border-color: #0056b3;
+}
+
+.filter-dropdown {
+  padding: 12px;
+  font-size: 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.filter-dropdown:hover {
+  border-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .search-filter {
+    flex-direction: column;
+    width: 100%;
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .search-input,
+  .filter-dropdown {
+    width: 100%;
+  }
 }
