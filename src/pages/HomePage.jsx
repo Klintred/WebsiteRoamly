@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
+import '../components/Buttons/buttons.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt, faStar} from '@fortawesome/free-solid-svg-icons';
+
 
 const API_KEY = 'AIzaSyBO0gm7S42KuQqgWTO63H-LCWix5488bMU';
 const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
@@ -143,6 +147,8 @@ const ResultsSection = ({ title, data, filter, type }) => {
     </>
   );
 };
+
+
 
 const PlaceCard = ({ place }) => (
   <div className="place-card">

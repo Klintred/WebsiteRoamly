@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import PrimaryButton from '../Buttons/PrimaryButton';
-import logo from "../../../public/assets/images/logo.png"; // Ensure the path is correct
-
+import mobileLogo from "../../../public/assets/images/logo.png"; // Mobile logo
+import fullLogo from "../../../public/assets/images/fulllogo.png"; // Desktop logo
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-  
+    const [logo, setLogo] = useState(mobileLogo); // Default to mobile logo
+
+    // Function to update logo based on screen size
+    useEffect(() => {
+      const updateLogo = () => {
+        if (window.innerWidth >= 1024) {
+          setLogo(fullLogo); // Use full logo on desktop
+        } else {
+          setLogo(mobileLogo); // Use mobile logo on smaller screens
+        }
+      };
+
+      updateLogo(); // Run on initial render
+      window.addEventListener("resize", updateLogo); // Listen for window resizes
+
+      return () => window.removeEventListener("resize", updateLogo); // Cleanup event listener
+    }, []);
+
     const toggleMenu = () => {
       setMenuOpen(!menuOpen);
     };
   
     return (
-      // Navbar mobile
       <nav className="navbar">
         <div className='nav-container'>
           {/* Logo */}
@@ -23,19 +39,20 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Hamburger Menu Icon */}
+          {/* Desktop Navigation Links */}
           <ul className="nav-links-desktop">
-              <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
-              <li><Link to="/my-trips" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
-              <li><Link to="/points" className='nav-link' onClick={() => setMenuOpen(false)}>My Points</Link></li>
-              <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a Trip</Link></li>
-            </ul>
+            <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
+            <li><Link to="/my-trips" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
+            <li><Link to="/points" className='nav-link' onClick={() => setMenuOpen(false)}>My Points</Link></li>
+            <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a Trip</Link></li>
+          </ul>
 
           {/* Hamburger Menu Icon */}
           <div className="menu-icon" onClick={toggleMenu}>
             <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
           </div>
 
+          {/* Profile Icon */}
           <div className="login">
             <Link to="/profile" className='nav-link login-icon' onClick={() => setMenuOpen(false)}>
               <span className="material-symbols-outlined">person</span>
@@ -43,7 +60,8 @@ const Navbar = () => {
             </Link>
           </div>
         </div>
-        {/* Navigation Links */}
+
+        {/* Mobile Navigation Links */}
         <div className={`nav-links-mobile-container ${menuOpen ? 'open' : ''}`}>
           <ul className="nav-links-mobile">
             <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
@@ -62,7 +80,6 @@ const Navbar = () => {
         </div>
       </nav>      
     );
-  };
-  
+};
 
 export default Navbar;

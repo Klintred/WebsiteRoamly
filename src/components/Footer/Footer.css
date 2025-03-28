@@ -3,60 +3,41 @@
   padding: 20px;
   background: var(--primary-color);
   color: var(--background-color);
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
 }
 
-.footer-content {
+.footer-container {
+  width: 100%;
   display: flex;
-  position: absolute;
-  bottom:0;
   flex-direction: column;
   align-items: center;
 }
 
+/* Header Section */
+.footer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Logo */
 .footer-logo img {
-  width: 120px; 
+  width: 120px;
   margin-bottom: 10px;
 }
 
-/* Footer Links */
-.footer-links {
+/* Social Icons */
+.footer-socials {
   display: flex;
-  flex-direction: row;
-  gap: 5px;
-  text-align: left;
-  justify-content: space-between;
-}
-
-.footer a {
-  color: var(--background-color);
-  text-decoration: none;
-}
-
-.footer-links-mobile li, .footer-links-desktop li{
-  list-style-type: none;
-  margin-bottom: 6px;
-}
-
-.footer a:hover {
-  text-decoration: underline;
-  color: var(--accent-color);
-}
-
-
-.footer-header{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-socials{
-  display: flex;
-  flex-direction: row;
   gap: 10px;
+  margin-left: auto; /* Pushes to right */
 }
 
-.social-icon{
+.social-icon {
   font-size: 1rem;
   background-color: var(--secondary-color);
   padding: 10px;
@@ -66,23 +47,68 @@
   border-radius: 50%;
 }
 
-.footer-copyright{
+/* Footer Links */
+.footer-links {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px 0;
+  flex-wrap: wrap;
+}
+.footer-links-mobile {
+  display:none;
 }
 
-.footer-links-desktop {
-  display: none;
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 20px;
+}
+
+.footer-links-header {
+  margin-bottom: 10px;
+}
+
+.footer a {
+  color: var(--background-color);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+  color: var(--accent-color);
+}
+
+.footer-links li {
+  list-style-type: none;
+  margin-bottom: 6px;
+}
+
+/* Copyright */
+.footer-copyright {
+  width: 100%;
+  text-align: center; /* Centers text */
+  margin-top: 10px;
 }
 
 /* Responsive Design */
 @media (min-width: 768px) {
-  .footer-links {
-    gap: 60px;
-    justify-content: start;
+  .footer-header {
+    justify-content: space-between;
   }
 
-  .footer-links-mobile {
-    display: none;
+  .footer-links {
+    justify-content: center; /* Even spacing */
+  }
+
+  .footer-socials {
+    margin-left: auto; /* Keeps aligned to right */
+  }
+
+  mobile
+  
+  .footer-copyright {
+    text-align: center;
+    width: 100%;
   }
 }

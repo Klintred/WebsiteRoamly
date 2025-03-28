@@ -12,6 +12,8 @@
     cursor: pointer;
     font-weight: bold;
     text-align: center;
+    text-decoration: none;
+
   }
   
   /* Login Button */
@@ -44,5 +46,4 @@
     opacity: 0.8;
   }
 
-  
   
