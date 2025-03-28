@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import HotelDetailPage from './pages/HotelDetailPage';  
 import PointsPage from './pages/PointsPage';  
-import MyTrips from './pages/MyTrips';
+import MyTrips from './pages/MyTripsPage';
 import AccessibilityFeedback from "./pages/reviews";
 
 
