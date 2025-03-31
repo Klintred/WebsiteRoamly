@@ -6,10 +6,8 @@ const MyTripsPage = () => {
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [dragging, setDragging] = useState(null); // Track the dragged item
-    const [selectedDay, setSelectedDay] = useState(0); // By default show Day 1
-    const [hoveredDay, setHoveredDay] = useState(null); // Track hovered day
-    const [tempActivity, setTempActivity] = useState(null); // Temporary storage for dragged activity
+    const [dragging, setDragging] = useState(null);
+    const [selectedDay, setSelectedDay] = useState(null);
 
     useEffect(() => {
         const fetchTrips = async () => {
@@ -31,15 +29,10 @@ const MyTripsPage = () => {
 
     const handleDragStart = (tripId, dayIndex, activity) => {
         setDragging({ tripId, dayIndex, activity });
-        setTempActivity(activity); // Temporarily store the dragged activity
-    };
-
-    const handleDropTempZone = () => {
-        setTempActivity(null); // Clear temporary activity when dropped in the neutral zone
     };
 
     const handleDropOnDay = (tripId, dayIndex) => {
-        if (!tempActivity) return; // Don't drop if there's no activity in tempActivity
+        if (!dragging) return;
 
         setTrips((prevTrips) => {
             return prevTrips.map((trip) => {
@@ -53,16 +46,14 @@ const MyTripsPage = () => {
                     }
 
                     const newItinerary = [...planData.itinerary];
+                    
+                    // Remove from source day
+                    const sourceDay = newItinerary[dragging.dayIndex];
+                    sourceDay.activities = sourceDay.activities.filter(a => a !== dragging.activity);
 
-                    // Find the correct day where the activity needs to be dropped
-                    const targetDay = newItinerary[dayIndex];
-                    targetDay.activities = [...targetDay.activities, tempActivity];
-
-                    // After adding to the target day, we remove the activity from its source day (if necessary)
-                    const sourceDayIndex = newItinerary.findIndex(day => day.activities.includes(tempActivity));
-                    if (sourceDayIndex !== -1) {
-                        const sourceDay = newItinerary[sourceDayIndex];
-                        sourceDay.activities = sourceDay.activities.filter(a => a !== tempActivity);
+                    // Add to target day if it's not already there
+                    if (!newItinerary[dayIndex].activities.includes(dragging.activity)) {
+                        newItinerary[dayIndex].activities = [...newItinerary[dayIndex].activities, dragging.activity];
                     }
 
                     return { ...trip, Plan: JSON.stringify({ ...planData, itinerary: newItinerary }) };
@@ -71,13 +62,7 @@ const MyTripsPage = () => {
             });
         });
 
-        // Clear the temporary activity after it's placed
-        setTempActivity(null);
-        setDragging(null); // Reset dragging state after drop
-    };
-
-    const handleDaySelection = (dayIndex) => {
-        setSelectedDay(dayIndex); // Update the selected day
+        setDragging(null);
     };
 
     return (
@@ -102,74 +87,50 @@ const MyTripsPage = () => {
 
                     return (
                         <div key={trip._id} className="border border-gray-300 rounded-xl shadow-md p-6">
-                            {planData.hotel && (
-                                <div className="bg-indigo-500 text-white p-5 rounded-md">
-                                    <h2 className="text-3xl font-bold">{planData.hotel}</h2>
-                                </div>
-                            )}
-
                             <h3 className="text-2xl font-semibold mt-4">{trip.TripName}</h3>
 
                             {planData.itinerary && (
                                 <>
-                                    {/* Day navigation buttons */}
                                     <div className="mt-4 flex space-x-4 mb-4">
                                         {planData.itinerary.map((day, index) => (
                                             <button
                                                 key={index}
                                                 className={`px-4 py-2 rounded-lg ${selectedDay === index ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-800"}`}
-                                                onClick={() => handleDaySelection(index)}
+                                                onClick={() => setSelectedDay(selectedDay === index ? null : index)}
+                                                onDragOver={() => setSelectedDay(index)}
                                             >
                                                 {day.day}
                                             </button>
                                         ))}
                                     </div>
 
-                                    {/* Neutral Drop Zone for activity */}
-                                    {tempActivity && (
+                                    {selectedDay !== null && (
                                         <div
-                                            className="p-4 mb-4 bg-gray-200 rounded-lg text-center"
-                                            onDrop={handleDropTempZone} // When activity is dropped in the neutral zone, clear it
-                                            onDragOver={(e) => e.preventDefault()}
-                                            style={{ border: "2px dashed #ccc" }}
+                                            className="mt-4 p-4 bg-gray-100 rounded-lg"
+                                            onDragOver={(e) => {
+                                                e.preventDefault();
+                                                setSelectedDay(selectedDay);
+                                            }}
+                                            onDrop={() => handleDropOnDay(trip._id, selectedDay)}
                                         >
-                                            <p className="text-gray-500">Drop the activity here before placing it on a day</p>
-                                            <div className="mt-2">
-                                                <FaMapMarkerAlt className="inline-block text-indigo-600 mr-2" />
-                                                {tempActivity}
+                                            <div className="p-4 bg-white rounded-md shadow-lg mb-4">
+                                                <h4 className="text-lg font-bold text-indigo-700">{planData.itinerary[selectedDay].day}</h4>
+                                                <ul className="mt-2 space-y-2">
+                                                    {planData.itinerary[selectedDay].activities?.map((activity, idx) => (
+                                                        <li
+                                                            key={idx}
+                                                            className="bg-white p-3 rounded-lg shadow cursor-move"
+                                                            draggable
+                                                            onDragStart={() => handleDragStart(trip._id, selectedDay, activity)}
+                                                        >
+                                                            <FaMapMarkerAlt className="inline-block text-indigo-600 mr-2" />
+                                                            {activity}
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </div>
                                         </div>
                                     )}
-
-                                    {/* Display selected day */}
-                                    <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                                        <div
-                                            className="p-4 bg-white rounded-md shadow-lg mb-4"
-                                            onDragOver={(e) => e.preventDefault()} // Allow the drop
-                                            onDrop={() => handleDropOnDay(trip._id, selectedDay)} // Handle drop event for selected day
-                                            onDragEnter={() => setHoveredDay(selectedDay)} // Set hovered day
-                                            onDragLeave={() => setHoveredDay(null)} // Reset hovered day when dragging leaves
-                                            style={{
-                                                backgroundColor: hoveredDay === selectedDay ? "#d1d5db" : "white", // Change background color when hovered
-                                                transition: "background-color 0.2s ease"
-                                            }}
-                                        >
-                                            <h4 className="text-lg font-bold text-indigo-700">{planData.itinerary[selectedDay]?.day}</h4>
-                                            <ul className="mt-2 space-y-2">
-                                                {planData.itinerary[selectedDay]?.activities?.map((activity, idx) => (
-                                                    <li
-                                                        key={idx}
-                                                        className="bg-white p-3 rounded-lg shadow cursor-move"
-                                                        draggable
-                                                        onDragStart={() => handleDragStart(trip._id, selectedDay, activity)} // Start dragging the activity
-                                                    >
-                                                        <FaMapMarkerAlt className="inline-block text-indigo-600 mr-2" />
-                                                        {activity}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </>
                             )}
                         </div>
