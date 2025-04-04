@@ -90,20 +90,7 @@ const HotelDetailPage = () => {
         <p><strong>Website:</strong> {hotelDetails.website ? <a href={hotelDetails.website} target="_blank" rel="noopener noreferrer">{hotelDetails.website}</a> : 'Not available'}</p>
         <p><strong>Rating:</strong> {hotelDetails.rating ? `⭐ ${hotelDetails.rating}` : 'No rating available'}</p>
         
-        {lat && lng ? (
-  <div className="hotel-map">
-    <h3>Hotel Location:</h3>
-    <iframe
-      width="600"
-      height="450"
-      src={`https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${lat},${lng}`}
-      allowFullScreen
-      loading="lazy"
-      title="Hotel Location"
-    ></iframe>
-  </div> 
-) : <p>Location not available</p>}
-<a href="#" className="accessibility-details-button">See details</a>
+        <a href="#" className="accessibility-details-button">See details</a>
 
           {/* ✅ Styled Info Section */}
           <div className="hotel-info">
