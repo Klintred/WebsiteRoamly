@@ -77,21 +77,33 @@ const HotelDetailPage = () => {
         <div className="hotel-details">
           <h1>{hotelDetails.name}</h1>
 
-          {/* ✅ Accessibility Section */}
-          <div className="hotel-accesibility">
-            <div className="hotel-accesibility-text">
-              <div className="accessibility-icon">
-                <i className="fas fa-wheelchair"></i>
-              </div>
-              <div>
-                <h2 id="General">General Accessibility</h2>
-                <div className="adjustment-status">
-                  <span></span> No Adjustments Needed
-                </div>
-              </div>
-            </div>
-            <a href="#" className="accessibility-details-button">See details</a>
+        <div className="hotel-accesibility">
+          <div className="hotel-accesibility-text">
+            <h2>General Accessibility</h2>
+            <p>High accessibility</p>
           </div>
+          <a href="../reviews">See details</a>
+        </div>
+        
+        <p><strong>Address:</strong> {hotelDetails.formatted_address}</p>
+        <p><strong>Phone:</strong> {hotelDetails.formatted_phone_number || 'Not available'}</p>
+        <p><strong>Website:</strong> {hotelDetails.website ? <a href={hotelDetails.website} target="_blank" rel="noopener noreferrer">{hotelDetails.website}</a> : 'Not available'}</p>
+        <p><strong>Rating:</strong> {hotelDetails.rating ? `⭐ ${hotelDetails.rating}` : 'No rating available'}</p>
+        
+        {lat && lng ? (
+  <div className="hotel-map">
+    <h3>Hotel Location:</h3>
+    <iframe
+      width="600"
+      height="450"
+      src={`https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${lat},${lng}`}
+      allowFullScreen
+      loading="lazy"
+      title="Hotel Location"
+    ></iframe>
+  </div> 
+) : <p>Location not available</p>}
+<a href="#" className="accessibility-details-button">See details</a>
 
           {/* ✅ Styled Info Section */}
           <div className="hotel-info">

@@ -1,0 +1,212 @@
+/* General Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Layout Container */
+.max-w-4xl {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4C51BF;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Trip Cards */
+.border-gray-300 {
+    border: 1px solid #e2e8f0;
+}
+
+/* Each individual trip card styling */
+div.border {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+div.border:hover {
+    transform: scale(1.03);
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+.text-indigo-600 {
+    color: #4C51BF;
+}
+
+h2, h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+h3.text-2xl {
+    font-size: 1.75rem;
+}
+
+h4.text-lg {
+    font-size: 1.25rem;
+    color: #2d3748;
+}
+
+h5 {
+    font-size: 1.125rem;
+    color: #4a5568;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+button {
+    background-color: #4C51BF;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #434190;
+}
+
+/* Card images */
+img {
+    object-fit: cover;
+    width: 96px;
+    height: 96px;
+    border-radius: 8px;
+    margin-right: 1rem;
+}
+
+/* Itinerary Section */
+.space-y-6 {
+    margin-top: 1.5rem;
+}
+
+p.text-gray-700 {
+    color: #4a5568;
+}
+
+.p-5 {
+    padding: 1.25rem;
+}
+
+h3.text-xl {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4C51BF;
+}
+
+.text-gray-600 {
+    color: #718096;
+}
+
+.bg-indigo-500 {
+    background-color: #5a67d8;
+    color: white;
+    padding: 1rem;
+}
+
+.bg-gray-50 {
+    background-color: #f7fafc;
+}
+
+/* Summary for raw trip data */
+details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #4C51BF;
+}
+
+pre {
+    background-color: #f0f4f8;
+    padding: 1rem;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.875rem;
+}
+
+/* Icons */
+svg {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.text-indigo-500 {
+    color: #4C51BF;
+}
+
+.text-green-500 {
+    color: #48bb78;
+}
+
+.text-red-500 {
+    color: #e53e3e;
+}
+
+.text-yellow-600 {
+    color: #ecc94b;
+}
+
+/* Flexbox adjustments for better layout */
+.flex {
+    display: flex;
+}
+
+.items-start {
+    align-items: flex-start;
+}
+
+.space-x-4 {
+    margin-right: 1rem;
+}
+
+/* Responsive Styling */
+@media screen and (max-width: 768px) {
+    .max-w-4xl {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .p-6 {
+        padding: 1rem;
+    }
+
+    .border {
+        margin-bottom: 1rem;
+    }
+
+    img {
+        width: 72px;
+        height: 72px;
+    }
+
+    button {
+        padding: 0.5rem 1.25rem;
+    }
+}

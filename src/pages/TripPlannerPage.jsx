@@ -6,6 +6,8 @@ function TripPlannerPage() {
   const [dates, setDates] = useState([null, null]);
   const [people, setPeople] = useState("");
   const [activities, setActivities] = useState({ sport: false, culture: false, spa: false });
+  const [departureLocation, setDepartureLocation] = useState(""); // Added departure location
+  const [transportMode, setTransportMode] = useState(""); // Added transport mode
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +16,7 @@ function TripPlannerPage() {
   };
 
   const handleSubmit = async () => {
-    if (!destination || !dates[0] || !dates[1] || !people || !Object.values(activities).includes(true)) return;
+    if (!destination || !dates[0] || !dates[1] || !people || !Object.values(activities).includes(true) || !departureLocation || !transportMode) return;
 
     const selectedActivities = Object.entries(activities)
       .filter(([_, value]) => value)
@@ -25,6 +27,8 @@ function TripPlannerPage() {
 
     const prompt = `Create a detailed travel plan with the following details and structure:
 
+    - Departure location: ${departureLocation}
+    - Transport mode: ${transportMode}
     - Destination: ${destination}
     - Dates: ${formattedDates}
     - Number of people: ${people}
@@ -89,7 +93,6 @@ function TripPlannerPage() {
         throw new Error("Geen geldige JSON gevonden in de AI-response.");
       }
       const cleanedResponse = jsonMatch[0]; // Nu puur de JSON
-      
 
       let jsonResponse;
       try {
@@ -100,16 +103,9 @@ function TripPlannerPage() {
         setLoading(false);
         return;
       }
-      function cleanupAIJson(rawText) {
-        let cleaned = rawText.trim();
-        cleaned = cleaned.replace(/,\s*([\]}])/g, '$1'); // Trailing commas
-        cleaned = cleaned.replace(/“|”/g, '"'); // Slimme quotes naar normale
-        return cleaned;
-    }
-    
+
       console.log("Cleaned AI response:", cleanedResponse);
       setResponse(cleanedResponse);
-      
 
       // We maken tripData aan en sturen het naar de backend
       const tripData = {
@@ -134,7 +130,7 @@ function TripPlannerPage() {
 
       // Update de response state als de trip succesvol is opgeslagen
       setResponse("Trip successfully saved!");
-      
+
     } catch (error) {
       console.error("Fout bij het ophalen van de AI response:", error);
       setResponse("Er is een fout opgetreden. Controleer de API-sleutel en probeer het opnieuw.");
@@ -165,6 +161,22 @@ function TripPlannerPage() {
         placeholder="How many people?"
         value={people}
         onChange={(e) => setPeople(e.target.value)}
+        style={{ width: "100%", padding: "8px", marginTop: "16px", borderRadius: "8px", border: "1px solid #ccc" }}
+      />
+
+      <input
+        type="text"
+        placeholder="Where are you departing from?"
+        value={departureLocation}
+        onChange={(e) => setDepartureLocation(e.target.value)}
+        style={{ width: "100%", padding: "8px", marginTop: "16px", borderRadius: "8px", border: "1px solid #ccc" }}
+      />
+
+      <input
+        type="text"
+        placeholder="Preferred transport mode (e.g., car, plane, train)"
+        value={transportMode}
+        onChange={(e) => setTransportMode(e.target.value)}
         style={{ width: "100%", padding: "8px", marginTop: "16px", borderRadius: "8px", border: "1px solid #ccc" }}
       />
 
