@@ -71,7 +71,7 @@
     z-index: 2;
   }
   
-  /* Flowing background through range */
+  /* 🔶 Flowing background */
   .calendar-day.in-range::before {
     content: "";
     position: absolute;
@@ -79,11 +79,10 @@
     bottom: 0;
     left: -50%;
     right: -150%;
-    background-color: #eaf0fa;
+    background-color: #fcddc3; /* soft orange */
     z-index: 1;
   }
   
-  /* Left/right edge of range */
   .calendar-day.range-start::before {
     content: "";
     position: absolute;
@@ -91,7 +90,7 @@
     bottom: 0;
     left: 50%;
     right: -90%;
-    background-color: #eaf0fa;
+    background-color: #fcddc3;
     z-index: 1;
   }
   
@@ -102,11 +101,11 @@
     bottom: 0;
     left: -50%;
     right: 50%;
-    background-color: #eaf0fa;
+    background-color: #fcddc3;
     z-index: 1;
   }
   
-  /* Solid circle for start/end */
+  /* 🔸 Solid orange circle for start/end */
   .calendar-day.range-start::after,
   .calendar-day.range-end::after {
     content: "";
@@ -115,12 +114,11 @@
     left: 0;
     width: 42px;
     height: 42px;
-    background-color: var(--primary-color);
+    background-color: var(--accent-color);
     border-radius: 50%;
     z-index: 2;
   }
   
-  /* Day number above everything */
   .calendar-day .day-number {
     position: relative;
     z-index: 3;
@@ -137,7 +135,6 @@
     background-color: #f1f3f5;
   }
   
-  /* Responsive */
   @media (max-width: 768px) {
     .calendar-day,
     .calendar-day.range-start::after,
