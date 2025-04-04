@@ -20,7 +20,7 @@
     border-radius: 12px;
     border: 1px solid var(--border-color);
     font-size: 1rem;
-    font-family: 'AcuminPro', sans-serif; /* ✅ matches your h1/h2 style */
+    font-family: 'AcuminPro', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     cursor: pointer;
@@ -39,9 +39,8 @@
     gap: 10px;
   }
   
-  /* ✅ Weekday headers */
   .calendar-weekday {
-    font-family: 'AcuminPro', sans-serif; /* ✅ brand header font */
+    font-family: 'AcuminPro', sans-serif;
     font-size: 0.9rem;
     font-weight: 500;
     text-align: center;
@@ -57,7 +56,7 @@
   .calendar-day {
     width: 42px;
     height: 42px;
-    font-family: 'Roboto', sans-serif; /* ✅ default UI font */
+    font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     font-weight: 400;
     text-align: center;
@@ -67,41 +66,47 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 2;
-    background-color: transparent;
     color: var(--text-color);
-    border-radius: 50%;
+    background-color: transparent;
+    z-index: 2;
   }
   
-  /* ✅ Flowing light blue background */
-  .calendar-day.in-range::before,
-  .calendar-day.range-start::before,
+  /* Flowing background through range */
+  .calendar-day.in-range::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -50%;
+    right: -150%;
+    background-color: #eaf0fa;
+    z-index: 1;
+  }
+  
+  /* Left/right edge of range */
+  .calendar-day.range-start::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    right: -90%;
+    background-color: #eaf0fa;
+    z-index: 1;
+  }
+  
   .calendar-day.range-end::before {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    background-color: #eaf0fa;
-    z-index: 1;
-    border-radius: 0;
-  }
-  
-  .calendar-day.in-range::before {
-    left: -50%;
-    right: -50%;
-  }
-  
-  .calendar-day.range-start::before {
-    left: 50%;
-    right: -50%;
-  }
-  
-  .calendar-day.range-end::before {
     left: -50%;
     right: 50%;
+    background-color: #eaf0fa;
+    z-index: 1;
   }
   
-  /* ✅ Start and end blue circles */
+  /* Solid circle for start/end */
   .calendar-day.range-start::after,
   .calendar-day.range-end::after {
     content: "";
@@ -115,42 +120,32 @@
     z-index: 2;
   }
   
-  /* ✅ Day number visible and styled */
+  /* Day number above everything */
   .calendar-day .day-number {
     position: relative;
     z-index: 3;
     font-family: 'Roboto', sans-serif;
-    font-weight: 700; /* ✅ consistent with .cta */
+    font-weight: 700;
   }
   
   .calendar-day.range-start,
   .calendar-day.range-end {
     color: white;
-    z-index: 3;
   }
   
   .calendar-day:hover {
     background-color: #f1f3f5;
   }
   
-  /* ✅ Responsive scaling */
+  /* Responsive */
   @media (max-width: 768px) {
-    .calendar-day {
-      width: 36px;
-      height: 36px;
-      font-size: 0.9rem;
-    }
-  
+    .calendar-day,
     .calendar-day.range-start::after,
-    .calendar-day.range-end::after {
-      width: 36px;
-      height: 36px;
-    }
-  
+    .calendar-day.range-end::after,
     .calendar-weekday {
       width: 36px;
       height: 36px;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
     }
   
     .calendar-controls select {
