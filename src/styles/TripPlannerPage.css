@@ -177,11 +177,7 @@
     padding: 20px;
     
   }
-
-  :root {
-    background-color: red;
-  }
-
+  
   .planner-header {
     font-size: 1.5rem;
   }
