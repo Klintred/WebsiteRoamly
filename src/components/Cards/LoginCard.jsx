@@ -1,17 +1,26 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // <- Add this
 import "../../styles/login.css";
 import PrimaryButton from "../Buttons/PrimaryButton";
 
 const LoginCard = () => {
+  const navigate = useNavigate(); // <- Hook for navigation
+
+  const handleLoginClick = () => {
+    navigate("/login-screen"); // <- Redirect to LoginScreen
+  };
+
+  const handleRegisterClick = () => {
+    navigate("/register"); // <- Redirect to LoginScreen
+  };
+
   return (
     <div className="login-box">
-      {/* Roamly Logo Image */}
       <img src="/assets/images/fulllogo.png" alt="Roamly Logo" className="logo-image" />
 
-      {/* Buttons */}
       <div className="button-group">
-        <PrimaryButton text="Login" />
-        <PrimaryButton text="Register" variant="secondary" />
+        <PrimaryButton text="Login" onClick={handleLoginClick} /> {/* <- Add onClick */}
+        <PrimaryButton text="Register" onClick={handleRegisterClick} variant="secondary" />
         <PrimaryButton text="Continue as a guest" variant="guest" />
       </div>
     </div>

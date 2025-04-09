@@ -1,0 +1,177 @@
+/* === PAGE LAYOUT === */
+.login-page-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--background-color);
+    flex-direction: column;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+  
+  @media (min-width: 768px) {
+    .login-page-wrapper {
+      flex-direction: row;
+    }
+  }
+  
+  /* === IMAGE SECTION === */
+  .login-image-wrapper {
+    display: none;
+  }
+  
+  @media (min-width: 768px) {
+    .login-image-wrapper {
+      display: block;
+      flex: 1;
+    }
+  
+    .login-image-wrapper img {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+    }
+  }
+  
+  /* === FORM SECTION === */
+  .login-form-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 24px;
+    box-sizing: border-box;
+  }
+  
+  /* === Login Form Container === */
+  .login-screen-container {
+    width: 100%;
+    max-width: 480px;
+    padding: 0 16px; /* Prevent inputs from touching edges */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+  
+  /* === Back Button === */
+  .back-button {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+    margin-bottom: 28px;
+    cursor: pointer;
+    color: var(--primary-color);
+  }
+  
+  /* === Heading === */
+  .welcome-heading {
+    font-family: 'AcuminPro', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 28px;
+    text-align: left;
+  }
+  
+  /* === Form === */
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .login-form label {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 6px;
+    text-align: left;
+  }
+  
+  /* === Input Fields === */
+  .login-form input {
+    padding: 16px 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+    color: var(--text-color);
+  }
+  
+  /* === Password Wrapper === */
+  .password-wrapper {
+    position: relative;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-color);
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  /* === Forgot Password === */
+  .forgot-password {
+    text-align: right;
+    font-size: 15px;
+    color: var(--text-color);
+    cursor: pointer;
+    margin-top: -8px;
+    margin-bottom: 12px;
+  }
+  
+  /* === Primary Button === */
+  .full-width-button {
+    width: 100%;
+  }
+  
+  .full-width-button .btn {
+    width: 100%;
+    font-size: 18px;
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  /* === Divider === */
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 32px 0;
+    color: var(--text-color);
+    font-size: 15px;
+  }
+  
+  .divider::before,
+  .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 0 10px;
+  }
+  
+  /* === Google Login Only === */
+  .google-login-button {
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f0f0f0;
+    width: 100%;
+    cursor: pointer;
+  }
+  
+  .google-login-button img {
+    height: 28px;
+    width: 28px;
+  }
+  
