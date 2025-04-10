@@ -1,48 +1,125 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
+
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import LoginScreen from "./pages/LoginScreen";
 import TripPlannerPage from "./pages/TripPlannerPage";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
-import HotelDetailPage from './pages/HotelDetailPage';  
-import PointsPage from './pages/PointsPage';  
-import MyTrips from './pages/MyTripsPage';
+import HotelDetailPage from "./pages/HotelDetailPage";
+import PointsPage from "./pages/PointsPage";
+import MyTrips from "./pages/MyTripsPage";
 import AccessibilityFeedback from "./pages/reviews";
-import RegisterScreen from "./pages/RegisterScreen"; 
+import RegisterScreen from "./pages/RegisterScreen";
+import Profile from "./pages/Profile"; // ✅ Import the Profile page
 
+// ✅ Inline ProtectedRoute Component
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/login-screen" replace />;
+  }
+
+  return children;
+};
 
 const AppLayout = () => {
   const location = useLocation();
 
-  // Hide Navbar and Footer on both login routes
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/login-screen" || location.pathname === "/register";
+  const isAuthPage =
+    location.pathname === "/login" ||
+    location.pathname === "/login-screen" ||
+    location.pathname === "/register";
 
   return (
     <>
-      {/* Only show Navbar if NOT on login or login-screen */}
       {!isAuthPage && <Navbar />}
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/place-detail/:id" element={<HotelDetailPage />} />
+        {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login-screen" element={<LoginScreen />} />
-        <Route path="/trip-planner" element={<TripPlannerPage />} />
-        <Route path="/points" element={<PointsPage />} />
-        <Route path="/my-trips" element={<MyTrips />} />
-        <Route path="/reviews" element={<AccessibilityFeedback />} />
         <Route path="/register" element={<RegisterScreen />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trip-planner"
+          element={
+            <ProtectedRoute>
+              <TripPlannerPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/place-detail/:id"
+          element={
+            <ProtectedRoute>
+              <HotelDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/points"
+          element={
+            <ProtectedRoute>
+              <PointsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-trips"
+          element={
+            <ProtectedRoute>
+              <MyTrips />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reviews"
+          element={
+            <ProtectedRoute>
+              <AccessibilityFeedback />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
-      {/* Only show Footer if NOT on login or login-screen */}
       {!isAuthPage && <Footer />}
     </>
   );
 };
-
 
 const AppRouter = () => {
   return (

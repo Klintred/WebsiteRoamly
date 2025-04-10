@@ -175,3 +175,20 @@
     width: 28px;
   }
   
+  .success-message {
+    color: green;
+    font-size: 15px;
+    text-align: center;
+    font-weight: 600;
+    margin-top: -10px;
+    margin-bottom: -10px;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 15px;
+    text-align: center;
+    font-weight: 600;
+    margin-top: -10px;
+    margin-bottom: -10px;
+  }

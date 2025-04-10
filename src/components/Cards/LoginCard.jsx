@@ -21,7 +21,7 @@ const LoginCard = () => {
       <div className="button-group">
         <PrimaryButton text="Login" onClick={handleLoginClick} /> {/* <- Add onClick */}
         <PrimaryButton text="Register" onClick={handleRegisterClick} variant="secondary" />
-        <PrimaryButton text="Continue as a guest" variant="guest" />
+        {/* <PrimaryButton text="Continue as a guest" variant="guest" /> */}
       </div>
     </div>
   );
