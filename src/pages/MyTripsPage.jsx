@@ -116,7 +116,51 @@ const MyTripsPage = () => {
             });
         });
 
-        setDragging(null);
+    const fetchSuggestedActivities = async (country, location = '') => {
+        let query = "";
+
+        switch (filterType) {
+            case "places":
+                query = `tourist attractions in ${country}`;
+                break;
+            case "restaurants":
+                query = `restaurants in ${country}`;
+                break;
+            default:
+                query = `things to do in ${country}`;
+        }
+
+        try {
+            const suggestions = await fetchPlaceDetails(query, location);
+            setSuggestedPlaces(suggestions.slice(0, 3));
+        } catch (e) {
+            console.error("Failed to fetch suggestions", e);
+        }
+    };
+
+    const renderPlaceCard = (placeName) => {
+        const place = places[placeName];
+        if (!place) {
+            getPlaceDetails(placeName);
+            return <p className="text-sm text-gray-500">Loading {placeName}...</p>;
+        }
+
+        return (
+            <div className="activity-item">
+                {place.photos?.[0] && (
+                    <img
+                        src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&photoreference=${place.photos[0].photo_reference}&key=${API_KEY}`}
+                        alt={place.name}
+                        className="w-24 h-24 object-cover rounded-lg"
+                    />
+                )}
+                <div>
+                    <h4>{place.name}</h4>
+                    <p>{place.formatted_address}</p>
+                    <p>⭐ {place.rating || "N/A"}</p>
+                </div>
+            </div>
+        );
     };
 
     const getPlaceDetails = async (placeName) => {
@@ -238,7 +282,10 @@ const MyTripsPage = () => {
 
             {loading && <p className="text-center text-muted">Loading trips...</p>}
             {error && <p className="text-error">{error}</p>}
+            {loading && <p className="text-center text-muted">Loading trips...</p>}
+            {error && <p className="text-error">{error}</p>}
             {trips.length === 0 && !loading && !error && (
+                <p className="text-center text-muted">No trips found.</p>
                 <p className="text-center text-muted">No trips found.</p>
             )}
 
@@ -254,9 +301,12 @@ const MyTripsPage = () => {
                     return (
                         <div key={trip._id} className="trip-card">
                             <h3 className="trip-title">{trip.TripName}</h3>
+                        <div key={trip._id} className="trip-card">
+                            <h3 className="trip-title">{trip.TripName}</h3>
 
                             {planData.itinerary && (
                                 <>
+                                    <div className="day-buttons">
                                     <div className="day-buttons">
                                         {planData.itinerary.map((day, index) => (
                                             <button
@@ -275,6 +325,7 @@ const MyTripsPage = () => {
 
                                     {selectedDay !== null && (
                                         <div
+                                            className="day-panel"
                                             className="day-panel"
                                             onDragOver={(e) => {
                                                 e.preventDefault();

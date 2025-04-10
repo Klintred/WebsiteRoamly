@@ -1,0 +1,211 @@
+.planner-container {
+  font-family: 'Roboto', sans-serif;
+  max-width: 760px;
+  margin: 24px auto;
+  padding: 34px 32px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+.planner-header {
+  font-family: 'AcuminPro', sans-serif;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.75rem;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.planner-input {
+  font-family: 'Roboto', sans-serif;
+  width: 100%;
+  padding: 12px 16px;
+  margin-top: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  font-size: 0.95rem;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.planner-input:focus {
+  outline: none;
+  background-color: #fff;
+  border-color: var(--primary-color);
+}
+
+::placeholder {
+  font-family: 'Roboto', sans-serif;
+  color: #999;
+  font-size: 0.95rem;
+}
+
+.planner-section {
+  margin-top: 20px;
+}
+
+.planner-subtitle {
+  font-family: 'AcuminPro', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 12px;
+}
+
+/* People stepper */
+.people-stepper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  justify-content: flex-start;
+}
+
+.circle-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.circle-button:hover {
+  background-color: #f1f3f5;
+  border-color: var(--primary-color);
+}
+
+.people-count {
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Checkbox styling */
+.planner-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  background-color: transparent;
+}
+
+.planner-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color);
+}
+
+.planner-label.checked {
+  border: 1px solid var(--primary-color);
+  background-color: #f1f3f5;
+}
+
+/* Submit button */
+.planner-button {
+  font-family: 'Roboto', sans-serif;
+  width: 100%;
+  padding: 14px;
+  margin-top: 24px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.planner-button:hover:not(:disabled) {
+  background-color: #0f3078;
+}
+
+.planner-button:disabled {
+  background-color: #e2e2e2;
+  cursor: not-allowed;
+}
+
+/* Response section */
+.planner-response {
+  margin-top: 28px;
+  padding: 16px;
+  border-radius: 14px;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.planner-response-title {
+  font-family: 'AcuminPro', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.planner-response-text {
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #444;
+}
+
+@media (max-width: 768px) {
+  .planner-container {
+    padding: 20px;
+    
+  }
+  
+  .planner-header {
+    font-size: 1.5rem;
+  }
+
+  .planner-input {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+
+  .planner-subtitle {
+    font-size: 1rem;
+  }
+
+  .planner-button {
+    font-size: 0.95rem;
+  }
+
+  .planner-label {
+    padding: 10px;
+  }
+
+  .circle-button {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+
+  .people-count {
+    font-size: 0.95rem;
+  }
+}

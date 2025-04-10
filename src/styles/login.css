@@ -1,4 +1,12 @@
-/* Ensure the entire page layout fills the screen properly */
+/* ✅ Scoped body fix to remove white space above image */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* === LOGIN PAGE WRAPPER === */
 .login-container {
   display: flex;
   flex-direction: column;
@@ -6,25 +14,29 @@
   justify-content: space-between;
   min-height: 100vh;
   width: 100%;
-  overflow-x: hidden; /* Prevent horizontal scroll */
   background-color: var(--background-color);
 }
 
-/* Wrapper for Image and Login Box */
+/* === WRAPS IMAGE + CONTENT === */
 .login-wrapper {
   display: flex;
-  flex-direction: column; /* Default: Stack Image on top, Login Below */
-  width: 100vw; /* Ensure full width */
+  flex-direction: column;
+  width: 100vw;
   align-items: center;
   justify-content: center;
+  flex-grow: 1;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-/* Background Image */
+/* === IMAGE CONTAINER === */
 .login-background {
   width: 100%;
-  height: 40vh; /* Image takes 40% height on mobile */
-  margin: 0; /* Ensures no spacing */
+  height: 40vh;
+  margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .login-background img {
@@ -32,18 +44,21 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  margin: 0;
+  padding: 0;
 }
 
-/* Login Content (Box) */
+/* === LOGIN CONTENT (FORM SIDE) === */
 .login-content {
   width: 100%;
-  max-width: 400px; /* Prevents stretching */
+  max-width: 400px;
   text-align: center;
   padding: 20px;
   background: var(--background-color);
+  margin: 0;
 }
 
-/* Login Box */
+/* === LOGIN BOX === */
 .login-box {
   display: flex;
   flex-direction: column;
@@ -52,25 +67,24 @@
   text-align: center;
 }
 
-/* Logo inside Login Box */
+/* === LOGO === */
 .logo-image {
   width: 180px;
   display: block;
-  margin: 20px auto;
-  margin-bottom: 40px;
+  margin: 20px auto 40px auto;
 }
 
-/* Buttons Group */
+/* === BUTTON GROUP === */
 .button-group {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Spacing between buttons */
+  gap: 15px;
   padding-bottom: 25px;
   width: 100%;
   align-items: center;
 }
 
-/* Guest Login Text */
+/* === GUEST TEXT === */
 .guest-text {
   color: var(--text-color);
   font-weight: bold;
@@ -78,57 +92,44 @@
   padding-bottom: 30px;
 }
 
-/* Footer */
-.footer {
-  width: 100%;
-  text-align: center;
-  padding: 20px;
-  background-color: var(--footer-background-color);
-  margin-top: auto; /* Ensures footer always stays at the bottom */
-}
-
-/* ✅ Fix: Ensure Image ALWAYS Hugs Left on Larger Screens */
+/* === RESPONSIVE DESKTOP STYLE === */
 @media (min-width: 768px) {
-
-  
   .login-wrapper {
-      display: flex;
-      flex-direction: row; /* Image & login box side by side */
-      align-items: stretch;
-      justify-content: flex-start;
-      width: 100vw; /* Ensure full screen width */
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
   }
 
   .login-background {
-      width: 50vw; /* Ensure image always takes half of the screen width */
-      height: 100vh; /* Full height */
-      margin: 0;
-      padding: 0;
-      flex-shrink: 0;
+    width: 50vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
   }
 
   .login-background img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-  
-  /* Guest Login */
-  .guest-text {
-    color: var(--text-color);
-    font-weight: bold;
-    margin-top: 20px; /* Increased spacing above */
-    padding-bottom: 30px; /* Increased space below */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    padding: 0;
   }
 
   .login-content {
-      width: 50vw; /* Ensure login form takes exactly half of the screen */
-      max-width: none; /* Removes any max-width restrictions */
-      padding: 40px;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    width: 50vw;
+    max-width: none;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+    margin: 0;
   }
-}
 }
