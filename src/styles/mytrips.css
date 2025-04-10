@@ -1,212 +1,154 @@
-/* General Styles */
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: #f7f7f7;
-    color: #333;
+    color: var(--text-color);
     margin: 0;
     padding: 0;
-}
-
-/* Layout Container */
-.max-w-4xl {
-    max-width: 1200px;
+  }
+  
+  .max-w-4xl {
+    max-width: 1100px;
     margin: 0 auto;
     padding: 2rem;
-}
-
-/* Header */
-h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #4C51BF;
+  }
+  
+  h1 {
+    font-family: 'AcuminPro', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
     text-align: center;
+    color: var(--primary-color);
     margin-bottom: 2rem;
-}
-
-/* Trip Cards */
-.border-gray-300 {
-    border: 1px solid #e2e8f0;
-}
-
-/* Each individual trip card styling */
-div.border {
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 1.5rem;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-}
-
-div.border:hover {
-    transform: scale(1.03);
-}
-
-.p-6 {
-    padding: 1.5rem;
-}
-
-.text-indigo-600 {
-    color: #4C51BF;
-}
-
-h2, h3 {
+  }
+  
+  .trip-card {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+    margin-bottom: 2rem;
+  }
+  
+  .trip-card:hover {
+    transform: scale(1.01);
+  }
+  
+  .trip-title {
     font-size: 1.5rem;
-    font-weight: bold;
-    color: #2d3748;
-}
-
-h3.text-2xl {
-    font-size: 1.75rem;
-}
-
-h4.text-lg {
-    font-size: 1.25rem;
-    color: #2d3748;
-}
-
-h5 {
-    font-size: 1.125rem;
-    color: #4a5568;
-}
-
-ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-button {
-    background-color: #4C51BF;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #434190;
-}
-
-/* Card images */
-img {
-    object-fit: cover;
-    width: 96px;
-    height: 96px;
-    border-radius: 8px;
-    margin-right: 1rem;
-}
-
-/* Itinerary Section */
-.space-y-6 {
-    margin-top: 1.5rem;
-}
-
-p.text-gray-700 {
-    color: #4a5568;
-}
-
-.p-5 {
-    padding: 1.25rem;
-}
-
-h3.text-xl {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #4C51BF;
-}
-
-.text-gray-600 {
-    color: #718096;
-}
-
-.bg-indigo-500 {
-    background-color: #5a67d8;
-    color: white;
-    padding: 1rem;
-}
-
-.bg-gray-50 {
-    background-color: #f7fafc;
-}
-
-/* Summary for raw trip data */
-details summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: #4C51BF;
-}
-
-pre {
-    background-color: #f0f4f8;
-    padding: 1rem;
-    border-radius: 8px;
-    max-height: 200px;
-    overflow-y: auto;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.875rem;
-}
-
-/* Icons */
-svg {
-    width: 1.2rem;
-    height: 1.2rem;
-}
-
-.text-indigo-500 {
-    color: #4C51BF;
-}
-
-.text-green-500 {
-    color: #48bb78;
-}
-
-.text-red-500 {
-    color: #e53e3e;
-}
-
-.text-yellow-600 {
-    color: #ecc94b;
-}
-
-/* Flexbox adjustments for better layout */
-.flex {
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 16px;
+  }
+  
+  .day-buttons {
     display: flex;
-}
-
-.items-start {
-    align-items: flex-start;
-}
-
-.space-x-4 {
-    margin-right: 1rem;
-}
-
-/* Responsive Styling */
-@media screen and (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .day-buttons button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    background-color: #f1f1f1;
+    color: #333;
+    border: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .day-buttons button:hover {
+    background-color: var(--accent-color);
+    color: white;
+  }
+  
+  .day-buttons .active {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .day-panel {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    margin-top: 16px;
+  }
+  
+  .day-title {
+    font-family: 'AcuminPro', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text-color);
+  }
+  
+  .activity-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .activity-item {
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: grab;
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .activity-item:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
+  
+  .activity-item svg {
+    color: var(--secondary-color);
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-muted {
+    color: #888;
+  }
+  
+  .text-error {
+    color: var(--error-color);
+    font-weight: 500;
+  }
+  
+  @media screen and (max-width: 768px) {
     .max-w-4xl {
-        padding: 1.5rem;
+      padding: 1.5rem;
     }
-
+  
     h1 {
-        font-size: 2rem;
+      font-size: 1.8rem;
     }
-
-    .p-6 {
-        padding: 1rem;
+  
+    .trip-title {
+      font-size: 1.3rem;
     }
-
-    .border {
-        margin-bottom: 1rem;
+  
+    .day-buttons button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
     }
-
-    img {
-        width: 72px;
-        height: 72px;
+  
+    .activity-item {
+      font-size: 0.9rem;
     }
-
-    button {
-        padding: 0.5rem 1.25rem;
-    }
-}
+  }
