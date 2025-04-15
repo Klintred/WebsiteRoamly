@@ -73,8 +73,9 @@ const RegisterScreen = () => {
 
       <div className="register-form-wrapper">
         <div className="register-screen-container">
-          <button className="back-button" onClick={() => navigate(-1)}>←</button>
-
+        <button className="back-button" onClick={() => window.location.href = 'https://landingspagina-roamly.vercel.app/'}>
+        ←
+        </button>
           <h1 className="register-heading">Create your account</h1>
 
           <form className="register-form" onSubmit={handleRegister}>
