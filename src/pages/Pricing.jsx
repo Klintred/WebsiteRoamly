@@ -81,7 +81,7 @@ const Pricing = () => {
                 <li>Custom onboarding</li>
               </ul>
             </div>
-            <button className="plan-button accent">For Enterprises</button>
+            <button className="plan-button accent">Unlimited Traveling</button>
           </div>
         </div>
       </div>
