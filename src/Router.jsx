@@ -18,9 +18,10 @@ import PointsPage from "./pages/PointsPage";
 import MyTrips from "./pages/MyTripsPage";
 import AccessibilityFeedback from "./pages/reviews";
 import RegisterScreen from "./pages/RegisterScreen";
-import Profile from "./pages/Profile"; // ✅ Import the Profile page
+import Pricing from "./pages/Pricing";
+import Profile from "./pages/Profile"; 
 
-// ✅ Inline ProtectedRoute Component
+
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
 
@@ -114,6 +115,15 @@ const AppLayout = () => {
             </ProtectedRoute>
           }
         />
+
+<Route
+  path="/pricing"
+  element={
+    <ProtectedRoute>
+      <Pricing />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
 
       {!isAuthPage && <Footer />}

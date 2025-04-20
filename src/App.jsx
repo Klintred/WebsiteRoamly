@@ -11,8 +11,8 @@ Hotjar.init(siteId, hotjarVersion);
 function App() {
   return (
     <div className="App">
-      <AppRouter />
-    </div>
+    <AppRouter />
+  </div>
   );
 
 }
