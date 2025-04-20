@@ -12,7 +12,7 @@ const PROXY_URLS = [
 ];
 
 const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
-const API_KEY = "AIzaSyBO0gm7S42KuQqgWTO63H-LCWix5488bMU"; // Gebruik .env in productie
+const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
 const fetchPlaceDetails = async (placeName, location = '', radius = 50000) => {
     let url = `${PLACES_API_BASE_URL}?query=${encodeURIComponent(placeName)}&key=${API_KEY}`;
