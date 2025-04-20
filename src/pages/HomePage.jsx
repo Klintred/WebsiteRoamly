@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faStar} from '@fortawesome/free-solid-svg-icons';
 
 
-const API_KEY = 'AIzaSyBO0gm7S42KuQqgWTO63H-LCWix5488bMU';
+const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
 const GEO_API_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 const PROXY_URL = 'https://api.allorigins.win/raw?url=';
