@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faStar} from '@fortawesome/free-solid-svg-icons';
-
+import { faMapMarkerAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 console.log("Google API key:", API_KEY);
 
 const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
 const GEO_API_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
-const PROXY_URL = 'https://api.allorigins.win/raw?url=';
 
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
@@ -60,20 +58,25 @@ const HomePage = () => {
     try {
       const radius = 50000;
       let hotelData = [], restaurantData = [], activityData = [];
-      const fetchHotelPromise = (filter === 'all' || filter === 'hotel') 
-        ? fetchPlaces(`hotels ${searchQuery}`, coordinates, radius) 
+
+      const fetchHotelPromise = (filter === 'all' || filter === 'hotel')
+        ? fetchPlaces(`hotels ${searchQuery}`, coordinates, radius)
         : Promise.resolve([]);
-      const fetchRestaurantPromise = (filter === 'all' || filter === 'restaurant') 
-        ? fetchPlaces(`restaurants ${searchQuery}`, coordinates, radius) 
+
+      const fetchRestaurantPromise = (filter === 'all' || filter === 'restaurant')
+        ? fetchPlaces(`restaurants ${searchQuery}`, coordinates, radius)
         : Promise.resolve([]);
-      const fetchActivityPromise = (filter === 'all' || filter === 'activity') 
-        ? fetchPlaces(`tourist attractions ${searchQuery}`, coordinates, radius) 
+
+      const fetchActivityPromise = (filter === 'all' || filter === 'activity')
+        ? fetchPlaces(`tourist attractions ${searchQuery}`, coordinates, radius)
         : Promise.resolve([]);
+
       [hotelData, restaurantData, activityData] = await Promise.all([
         fetchHotelPromise,
         fetchRestaurantPromise,
         fetchActivityPromise
       ]);
+
       setHotels(hotelData);
       setRestaurants(restaurantData);
       setActivities(activityData);
@@ -86,9 +89,8 @@ const HomePage = () => {
 
   const fetchPlaces = async (query, location, radius) => {
     const apiUrl = `${PLACES_API_BASE_URL}?query=${encodeURIComponent(query)}&location=${location}&radius=${radius}&key=${API_KEY}`;
-    const proxiedUrl = `${PROXY_URL}${encodeURIComponent(apiUrl)}`;
     try {
-      const response = await fetch(proxiedUrl);
+      const response = await fetch(apiUrl);
       const data = await response.json();
       if (data.status !== "OK") {
         throw new Error(data.error_message || `Geen resultaten gevonden.`);
@@ -112,20 +114,20 @@ const HomePage = () => {
     <div className="home-page">
       <h1>Ontdek Plaatsen</h1>
       <div className="search-filter">
-  <input
-    type="text"
-    className="search-input"
-    placeholder="Voer een stad of land in..."
-    value={location}
-    onChange={(e) => setLocation(e.target.value)}
-  />
-  <select className="filter-dropdown" value={filter} onChange={(e) => setFilter(e.target.value)}>
-    <option value="all">Alle</option>
-    <option value="hotel">Hotels</option>
-    <option value="restaurant">Restaurants</option>
-    <option value="activity">Activiteiten</option>
-  </select>
-</div>
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Voer een stad of land in..."
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+        <select className="filter-dropdown" value={filter} onChange={(e) => setFilter(e.target.value)}>
+          <option value="all">Alle</option>
+          <option value="hotel">Hotels</option>
+          <option value="restaurant">Restaurants</option>
+          <option value="activity">Activiteiten</option>
+        </select>
+      </div>
 
       {loading && <p>Zoeken...</p>}
       {error && <p className="error-message">{error}</p>}
@@ -148,8 +150,6 @@ const ResultsSection = ({ title, data, filter, type }) => {
     </>
   );
 };
-
-
 
 const PlaceCard = ({ place }) => (
   <div className="place-card">
