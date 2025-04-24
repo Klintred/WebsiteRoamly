@@ -53,11 +53,13 @@ html, body {
 }
 
 h1 {
-    font-family: 'AcuminPro', sans-serif;
+    font-family: 'AcumixnPro', sans-serif;
     font-size: 1.75rem; 
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1rem;
+    color: var(--text-color);
+    text-align: left;
 }
 
 h2 {

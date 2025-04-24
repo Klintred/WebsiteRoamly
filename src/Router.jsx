@@ -20,10 +20,11 @@ import AccessibilityFeedback from "./pages/reviews";
 import RegisterScreen from "./pages/RegisterScreen";
 import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile";
+import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import SetNewPassword from "./pages/SetNewPassword"; // ✅ NEW
-
+import SetNewPassword from "./pages/SetNewPassword"; 
+import WriteReviewPage from "./pages/WriteReviewPage";
 // ✅ Middleware to protect private routes
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -51,7 +52,6 @@ const AppLayout = () => {
       {!isAuthPage && <Navbar />}
 
       <Routes>
-        {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login-screen" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
@@ -59,7 +59,6 @@ const AppLayout = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/set-new-password" element={<SetNewPassword />} /> {/* ✅ Added */}
 
-        {/* Protected routes */}
         <Route
           path="/"
           element={
@@ -125,13 +124,21 @@ const AppLayout = () => {
           }
         />
         <Route
-          path="/pricing"
+          path="/write-review"
           element={
             <ProtectedRoute>
-              <Pricing />
+              <WriteReviewPage />
             </ProtectedRoute>
           }
         />
+                <Route
+                  path="/pricing"
+                  element={
+                    <ProtectedRoute>
+                      <Pricing />
+                    </ProtectedRoute>
+                  }
+                />
       </Routes>
 
       {!isAuthPage && <Footer />}
