@@ -20,6 +20,8 @@ import AccessibilityFeedback from "./pages/reviews";
 import RegisterScreen from "./pages/RegisterScreen";
 import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile"; 
+import ForgotPassword from "./pages/ForgotPassword";
+
 
 
 const ProtectedRoute = ({ children }) => {
@@ -38,7 +40,8 @@ const AppLayout = () => {
   const isAuthPage =
     location.pathname === "/login" ||
     location.pathname === "/login-screen" ||
-    location.pathname === "/register";
+    location.pathname === "/register" ||
+    location.pathname === "/forgot-password"; // ✅ added this line
 
   return (
     <>
@@ -49,6 +52,7 @@ const AppLayout = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login-screen" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Protected routes */}
         <Route
@@ -115,15 +119,14 @@ const AppLayout = () => {
             </ProtectedRoute>
           }
         />
-
-<Route
-  path="/pricing"
-  element={
-    <ProtectedRoute>
-      <Pricing />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/pricing"
+          element={
+            <ProtectedRoute>
+              <Pricing />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {!isAuthPage && <Footer />}

@@ -45,7 +45,6 @@ const LoginScreen = () => {
         throw new Error(data.message || "Login failed.");
       }
 
-      // Store session
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -98,7 +97,13 @@ const LoginScreen = () => {
             {error && <div className="error-message">{error}</div>}
             {successMessage && <div className="success-message">{successMessage}</div>}
 
-            <div className="forgot-password">Forgot password?</div>
+            <div
+              className="forgot-password"
+              onClick={() => navigate("/forgot-password")}
+              style={{ cursor: "pointer", color: "#007bff" }}
+            >
+              Forgot password?
+            </div>
 
             <div className="full-width-button">
               <PrimaryButton text="Login" type="submit" />
