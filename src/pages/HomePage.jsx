@@ -4,12 +4,6 @@ import '../styles/homepage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 
-const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
-console.log("Google API key:", API_KEY);
-
-const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
-const GEO_API_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
-
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
@@ -36,12 +30,10 @@ const HomePage = () => {
   const fetchCoordinates = async (location) => {
     setLoading(true);
     try {
-      const apiUrl = `${GEO_API_BASE_URL}?address=${encodeURIComponent(location)}&key=${API_KEY}`;
-      const response = await fetch(apiUrl);
+      const response = await fetch(`/api/coordinates?location=${encodeURIComponent(location)}`);
       const data = await response.json();
-      if (data.status === "OK") {
-        const loc = data.results[0].geometry.location;
-        setCoordinates(`${loc.lat},${loc.lng}`);
+      if (data.lat && data.lng) {
+        setCoordinates(`${data.lat},${data.lng}`);
       } else {
         throw new Error("Locatie niet gevonden.");
       }
@@ -88,22 +80,13 @@ const HomePage = () => {
   };
 
   const fetchPlaces = async (query, location, radius) => {
-    const apiUrl = `${PLACES_API_BASE_URL}?query=${encodeURIComponent(query)}&location=${location}&radius=${radius}&key=${API_KEY}`;
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetch(`/api/places?query=${encodeURIComponent(query)}&location=${location}&radius=${radius}`);
       const data = await response.json();
-      if (data.status !== "OK") {
-        throw new Error(data.error_message || `Geen resultaten gevonden.`);
+      if (data.error) {
+        throw new Error(data.error);
       }
-      return data.results.map(place => ({
-        id: place.place_id,
-        name: place.name,
-        address: place.formatted_address,
-        rating: place.rating,
-        photo: place.photos
-          ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${API_KEY}`
-          : 'https://via.placeholder.com/320x200',
-      }));
+      return data;
     } catch (error) {
       console.error(`Fout bij ophalen van gegevens:`, error);
       return [];
