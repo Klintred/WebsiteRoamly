@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import CustomCalendar from "../components/Forms/callender";
 import "../styles/TripPlannerPage.css";
+import PrimaryButton from '../components/Buttons/PrimaryButton';
+
 
 function TripPlannerPage() {
   const [destination, setDestination] = useState("");
   const [dates, setDates] = useState([null, null]);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [activitiesOpen, setActivitiesOpen] = useState(false);
   const [people, setPeople] = useState(1);
   const [activities, setActivities] = useState({ sport: false, culture: false, spa: false });
   const [departureLocation, setDepartureLocation] = useState("");
@@ -90,91 +94,105 @@ function TripPlannerPage() {
 
   return (
     <div className="planner-container">
-      <h1 className="planner-header">AI Travel Planner</h1>
-
-      <input
+      <h1 className="planner-header">Create a new trip</h1>
+      <div>
+        {/* <input
         type="text"
-        placeholder="Where do you want to go?"
+        placeholder="Trip name"
         value={destination}
         onChange={(e) => setDestination(e.target.value)}
         className="planner-input"
       />
 
-      <div className="planner-section">
-        <h3 className="planner-subtitle">When?</h3>
-        <CustomCalendar selectedDates={dates} setSelectedDates={setDates} />
-      </div>
+*/}
+        <input
+          type="text"
+          placeholder="Where are you departing from?"
+          value={departureLocation}
+          onChange={(e) => setDepartureLocation(e.target.value)}
+          className="planner-input"
+        />
 
-      <div className="planner-section">
-        <h3 className="planner-subtitle">How many people?</h3>
-        <div className="people-stepper">
+        <input
+          type="text"
+          placeholder="Where are you going?"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+          className="planner-input"
+        />
+
+        <div className="planner-section">
           <button
             type="button"
-            className="circle-button"
-            onClick={() => setPeople((prev) => Math.max(1, Number(prev) - 1))}
+            className="calendar-select-button"
+            onClick={() => setCalendarOpen((prev) => !prev)}
           >
-            –
+            {dates[0] && dates[1]
+              ? `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`
+              : "Select your dates"}
           </button>
-          <span className="people-count">{people}</span>
-          <button
-            type="button"
-            className="circle-button"
-            onClick={() => setPeople((prev) => Number(prev) + 1)}
-          >
-            +
-          </button>
+
+          {calendarOpen && (
+            <div className="calendar-wrapper">
+              <CustomCalendar
+                selectedDates={dates}
+                setSelectedDates={(selected) => {
+                  const maybeDates = typeof selected === "function" ? selected(dates) : selected;
+                  console.log("Cleaned selected dates:", maybeDates);
+
+                  setDates(maybeDates);
+
+                  if (maybeDates[0] && maybeDates[1]) {
+                    setCalendarOpen(false);
+                  }
+                }}
+              />
+            </div>
+          )}
         </div>
+
+        <div className="planner-section">
+
+          <button
+            type="button"
+            className="calendar-select-button"
+            onClick={() => setActivitiesOpen((prev) => !prev)}
+          >
+            {Object.values(activities).some(val => val)
+              ? `Selected: ${Object.entries(activities)
+                .filter(([_, value]) => value)
+                .map(([key]) => key.charAt(0).toUpperCase() + key.slice(1))
+                .join(", ")}`
+              : "Select activities"}
+          </button>
+
+          {activitiesOpen && (
+            <div className="activity-options">
+              {["sport", "culture", "spa"].map((activity) => (
+                <label
+                  key={activity}
+                  className={`planner-label ${activities[activity] ? "checked" : ""}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={activities[activity]}
+                    onChange={() => handleActivityChange(activity)}
+                  />{" "}
+                  {activity.charAt(0).toUpperCase() + activity.slice(1)}
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+
       </div>
-
-      <input
-        type="text"
-        placeholder="Where are you departing from?"
-        value={departureLocation}
-        onChange={(e) => setDepartureLocation(e.target.value)}
-        className="planner-input"
-      />
-
-      <input
-        type="text"
-        placeholder="Preferred transport mode (e.g., car, plane, train)"
-        value={transportMode}
-        onChange={(e) => setTransportMode(e.target.value)}
-        className="planner-input"
-      />
-
-      <div className="planner-section">
-        <h3 className="planner-subtitle">What activities do you prefer?</h3>
-        <label className={`planner-label ${activities.sport ? "checked" : ""}`}>
-          <input
-            type="checkbox"
-            checked={activities.sport}
-            onChange={() => handleActivityChange("sport")}
-          /> Sport
-        </label>
-        <label className={`planner-label ${activities.culture ? "checked" : ""}`}>
-          <input
-            type="checkbox"
-            checked={activities.culture}
-            onChange={() => handleActivityChange("culture")}
-          /> Culture
-        </label>
-        <label className={`planner-label ${activities.spa ? "checked" : ""}`}>
-          <input
-            type="checkbox"
-            checked={activities.spa}
-            onChange={() => handleActivityChange("spa")}
-          /> Spa
-        </label>
-      </div>
-
-      <button
+      <PrimaryButton
+        text={loading ? "Planning..." : "Generate Travel Plan"}
         onClick={handleSubmit}
+        variant="primary"
         disabled={loading}
-        className="planner-button"
-      >
-        {loading ? "Planning..." : "Generate Travel Plan"}
-      </button>
-
+      />
       {response && (
         <div className="planner-response">
           <h2 className="planner-response-title">Travel Plan Proposal:</h2>
