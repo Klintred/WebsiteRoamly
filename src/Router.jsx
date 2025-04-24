@@ -19,29 +19,32 @@ import MyTrips from "./pages/MyTripsPage";
 import AccessibilityFeedback from "./pages/reviews";
 import RegisterScreen from "./pages/RegisterScreen";
 import Pricing from "./pages/Pricing";
-import Profile from "./pages/Profile"; 
+import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import SetNewPassword from "./pages/SetNewPassword"; // ✅ NEW
 
-
-
+// ✅ Middleware to protect private routes
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
-
   if (!token) {
     return <Navigate to="/register" replace />;
   }
-
   return children;
 };
 
+// ✅ Layout with conditional Nav/Footer
 const AppLayout = () => {
   const location = useLocation();
 
-  const isAuthPage =
-    location.pathname === "/login" ||
-    location.pathname === "/login-screen" ||
-    location.pathname === "/register" ||
-    location.pathname === "/forgot-password"; // ✅ added this line
+  const isAuthPage = [
+    "/login",
+    "/login-screen",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+    "/set-new-password", // ✅ Added here
+  ].includes(location.pathname);
 
   return (
     <>
@@ -53,6 +56,8 @@ const AppLayout = () => {
         <Route path="/login-screen" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/set-new-password" element={<SetNewPassword />} /> {/* ✅ Added */}
 
         {/* Protected routes */}
         <Route
@@ -134,6 +139,7 @@ const AppLayout = () => {
   );
 };
 
+// ✅ Main router wrapper
 const AppRouter = () => {
   return (
     <Router>

@@ -215,6 +215,13 @@ const RegisterScreen = () => {
             <div className="full-width-button">
               <PrimaryButton text="Register" type="submit" />
             </div>
+            <div className="divider">
+  <span>Or register with</span>
+</div>
+
+<button className="google-login-button">
+  <img src="/assets/icons/googleIcon.svg" alt="Google login" />
+</button>
           </form>
 
           <p className="bottom-prompt">

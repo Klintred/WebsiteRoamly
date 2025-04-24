@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/LoginScreen.css"; // Reuse styles
+import "../styles/LoginScreen.css";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 
 const ForgotPassword = () => {
@@ -34,7 +34,14 @@ const ForgotPassword = () => {
         throw new Error(data.message || "Something went wrong.");
       }
 
+      // ✅ Save the email for use in ResetPassword.jsx
+      localStorage.setItem("resetEmail", email);
+
       setMessage("Recovery code sent! Please check your email.");
+
+      setTimeout(() => {
+        navigate("/reset-password");
+      }, 2000);
     } catch (err) {
       console.error(err);
       setError(err.message);
