@@ -19,9 +19,10 @@ import MyTrips from "./pages/MyTripsPage";
 import AccessibilityFeedback from "./pages/reviews";
 import RegisterScreen from "./pages/RegisterScreen";
 import Pricing from "./pages/Pricing";
-import Profile from "./pages/Profile"; 
+import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
 
+import WriteReviewPage from "./pages/WriteReviewPage";
 
 
 const ProtectedRoute = ({ children }) => {
@@ -48,13 +49,11 @@ const AppLayout = () => {
       {!isAuthPage && <Navbar />}
 
       <Routes>
-        {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login-screen" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Protected routes */}
         <Route
           path="/"
           element={
@@ -120,13 +119,21 @@ const AppLayout = () => {
           }
         />
         <Route
-          path="/pricing"
+          path="/write-review"
           element={
             <ProtectedRoute>
-              <Pricing />
+              <WriteReviewPage />
             </ProtectedRoute>
           }
         />
+                <Route
+                  path="/pricing"
+                  element={
+                    <ProtectedRoute>
+                      <Pricing />
+                    </ProtectedRoute>
+                  }
+                />
       </Routes>
 
       {!isAuthPage && <Footer />}

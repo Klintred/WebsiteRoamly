@@ -9,7 +9,7 @@ const PrimaryButton = ({ text, onClick, to, variant = "primary" }) => {
       : variant === "guest"
       ? "guest-btn"
       : "login-btn"
-  }`;
+  }`; 
 
 
   // If a 'to' prop is passed, render a <Link> for navigation

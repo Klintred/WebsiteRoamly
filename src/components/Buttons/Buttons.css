@@ -46,4 +46,62 @@
     opacity: 0.8;
   }
 
+  .tag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4em 0.8em;
+    border: 2px solid #ccc;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    transition: background-color 0.2s;
+  }
+
+  .tag-btn:hover {
+    background-color: #e0e0e0;
+  }
   
+  .tag-indicator {
+    width: 0.7em;
+    height: 0.7em;
+    border-radius: 9999px;
+    background-color: currentColor;
+  }
+  
+  .tag-green {
+    border-color: var(--success-color);
+  }
+  
+  .tag-green .tag-indicator {
+    color: var(--success-color);
+  }
+  
+  .tag-orange {
+    border-color: var(--warning-color);
+  }
+  
+  .tag-orange .tag-indicator {
+    color: var(--warning-color);
+  }
+  
+  .tag-red {
+    border-color: var(--error-color);
+  }
+  
+  .tag-red .tag-indicator {
+    color: var(--error-color);
+  }
+  
+  .tag-gray {
+    border-color: var(--border-color);
+  }
+  
+  .tag-gray .tag-indicator {
+    color: var(--border-color);
+  }
+
+  .tag-selected {
+    background-color: #e0e0e0;
+  }
