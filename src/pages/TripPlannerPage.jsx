@@ -78,7 +78,7 @@ function TripPlannerPage() {
         Plan: cleanedResponse,
       };
 
-      await fetch("https://roamly-api.onrender.com/api/v1/reviews", {
+      await fetch("https://roamly-api.onrender.com/api/v1/trips", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(tripData),
