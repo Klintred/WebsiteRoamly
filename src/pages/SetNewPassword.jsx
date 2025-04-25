@@ -26,26 +26,36 @@ const SetNewPassword = () => {
     }
 
     const email = localStorage.getItem("verifiedEmail");
-    if (!email) {
-      setError("Email verification missing. Please restart the reset process.");
+    const resetPasswordCode = localStorage.getItem("verifiedCode");
+
+    if (!email || !resetPasswordCode) {
+      setError("Verification missing. Please restart the reset process.");
       return;
     }
 
     try {
-      // TODO: Replace with your actual API endpoint
       const response = await fetch("https://roamly-api.onrender.com/api/v1/users/reset-password", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, newPassword }),
+        method: "POST", // This is a POST, per your backend
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          resetPasswordCode,
+          newPassword,
+        }),
       });
 
       const data = await response.json();
+
       if (!response.ok) {
         throw new Error(data.message || "Password reset failed.");
       }
 
       setSuccessMessage("Password reset successful!");
       localStorage.removeItem("verifiedEmail");
+      localStorage.removeItem("verifiedCode");
+
       setTimeout(() => navigate("/login-screen"), 2000);
     } catch (err) {
       console.error(err);

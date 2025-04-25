@@ -20,7 +20,6 @@ import AccessibilityFeedback from "./pages/reviews";
 import RegisterScreen from "./pages/RegisterScreen";
 import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile";
-import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import SetNewPassword from "./pages/SetNewPassword"; 
