@@ -21,9 +21,8 @@ import RegisterScreen from "./pages/RegisterScreen";
 import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import SetNewPassword from "./pages/SetNewPassword"; 
 import WriteReviewPage from "./pages/WriteReviewPage";
+import DetailedReviewPage from './pages/DetailedReviewPage';
 // ✅ Middleware to protect private routes
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -130,14 +129,20 @@ const AppLayout = () => {
             </ProtectedRoute>
           }
         />
-                <Route
-                  path="/pricing"
-                  element={
-                    <ProtectedRoute>
-                      <Pricing />
-                    </ProtectedRoute>
-                  }
-                />
+        <Route
+          path="/pricing"
+          element={
+            <ProtectedRoute>
+              <Pricing />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/review/details/:id" element={
+          <ProtectedRoute>
+            <DetailedReviewPage />
+          </ProtectedRoute>
+
+        } />
       </Routes>
 
       {!isAuthPage && <Footer />}

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import "../styles/reviews.css";
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Tag from '../components/Buttons/Tag';
 import PrimaryButton from '../components/Buttons/PrimaryButton';
 
@@ -28,12 +27,17 @@ const WriteReviewPage = () => {
       const res = await fetch("https://roamly-api.onrender.com/api/v1/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ general: responses }) // <- wrap in "general"
-      });
+        body: JSON.stringify({
+          general: responses,
+          points: 1 
+        })
+      });   
   
       if (!res.ok) throw new Error("Failed to submit");
   
-      const data = await res.json(); // expects { _id: "..." }
+      const data = await res.json(); 
+      console.log("Created review ID:", data._id);
+
       setReviewId(data._id);
       setShowFollowUp(true);
     } catch (err) {
@@ -56,7 +60,7 @@ const WriteReviewPage = () => {
   }
   return (
     <div className="write-review-container">
-      <h2>Give feedback</h2>
+      <h1>Give feedback</h1>
       <div className="write-review-form">
         <div className="write-review-form-group">
         <QuestionGroup label="How would you rate the overall accessibility?" field="accessibility">

@@ -95,7 +95,7 @@ function TripPlannerPage() {
   return (
     <div className="planner-container">
       <h1 className="planner-header">Create a new trip</h1>
-      <div>
+      <div className="planner-subcontainer">
         {/* <input
         type="text"
         placeholder="Trip name"
@@ -105,23 +105,45 @@ function TripPlannerPage() {
       />
 
 */}
-        <input
-          type="text"
-          placeholder="Where are you departing from?"
-          value={departureLocation}
-          onChange={(e) => setDepartureLocation(e.target.value)}
-          className="planner-input"
-        />
+        <div className="planner-input-container">
+          <div>
+            <span class="material-symbols-outlined">
+              search
+            </span>
 
-        <input
-          type="text"
-          placeholder="Where are you going?"
-          value={destination}
-          onChange={(e) => setDestination(e.target.value)}
-          className="planner-input"
-        />
+          </div>
+          <input
+            type="text"
+            placeholder="Where are you departing from?"
+            value={departureLocation}
+            onChange={(e) => setDepartureLocation(e.target.value)}
+            className="planner-input"
+          />
+        </div>
+
+        <div className="planner-input-container">
+          <div>
+            <span class="material-symbols-outlined">
+              search
+            </span>
+
+          </div>
+          <input
+            type="text"
+            placeholder="Where are you going?"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            className="planner-input"
+          />
+        </div>
 
         <div className="planner-section">
+        <div className="planner-input-container">
+          <div>
+            <span class="material-symbols-outlined">
+              calendar_today
+            </span>
+          </div>
           <button
             type="button"
             className="calendar-select-button"
@@ -132,6 +154,7 @@ function TripPlannerPage() {
               : "Select your dates"}
           </button>
 
+        </div>
           {calendarOpen && (
             <div className="calendar-wrapper">
               <CustomCalendar
@@ -151,8 +174,13 @@ function TripPlannerPage() {
           )}
         </div>
 
-        <div className="planner-section">
-
+         <div className="planner-section">
+        <div className="planner-input-container">
+          <div>
+            <span class="material-symbols-outlined">
+              calendar_today
+            </span>
+          </div>
           <button
             type="button"
             className="calendar-select-button"
@@ -166,6 +194,7 @@ function TripPlannerPage() {
               : "Select activities"}
           </button>
 
+        </div>
           {activitiesOpen && (
             <div className="activity-options">
               {["sport", "culture", "spa"].map((activity) => (
