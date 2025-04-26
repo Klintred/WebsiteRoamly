@@ -27,7 +27,8 @@ const EntranceReviewPage = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     entrance: responses,
-                    points: 1
+                    points: 1,
+                    sectionsCompleted: "entrance"
                 })
             });
 

@@ -29,7 +29,8 @@ const SanitaryReviewPage = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     sanitary: responses,
-                    points: 1
+                    points: 1,
+                    sectionsCompleted: "sanitary"
                 })
             });
 

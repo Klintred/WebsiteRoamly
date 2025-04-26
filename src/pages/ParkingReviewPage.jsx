@@ -12,7 +12,6 @@ const ParkingReviewPage = () => {
     sizeRating: "",
     entranceAccessible: "",
     closeToEntrance: "",
-    smoothPath: "",
   });
 
   const navigate = useNavigate();
@@ -28,7 +27,8 @@ const ParkingReviewPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           parking: responses, 
-          points: 1 
+          points: 1,
+          sectionsCompleted: "parking"
         })
       });
 
@@ -62,9 +62,9 @@ const ParkingReviewPage = () => {
           <Tag text="No" color="red" isSelected={responses.entranceAccessible === "No"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
         </QuestionGroup>
 
-        <QuestionGroup label="Was the path from the parking to the entrance smooth and obstacle-free?" field="smoothPath">
-          <Tag text="Yes" color="green" isSelected={responses.smoothPath === "Yes"} onClick={(val) => handleTagClick("smoothPath", val)} />
-          <Tag text="No" color="red" isSelected={responses.smoothPath === "No"} onClick={(val) => handleTagClick("smoothPath", val)} />
+        <QuestionGroup label="Was the parking area close to the entrance?" field="closeToEntrance">
+          <Tag text="Yes" color="green" isSelected={responses.closeToEntrance === "Yes"} onClick={(val) => handleTagClick("closeToEntrance", val)} />
+          <Tag text="No" color="red" isSelected={responses.closeToEntrance === "No"} onClick={(val) => handleTagClick("closeToEntrance", val)} />
         </QuestionGroup>
 
      

@@ -12,7 +12,6 @@ const InternalReviewPage = () => {
         elevatorOrRamp: "",
         elevatorAccessible: "",
         obstaclesLevel: "",
-        obstaclesDescription: "",
     });
 
     const navigate = useNavigate();
@@ -28,7 +27,8 @@ const InternalReviewPage = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     internalNavigation: responses,
-                    points: 1
+                    points: 1,
+                    sectionsCompleted: "internalNavigation"
                 })
             });
 
