@@ -16,7 +16,7 @@ const LoginScreen = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/home");
+      navigate("/profile"); // ✅ navigate to /profile if already logged in
     }
   }, [navigate]);
 
@@ -45,14 +45,21 @@ const LoginScreen = () => {
         throw new Error(data.message || "Login failed.");
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // ✅ Save token immediately after successful login
+      const token = data?.data?.token;
+      if (token) {
+        localStorage.setItem("token", token);
+      } else {
+        throw new Error("No token received from server.");
+      }
 
       setSuccessMessage("Login successful!");
-      setTimeout(() => navigate("/home"), 1500);
+
+      // ✅ Navigate to /profile after successful login
+      setTimeout(() => navigate("/profile"), 1500);
     } catch (err) {
       console.error(err);
-      setError(err.message);
+      setError(err.message || "Something went wrong.");
     }
   };
 

@@ -83,7 +83,13 @@ const HomePage = () => {
 
   const fetchPlaces = async (query, location, radius) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(query)}&location=${location}&radius=${radius}`);
+      const cleanedQuery = query.trim();
+const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(cleanedQuery)}&location=${location}&radius=${radius}`);
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Server gaf geen geldige JSON terug.");
+      }
       const data = await response.json();
       if (data.error) {
         throw new Error(data.error);

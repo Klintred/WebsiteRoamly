@@ -7,11 +7,11 @@ import PrimaryButton from '../components/Buttons/PrimaryButton';
 const WriteReviewPage = () => {
   const [responses, setResponses] = useState({
     accessibility: "",
-    parking: "",
-    entrance: "",
+    parkingSuitable: "",
+    entranceAccessible: "",
     movement: "",
-    restrooms: "",
-    staff: "",
+    restroomsAccessible: "",
+    staffSupport: "",
     recommend: ""
   });
   const [reviewId, setReviewId] = useState(null);
@@ -29,7 +29,8 @@ const WriteReviewPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           general: responses,
-          points: 1 
+          points: 1,
+          sectionsCompleted: ["general"]
         })
       });   
   
@@ -69,14 +70,14 @@ const WriteReviewPage = () => {
           <Tag text="Not accessible" color="red" isSelected={responses.accessibility === "Not accessible"} onClick={(val) => handleTagClick("accessibility", val)} />
         </QuestionGroup>
 
-        <QuestionGroup label="Was the parking suitable for your needs?" field="parking">
-          <Tag text="Yes" color="green" isSelected={responses.parking === "Yes"} onClick={(val) => handleTagClick("parking", val)} />
-          <Tag text="No" color="red" isSelected={responses.parking === "No"} onClick={(val) => handleTagClick("parking", val)} />
+        <QuestionGroup label="Was the parking suitable for your needs?" field="parkingSuitable">
+          <Tag text="Yes" color="green" isSelected={responses.parkingSuitable === "Yes"} onClick={(val) => handleTagClick("parkingSuitable", val)} />
+          <Tag text="No" color="red" isSelected={responses.parkingSuitable === "No"} onClick={(val) => handleTagClick("parkingSuitable", val)} />
         </QuestionGroup>
 
-        <QuestionGroup label="Was the entrance easily accessible?" field="entrance">
-          <Tag text="Yes" color="green" isSelected={responses.entrance === "Yes"} onClick={(val) => handleTagClick("entrance", val)} />
-          <Tag text="No" color="red" isSelected={responses.entrance === "No"} onClick={(val) => handleTagClick("entrance", val)} />
+        <QuestionGroup label="Was the entrance easily accessible?" field="entranceAccessible">
+          <Tag text="Yes" color="green" isSelected={responses.entranceAccessible === "Yes"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
+          <Tag text="No" color="red" isSelected={responses.entranceAccessible === "No"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
         </QuestionGroup>
 
         <QuestionGroup label="Could you move around inside without difficulties?" field="movement">
@@ -85,15 +86,15 @@ const WriteReviewPage = () => {
           <Tag text="Not applicable" color="gray" isSelected={responses.movement === "Not applicable"} onClick={(val) => handleTagClick("movement", val)} />
         </QuestionGroup>
 
-        <QuestionGroup label="Were the restroom facilities accessible?" field="restrooms">
-          <Tag text="Yes" color="green" isSelected={responses.restrooms === "Yes"} onClick={(val) => handleTagClick("restrooms", val)} />
-          <Tag text="No" color="red" isSelected={responses.restrooms === "No"} onClick={(val) => handleTagClick("restrooms", val)} />
+        <QuestionGroup label="Were the restroom facilities accessible?" field="restroomsAccessible">
+          <Tag text="Yes" color="green" isSelected={responses.restroomsAccessible === "Yes"} onClick={(val) => handleTagClick("restroomsAccessible", val)} />
+          <Tag text="No" color="red" isSelected={responses.restroomsAccessible === "No"} onClick={(val) => handleTagClick("restroomsAccessible", val)} />
         </QuestionGroup>
 
-        <QuestionGroup label="Was the staff helpful and accommodating?" field="staff">
-          <Tag text="Yes" color="green" isSelected={responses.staff === "Yes"} onClick={(val) => handleTagClick("staff", val)} />
-          <Tag text="No" color="red" isSelected={responses.staff === "No"} onClick={(val) => handleTagClick("staff", val)} />
-          <Tag text="Not applicable" color="gray" isSelected={responses.staff === "Not applicable"} onClick={(val) => handleTagClick("staff", val)} />
+        <QuestionGroup label="Was the staff helpful and accommodating?" field="staffSupport">
+          <Tag text="Yes" color="green" isSelected={responses.staffSupport === "Yes"} onClick={(val) => handleTagClick("staffSupport", val)} />
+          <Tag text="No" color="red" isSelected={responses.staffSupport === "No"} onClick={(val) => handleTagClick("staffSupport", val)} />
+          <Tag text="Not applicable" color="gray" isSelected={responses.staffSupport === "Not applicable"} onClick={(val) => handleTagClick("staffSupport", val)} />
         </QuestionGroup>
 
         <QuestionGroup label="Would you recommend this location to others with similar needs?" field="recommend">

@@ -15,8 +15,8 @@ const countryList = [
   "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France",
   "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau",
   "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland",
-  "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North",
-  "Korea, South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya",
+  "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "North Korea",
+  "South Korea", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya",
   "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
   "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
   "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia",
@@ -122,8 +122,18 @@ const RegisterScreen = () => {
         return;
       }
 
+      // ✅ Save token immediately after successful registration
+      const token = data?.data?.token;
+      if (token) {
+        localStorage.setItem("token", token);
+      } else {
+        throw new Error("No token received from server.");
+      }
+
       setSuccessMessage("Registration successful!");
-      setTimeout(() => navigate("/login-screen"), 1500);
+
+      // ✅ Navigate to profile after short delay
+      setTimeout(() => navigate("/profile"), 1500);
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Try again.");
@@ -138,7 +148,7 @@ const RegisterScreen = () => {
 
       <div className="register-form-wrapper">
         <div className="register-screen-container">
-        <button className="back-button" onClick={() => navigate(-1)}>←</button>
+          <button className="back-button" onClick={() => navigate(-1)}>←</button>
           <h1 className="register-heading">Create your account</h1>
 
           <form className="register-form" onSubmit={handleRegister}>
@@ -215,13 +225,14 @@ const RegisterScreen = () => {
             <div className="full-width-button">
               <PrimaryButton text="Register" type="submit" />
             </div>
-            <div className="divider">
-  <span>Or register with</span>
-</div>
 
-<button className="google-login-button">
-  <img src="/assets/icons/googleIcon.svg" alt="Google login" />
-</button>
+            <div className="divider">
+              <span>Or register with</span>
+            </div>
+
+            <button className="google-login-button">
+              <img src="/assets/icons/googleIcon.svg" alt="Google login" />
+            </button>
           </form>
 
           <p className="bottom-prompt">

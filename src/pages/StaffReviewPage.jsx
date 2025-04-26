@@ -26,7 +26,8 @@ const StaffReviewPage = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     staff: responses,
-                    points: 1
+                    points: 1,
+                    sectionsCompleted: "staff"
                 })
             });
 
