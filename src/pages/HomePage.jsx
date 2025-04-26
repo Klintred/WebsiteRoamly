@@ -4,7 +4,7 @@ import '../styles/homepage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 
-const API_BASE_URL = 'https://roamly-api.onrender.com'; // <-- Toegevoegd
+const API_BASE_URL = 'https://roamly-api.onrender.com';
 
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
