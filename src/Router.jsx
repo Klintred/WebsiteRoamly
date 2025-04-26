@@ -24,7 +24,11 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import SetNewPassword from "./pages/SetNewPassword"; 
 import WriteReviewPage from "./pages/WriteReviewPage";
-import DetailedReviewPage from './pages/DetailedReviewPage';
+import ParkingReviewPage from './pages/ParkingReviewPage';
+import EntranceReviewPage from './pages/EntranceReviewPage';
+import InternalReviewPage from './pages/InternalReviewPage';
+import SanitaryReviewPage from './pages/SanitaryReviewPage';
+
 // ✅ Middleware to protect private routes
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -139,12 +143,31 @@ const AppLayout = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/review/details/:id" element={
+        <Route path="/review/parking/:id" element={
           <ProtectedRoute>
-            <DetailedReviewPage />
+            <ParkingReviewPage />
           </ProtectedRoute>
 
         } />
+         <Route path="/review/entrance/:id" element={
+          <ProtectedRoute>
+            <EntranceReviewPage />
+          </ProtectedRoute>
+
+        } />
+         <Route path="/review/internal/:id" element={
+          <ProtectedRoute>
+            <InternalReviewPage />
+          </ProtectedRoute>
+
+        } />
+        <Route path="/review/sanitary/:id" element={
+          <ProtectedRoute>
+            <SanitaryReviewPage />
+          </ProtectedRoute>
+
+        } />
+        
       </Routes>
 
       {!isAuthPage && <Footer />}

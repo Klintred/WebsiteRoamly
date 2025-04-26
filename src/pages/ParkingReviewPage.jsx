@@ -4,7 +4,7 @@ import Tag from '../components/Buttons/Tag';
 import PrimaryButton from '../components/Buttons/PrimaryButton';
 import "../styles/reviews.css";
 
-const DetailedReviewPage = () => {
+const ParkingReviewPage = () => {
   const { id } = useParams(); 
   
   const [responses, setResponses] = useState({
@@ -34,16 +34,16 @@ const DetailedReviewPage = () => {
 
       if (!res.ok) throw new Error("Failed to update review");
 
-      navigate("/thank-you");
-    } catch (err) {
-      console.error(err);
-      alert("Could not save detailed review.");
-    }
-  };
+       navigate(`/review/entrance/${id}`); 
+        } catch (err) {
+          console.error(err);
+          alert("Could not save detailed review.");
+        }
+      };
 
   return (
     <div className="write-review-container">
-      <h1>Parking facilities</h1>
+      <h1>Internal navigation</h1>
 
       <div className="write-review-form-group">
         <QuestionGroup label="Was there a designated parking spot for people with disabilities?" field="designatedSpot">
@@ -89,4 +89,4 @@ const QuestionGroup = ({ label, children }) => (
   </div>
 );
 
-export default DetailedReviewPage;
+export default ParkingReviewPage;

@@ -4,6 +4,8 @@ import '../styles/homepage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 
+const API_BASE_URL = 'https://roamly-api.onrender.com'; // <-- Toegevoegd
+
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
@@ -30,7 +32,7 @@ const HomePage = () => {
   const fetchCoordinates = async (location) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/coordinates?location=${encodeURIComponent(location)}`);
+      const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(location)}`);
       const data = await response.json();
       if (data.lat && data.lng) {
         setCoordinates(`${data.lat},${data.lng}`);
@@ -81,7 +83,7 @@ const HomePage = () => {
 
   const fetchPlaces = async (query, location, radius) => {
     try {
-      const response = await fetch(`/api/places?query=${encodeURIComponent(query)}&location=${location}&radius=${radius}`);
+      const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(query)}&location=${location}&radius=${radius}`);
       const data = await response.json();
       if (data.error) {
         throw new Error(data.error);

@@ -52,7 +52,7 @@ const WriteReviewPage = () => {
         <h2>Thank you for your feedback!</h2>
         <p>Would you like to leave a more detailed review?</p>
         <div className="button-group">
-          <PrimaryButton text="Yes, continue" onClick={() => navigate(`/review/details/${reviewId}`)} />
+          <PrimaryButton text="Yes, continue" onClick={() => navigate(`/review/parking/${reviewId}`)} />
           <PrimaryButton text="No, I'm done" variant="secondary" onClick={() => navigate('/thank-you')} />
         </div>
       </div>
