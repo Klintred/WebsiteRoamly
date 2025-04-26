@@ -5,72 +5,77 @@ import '../styles/hoteldetails.css';
 const API_BASE_URL = 'https://roamly-api.onrender.com';
 
 const HotelDetailPage = () => {
-  const { id: hotelId } = useParams();
+  const { id: hotelId } = useParams();  // Het ID van het hotel uit de URL
   const [hotelDetails, setHotelDetails] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Ophalen van hotel details op basis van hotel ID
   useEffect(() => {
-    const fetchHotelDetails = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/hotel/${hotelId}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setHotelDetails(data);
-
-          // Check of er al lat/lng aanwezig is
-          if (data.location && data.location.lat && data.location.lng) {
-            setCoordinates(`${data.location.lat},${data.location.lng}`);
-          } else if (data.address) {
-            // Anders ophalen op basis van adres
-            await fetchCoordinatesFromAddress(data.address);
-          } else {
-            throw new Error("No location data available for this hotel.");
-          }
-        } else {
-          throw new Error(data.message || "Hotel details not found.");
-        }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchCoordinatesFromAddress = async (address) => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(address)}`);
-        const data = await response.json();
-        if (data.lat && data.lng) {
-          setCoordinates(`${data.lat},${data.lng}`);
-        } else {
-          throw new Error("Could not find coordinates for the given address.");
-        }
-      } catch (error) {
-        console.error('Error fetching coordinates:', error);
-      }
-    };
-
     if (hotelId) {
       fetchHotelDetails();
     }
   }, [hotelId]);
 
-  if (loading) return <p>Loading data...</p>;
-  if (error) return <p>{error}</p>;
+  const fetchHotelDetails = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/hotel/${hotelId}`);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      setHotelDetails(data);
+
+      if (data.location && data.location.lat && data.location.lng) {
+        setCoordinates(`${data.location.lat},${data.location.lng}`);
+      } else if (data.address) {
+        await fetchCoordinatesFromAddress(data.address);
+      } else {
+        throw new Error("Geen locatiegegevens beschikbaar voor dit hotel.");
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCoordinatesFromAddress = async (address) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(address)}`);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      if (data.lat && data.lng) {
+        setCoordinates(`${data.lat},${data.lng}`);
+      } else {
+        throw new Error("Kon geen coördinaten vinden voor dit adres.");
+      }
+    } catch (error) {
+      console.error('Fout bij ophalen coördinaten:', error);
+      setError(error.message);
+    }
+  };
+
+  if (loading) return <p>Gegevens laden...</p>;
+  if (error) return <p>Fout: {error}</p>;
 
   return (
     <div className="hotel-detail">
       <div className="hotel-header">
         <img
-          src={hotelDetails.photos ? hotelDetails.photos[0].url : 'https://via.placeholder.com/1920x400?text=No+Image'}
-          alt={hotelDetails.name}
+          src={hotelDetails?.photos?.[0]?.url || 'https://via.placeholder.com/1920x400?text=No+Image'}
+          alt={hotelDetails?.name || "Hotel"}
           className="hotel-header-image"
         />
       </div>
@@ -78,29 +83,27 @@ const HotelDetailPage = () => {
       <div className="hotel-content">
         <div className="hotel-details">
           <h1>{hotelDetails.name}</h1>
-          <p><strong>Address:</strong> {hotelDetails.address}</p>
-          <p><strong>Phone:</strong> {hotelDetails.phone || 'Not available'}</p>
+          <p><strong>Adres:</strong> {hotelDetails.address}</p>
+          <p><strong>Telefoon:</strong> {hotelDetails.phone || 'Niet beschikbaar'}</p>
           <p><strong>Website:</strong> {hotelDetails.website ? (
-            <a href={hotelDetails.website} target="_blank" rel="noopener noreferrer">
-              {hotelDetails.website}
-            </a>
-          ) : 'Not available'}</p>
-          <p><strong>Rating:</strong> {hotelDetails.rating ? `⭐ ${hotelDetails.rating}` : 'No rating available'}</p>
-          <p><strong>Description:</strong> {hotelDetails.description || 'No description available.'}</p>
+            <a href={hotelDetails.website} target="_blank" rel="noopener noreferrer">{hotelDetails.website}</a>
+          ) : 'Niet beschikbaar'}</p>
+          <p><strong>Beoordeling:</strong> {hotelDetails.rating ? `⭐ ${hotelDetails.rating}` : 'Geen beoordeling beschikbaar'}</p>
+          <p><strong>Beschrijving:</strong> {hotelDetails.description || 'Geen beschrijving beschikbaar.'}</p>
         </div>
 
-        {/* Maps embed (bijv. locatie van het hotel) */}
+        {/* Maps embed */}
         <div className="hotel-map">
           {coordinates ? (
             <iframe
               src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${coordinates}`}
               allowFullScreen
               loading="lazy"
-              title="Hotel Location"
+              title="Hotel locatie"
               className="map-iframe"
             ></iframe>
           ) : (
-            <p>Location not available</p>
+            <p>Locatie niet beschikbaar</p>
           )}
         </div>
       </div>
