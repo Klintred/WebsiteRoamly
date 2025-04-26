@@ -15,13 +15,28 @@ function TripPlannerPage() {
   const [transportMode, setTransportMode] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const [tripName, setTripName] = useState("");    // 📝 Trip Title
 
   const handleActivityChange = (activity) => {
     setActivities((prev) => ({ ...prev, [activity]: !prev[activity] }));
   };
 
   const handleSubmit = async () => {
-    if (!destination || !dates[0] || !dates[1] || !people || !Object.values(activities).includes(true) || !departureLocation || !transportMode) return;
+    console.log("Button clicked!");
+    console.log("Current Form State:");
+    console.log({ tripName, destination, dates, people, activities, departureLocation, transportMode });
+
+    if (!destination || !dates[0] || !dates[1] || !people || !Object.values(activities).includes(true) || !departureLocation){
+    console.log("Form validation failed!");
+      if (!destination) console.log("❌ Destination missing");
+      if (!dates[0] || !dates[1]) console.log("❌ Dates missing");
+      if (!people) console.log("❌ People missing");
+      if (!Object.values(activities).includes(true)) console.log("❌ No activity selected");
+      if (!departureLocation) console.log("❌ Departure location missing");
+      if (!transportMode) console.log("❌ Transport mode missing");
+      return;
+    }
+    console.log("✅ Form is valid. Submitting...");
 
     const selectedActivities = Object.entries(activities)
       .filter(([_, value]) => value)
@@ -55,8 +70,7 @@ function TripPlannerPage() {
 
     try {
       const res = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDltrr08aNnNRhkZXyVTL7mVCPxC-MpSJ4",
-        {
+"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDltrr08aNnNRhkZXyVTL7mVCPxC-MpSJ4",        {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
@@ -65,46 +79,56 @@ function TripPlannerPage() {
 
       const data = await res.json();
       const output = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
-
       const jsonMatch = output.match(/{[\s\S]*}/);
       if (!jsonMatch) throw new Error("No valid JSON found.");
+
       const cleanedResponse = jsonMatch[0];
 
-      const tripData = {
-        TripName: destination,
-        Place: destination,
-        StartDate: dates[0].toISOString(),
-        EndDate: dates[1].toISOString(),
-        Plan: cleanedResponse,
-      };
-
+      // Save the trip
       await fetch("https://roamly-api.onrender.com/api/v1/trips", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(tripData),
+        body: JSON.stringify({
+          TripName: destination,
+          Place: destination,
+          StartDate: dates[0].toISOString(),
+          EndDate: dates[1].toISOString(),
+          Plan: cleanedResponse,
+        }),
       });
 
-      setResponse("Trip successfully saved!");
+      // 🛑 NO MORE fetching all trips
+      // ✅ Just show the newly generated trip plan:
+      setResponse(cleanedResponse);
+
     } catch (error) {
       setResponse("An error occurred. Please check your API key.");
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="planner-container">
       <h1 className="planner-header">Create a new trip</h1>
       <div className="planner-subcontainer">
-        {/* <input
-        type="text"
-        placeholder="Trip name"
-        value={destination}
-        onChange={(e) => setDestination(e.target.value)}
-        className="planner-input"
-      />
 
-*/}
+        <div className="planner-input-container">
+          <div>
+            <span class="material-symbols-outlined">
+              search
+            </span>
+
+          </div>
+          <input
+            type="text"
+            placeholder="Trip Name"
+            value={tripName}
+            onChange={(e) => setTripName(e.target.value)}
+            className="planner-input"
+          />
+        </div>
+
         <div className="planner-input-container">
           <div>
             <span class="material-symbols-outlined">
@@ -123,7 +147,7 @@ function TripPlannerPage() {
 
         <div className="planner-input-container">
           <div>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               search
             </span>
 
@@ -138,23 +162,23 @@ function TripPlannerPage() {
         </div>
 
         <div className="planner-section">
-        <div className="planner-input-container">
-          <div>
-            <span class="material-symbols-outlined">
-              calendar_today
-            </span>
-          </div>
-          <button
-            type="button"
-            className="calendar-select-button"
-            onClick={() => setCalendarOpen((prev) => !prev)}
-          >
-            {dates[0] && dates[1]
-              ? `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`
-              : "Select your dates"}
-          </button>
+          <div className="planner-input-container">
+            <div>
+              <span className="material-symbols-outlined">
+                calendar_today
+              </span>
+            </div>
+            <button
+              type="button"
+              className="calendar-select-button"
+              onClick={() => setCalendarOpen((prev) => !prev)}
+            >
+              {dates[0] && dates[1]
+                ? `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`
+                : "Select your dates"}
+            </button>
 
-        </div>
+          </div>
           {calendarOpen && (
             <div className="calendar-wrapper">
               <CustomCalendar
@@ -174,27 +198,27 @@ function TripPlannerPage() {
           )}
         </div>
 
-         <div className="planner-section">
-        <div className="planner-input-container">
-          <div>
-            <span class="material-symbols-outlined">
-              calendar_today
-            </span>
-          </div>
-          <button
-            type="button"
-            className="calendar-select-button"
-            onClick={() => setActivitiesOpen((prev) => !prev)}
-          >
-            {Object.values(activities).some(val => val)
-              ? `Selected: ${Object.entries(activities)
-                .filter(([_, value]) => value)
-                .map(([key]) => key.charAt(0).toUpperCase() + key.slice(1))
-                .join(", ")}`
-              : "Select activities"}
-          </button>
+        <div className="planner-section">
+          <div className="planner-input-container">
+            <div>
+              <span className="material-symbols-outlined">
+                calendar_today
+              </span>
+            </div>
+            <button
+              type="button"
+              className="calendar-select-button"
+              onClick={() => setActivitiesOpen((prev) => !prev)}
+            >
+              {Object.values(activities).some(val => val)
+                ? `Selected: ${Object.entries(activities)
+                  .filter(([_, value]) => value)
+                  .map(([key]) => key.charAt(0).toUpperCase() + key.slice(1))
+                  .join(", ")}`
+                : "Select activities"}
+            </button>
 
-        </div>
+          </div>
           {activitiesOpen && (
             <div className="activity-options">
               {["sport", "culture", "spa"].map((activity) => (
