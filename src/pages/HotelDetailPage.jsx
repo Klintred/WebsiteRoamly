@@ -5,7 +5,7 @@ import '../styles/hoteldetails.css';
 const API_BASE_URL = 'https://roamly-api.onrender.com';
 
 const HotelDetailPage = () => {
-  const { id: hotelId } = useParams();  // Het id van het hotel uit de URL
+  const { id: hotelId } = useParams();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
