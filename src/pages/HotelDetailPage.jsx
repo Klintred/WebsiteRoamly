@@ -14,6 +14,7 @@ const HotelDetailPage = () => {
   const [location, setLocation] = useState('Paris, France');
   const [coordsString, setCoordsString] = useState('48.8566,2.3522');
 
+
   useEffect(() => {
     fetchCoordinates(location);
   }, [location]);
@@ -23,6 +24,17 @@ const HotelDetailPage = () => {
       fetchHotelById();
     }
   }, [coordsString]);
+
+  const [mapEmbedUrl, setMapEmbedUrl] = useState(null);
+
+useEffect(() => {
+  if (coordinates) {
+    fetch(`${API_BASE_URL}/api/mapembed?location=${encodeURIComponent(coordinates)}`)
+      .then(res => res.json())
+      .then(data => setMapEmbedUrl(data.embedUrl))
+      .catch(err => console.error('Fout bij ophalen map embed URL:', err));
+  }
+}, [coordinates]);
 
   const fetchCoordinates = async (locationName) => {
     setLoading(true);
@@ -110,19 +122,25 @@ const HotelDetailPage = () => {
     Boek dit hotel op Booking.com
   </a>
 </div>
-        <div className="hotel-map">
-          {coordinates ? (
-            <iframe
-              src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${coordinates}`}
-              allowFullScreen
-              loading="lazy"
-              title="Hotel locatie"
-              className="map-iframe"
-            ></iframe>
-          ) : (
-            <p>Locatie niet beschikbaar</p>
-          )}
-        </div>
+
+
+
+<div className="hotel-map">
+  
+  
+  {mapEmbedUrl ? (
+    <iframe
+      src={mapEmbedUrl}
+      allowFullScreen
+      loading="lazy"
+      title="Hotel locatie"
+      className="map-iframe"
+    ></iframe>
+  ) : (
+    <p>Locatie niet beschikbaar</p>
+  )}
+</div>
+
       </div>
     </div>
     
