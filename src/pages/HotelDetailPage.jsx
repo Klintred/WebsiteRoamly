@@ -5,65 +5,74 @@ import '../styles/hoteldetails.css';
 const API_BASE_URL = 'https://roamly-api.onrender.com';
 
 const HotelDetailPage = () => {
-  const { id: hotelId } = useParams();  // Het ID van het hotel uit de URL
+  const { id: hotelId } = useParams();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [location, setLocation] = useState('Paris, France');
+  const [coordsString, setCoordsString] = useState('48.8566,2.3522');
+
   useEffect(() => {
-    if (hotelId) {
-      fetchHotelDetails();
+    fetchCoordinates(location);
+  }, [location]);
+
+  useEffect(() => {
+    if (coordsString) {
+      fetchHotelById();
     }
-  }, [hotelId]);
+  }, [coordsString]);
 
-  const fetchHotelDetails = async () => {
+  const fetchCoordinates = async (locationName) => {
     setLoading(true);
-    setError(null);
-
     try {
-      const response = await fetch(`${API_BASE_URL}/api/hotel/${hotelId}`);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(locationName)}`);
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Server gaf geen geldige JSON terug bij coördinaten.");
       }
-
       const data = await response.json();
-      setHotelDetails(data);
-
-      if (data.location && data.location.lat && data.location.lng) {
-        setCoordinates(`${data.location.lat},${data.location.lng}`);
-      } else if (data.address) {
-        await fetchCoordinatesFromAddress(data.address);
+      if (data.lat && data.lng) {
+        setCoordsString(`${data.lat},${data.lng}`);
       } else {
-        throw new Error("Geen locatiegegevens beschikbaar voor dit hotel.");
+        throw new Error("Kon geen coördinaten vinden.");
       }
-    } catch (error) {
-      setError(error.message);
-    } finally {
+    } catch (err) {
+      setError(err.message);
       setLoading(false);
     }
   };
 
-  const fetchCoordinatesFromAddress = async (address) => {
+  const fetchHotelById = async () => {
+    setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(address)}`);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      const response = await fetch(`${API_BASE_URL}/api/places?query=hotels&location=${coordsString}&radius=50000`);
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Server gaf geen geldige JSON terug.");
       }
 
       const data = await response.json();
-      if (data.lat && data.lng) {
-        setCoordinates(`${data.lat},${data.lng}`);
+      const match = data.find(h => String(h.id) === String(hotelId));
+
+      if (!match) throw new Error("Hotel niet gevonden.");
+
+      setHotelDetails(match);
+
+      if (match.location?.lat && match.location?.lng) {
+        setCoordinates(`${match.location.lat},${match.location.lng}`);
+      } else if (match.address) {
+        await fetchCoordinates(match.address);
       } else {
-        throw new Error("Kon geen coördinaten vinden voor dit adres.");
+        throw new Error("Geen locatiegegevens beschikbaar.");
       }
-    } catch (error) {
-      console.error('Fout bij ophalen coördinaten:', error);
-      setError(error.message);
+
+    } catch (err) {
+      console.error('Fout bij ophalen hotel:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,7 +83,7 @@ const HotelDetailPage = () => {
     <div className="hotel-detail">
       <div className="hotel-header">
         <img
-          src={hotelDetails?.photos?.[0]?.url || 'https://via.placeholder.com/1920x400?text=No+Image'}
+          src={hotelDetails?.photo || 'https://via.placeholder.com/1920x400?text=No+Image'}
           alt={hotelDetails?.name || "Hotel"}
           className="hotel-header-image"
         />
@@ -91,8 +100,16 @@ const HotelDetailPage = () => {
           <p><strong>Beoordeling:</strong> {hotelDetails.rating ? `⭐ ${hotelDetails.rating}` : 'Geen beoordeling beschikbaar'}</p>
           <p><strong>Beschrijving:</strong> {hotelDetails.description || 'Geen beschrijving beschikbaar.'}</p>
         </div>
-
-        {/* Maps embed */}
+        <div className="affiliate-button">
+  <a
+    href={`https://www.booking.com/searchresults.html?aid=7484361&ss=${encodeURIComponent(hotelDetails.name + ' ' + hotelDetails.address)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="booking-affiliate-link"
+  >
+    Boek dit hotel op Booking.com
+  </a>
+</div>
         <div className="hotel-map">
           {coordinates ? (
             <iframe
@@ -108,7 +125,9 @@ const HotelDetailPage = () => {
         </div>
       </div>
     </div>
+    
   );
 };
+
 
 export default HotelDetailPage;
