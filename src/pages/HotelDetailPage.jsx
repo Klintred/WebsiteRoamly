@@ -37,7 +37,6 @@ const HotelDetailPage = () => {
   }, [coordinates]);
 
   const fetchCoordinates = async (locationName) => {
-    setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(locationName)}`);
       const contentType = response.headers.get("content-type");
@@ -49,15 +48,13 @@ const HotelDetailPage = () => {
       if (data.lat && data.lng) {
         const coords = `${data.lat},${data.lng}`;
         setCoordsString(coords);
-        setCoordinates(coords); // ✅ direct coordinates instellen
+        setCoordinates(coords);
       } else {
         throw new Error("Kon geen coördinaten vinden.");
       }
     } catch (err) {
       console.error('Fout bij ophalen coördinaten:', err);
       setError(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -71,9 +68,12 @@ const HotelDetailPage = () => {
       }
 
       const data = await response.json();
+
       const match = data.find(h => String(h.id) === String(hotelId));
 
-      if (!match) throw new Error("Hotel niet gevonden.");
+      if (!match) {
+        throw new Error("Hotel niet gevonden.");
+      }
 
       setHotelDetails(match);
 
@@ -85,6 +85,7 @@ const HotelDetailPage = () => {
       } else {
         throw new Error("Geen locatiegegevens beschikbaar.");
       }
+
     } catch (err) {
       console.error('Fout bij ophalen hotel:', err);
       setError(err.message);
@@ -94,22 +95,23 @@ const HotelDetailPage = () => {
   };
 
   if (loading) return <p>Gegevens laden...</p>;
-  if (error) return <p>Fout: {error}</p>;
+  if (error) return <p style={{ color: 'red' }}>Fout: {error}</p>;
+  if (!hotelDetails) return <p>Geen gegevens gevonden voor dit hotel.</p>;
 
   return (
     <div className="hotel-detail">
       <div className="hotel-header">
         <img
-          src={hotelDetails?.photo || 'https://via.placeholder.com/1920x400?text=No+Image'}
-          alt={hotelDetails?.name || "Hotel"}
+          src={hotelDetails.photo || 'https://via.placeholder.com/1920x400?text=Geen+afbeelding'}
+          alt={hotelDetails.name || "Hotel"}
           className="hotel-header-image"
         />
       </div>
 
       <div className="hotel-content">
         <div className="hotel-details">
-          <h1>{hotelDetails.name}</h1>
-          <p><strong>Adres:</strong> {hotelDetails.address}</p>
+          <h1>{hotelDetails.name || 'Naam niet beschikbaar'}</h1>
+          <p><strong>Adres:</strong> {hotelDetails.address || 'Onbekend'}</p>
           <p><strong>Telefoon:</strong> {hotelDetails.phone || 'Niet beschikbaar'}</p>
           <p><strong>Website:</strong> {hotelDetails.website ? (
             <a href={hotelDetails.website} target="_blank" rel="noopener noreferrer">{hotelDetails.website}</a>
