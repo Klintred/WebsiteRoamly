@@ -1,159 +1,116 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import '../styles/hoteldetails.css';
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 
-const API_BASE_URL = 'https://roamly-api.onrender.com';
+const API_BASE_URL = "https://roamly-api.onrender.com"; // of jouw lokale API
 
 const PlaceDetailPage = () => {
-  const { id, type } = useParams(); // type = hotel | restaurant | activity
+  const { type, id } = useParams();
   const [placeDetails, setPlaceDetails] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [location, setLocation] = useState('Paris, France');
-  const [coordsString, setCoordsString] = useState('48.8566,2.3522');
-  const [mapEmbedUrl, setMapEmbedUrl] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchCoordinates(location);
-  }, [location]);
+    const fetchPlaceById = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/place/${id}`);
+        const contentType = response.headers.get("content-type");
 
-  useEffect(() => {
-    if (coordsString) {
-      fetchPlaceById();
-    }
-  }, [coordsString]);
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Server gaf geen geldige JSON terug.");
+        }
 
-  useEffect(() => {
-    if (coordinates) {
-      fetch(`${API_BASE_URL}/api/mapembed?location=${encodeURIComponent(coordinates)}`)
-        .then(res => res.json())
-        .then(data => setMapEmbedUrl(data.embedUrl))
-        .catch(err => {
-          console.error('Fout bij ophalen map embed URL:', err);
-          setMapEmbedUrl(null);
-        });
-    }
-  }, [coordinates]);
+        const data = await response.json();
 
-  const fetchCoordinates = async (locationName) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(locationName)}`);
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Server gaf geen geldige JSON terug bij coördinaten.");
+        setPlaceDetails(data);
+
+        if (data.location?.lat && data.location?.lng) {
+          const coords = `${data.location.lat},${data.location.lng}`;
+          setCoordinates(coords);
+        } else if (data.address) {
+          await fetchCoordinates(data.address);
+        } else {
+          throw new Error("Geen locatiegegevens beschikbaar.");
+        }
+
+      } catch (err) {
+        console.error('Fout bij ophalen plaatsdetails:', err.message);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const data = await response.json();
-      if (data.lat && data.lng) {
-        const coords = `${data.lat},${data.lng}`;
-        setCoordsString(coords);
-        setCoordinates(coords);
-      } else {
-        throw new Error("Kon geen coördinaten vinden.");
+    const fetchCoordinates = async (location) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(location)}`);
+        const data = await response.json();
+        if (data.lat && data.lng) {
+          setCoordinates(`${data.lat},${data.lng}`);
+        }
+      } catch (err) {
+        console.error("Fout bij ophalen coördinaten:", err.message);
       }
-    } catch (err) {
-      console.error('Fout bij ophalen coördinaten:', err);
-      setError(err.message);
-    }
-  };
+    };
 
-  const fetchPlaceById = async () => {
-    setLoading(true);
-    try {
-      const queryMap = {
-        hotel: 'hotels',
-        restaurant: 'restaurants',
-        activity: 'tourist attractions'
-      };
+    if (id) fetchPlaceById();
+  }, [id]);
 
-      const query = queryMap[type] || 'hotels'; // fallback op hotels
-      const response = await fetch(`${API_BASE_URL}/api/places?query=${query}&location=${coordsString}&radius=50000`);
-      const contentType = response.headers.get("content-type");
-
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Server gaf geen geldige JSON terug.");
-      }
-
-      const data = await response.json();
-      const match = data.find(p => String(p.id) === String(id));
-
-      if (!match) {
-        throw new Error(`${type} niet gevonden.`);
-      }
-
-      setPlaceDetails(match);
-
-      if (match.location?.lat && match.location?.lng) {
-        const coords = `${match.location.lat},${match.location.lng}`;
-        setCoordinates(coords);
-      } else if (match.address) {
-        await fetchCoordinates(match.address);
-      } else {
-        throw new Error("Geen locatiegegevens beschikbaar.");
-      }
-
-    } catch (err) {
-      console.error('Fout bij ophalen plaats:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) return <p>Gegevens laden...</p>;
-  if (error) return <p style={{ color: 'red' }}>Fout: {error}</p>;
-  if (!placeDetails) return <p>Geen gegevens gevonden voor deze locatie.</p>;
+  if (loading) return <p>Bezig met laden...</p>;
+  if (error) return <p style={{ color: "red" }}>Fout: {error}</p>;
+  if (!placeDetails) return <p>Geen gegevens gevonden.</p>;
 
   return (
-    <div className="hotel-detail">
-      <div className="hotel-header">
-        <img
-          src={placeDetails.photo || 'https://via.placeholder.com/1920x400?text=Geen+afbeelding'}
-          alt={placeDetails.name || "Locatie"}
-          className="hotel-header-image"
-        />
-      </div>
+    <div className="place-detail" style={{ maxWidth: "800px", margin: "0 auto" }}>
+      <Link to={`/${type}`}>&larr; Terug naar {type}</Link>
+      <h1>{placeDetails.name}</h1>
 
-      <div className="hotel-content">
-        <div className="hotel-details">
-          <h1>{placeDetails.name || 'Naam niet beschikbaar'}</h1>
-          <p><strong>Adres:</strong> {placeDetails.address || 'Onbekend'}</p>
-          <p><strong>Telefoon:</strong> {placeDetails.phone || 'Niet beschikbaar'}</p>
-          <p><strong>Website:</strong> {placeDetails.website ? (
-            <a href={placeDetails.website} target="_blank" rel="noopener noreferrer">{placeDetails.website}</a>
-          ) : 'Niet beschikbaar'}</p>
-          <p><strong>Beoordeling:</strong> {placeDetails.rating ? `⭐ ${placeDetails.rating}` : 'Geen beoordeling beschikbaar'}</p>
-          <p><strong>Beschrijving:</strong> {placeDetails.description || 'Geen beschrijving beschikbaar.'}</p>
+      <img
+        src={placeDetails.photo || "https://placehold.co/320x200?text=Geen+afbeelding"}
+        alt={placeDetails.name}
+        style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}
+      />
+
+      <p><strong>Adres:</strong> {placeDetails.address}</p>
+      {placeDetails.phone && <p><strong>Telefoon:</strong> {placeDetails.phone}</p>}
+      {placeDetails.website && (
+        <p>
+          <strong>Website:</strong>{" "}
+          <a href={placeDetails.website} target="_blank" rel="noopener noreferrer">
+            {placeDetails.website}
+          </a>
+        </p>
+      )}
+      {placeDetails.rating && <p><strong>Rating:</strong> ⭐ {placeDetails.rating}</p>}
+      {placeDetails.description && <p><strong>Beschrijving:</strong> {placeDetails.description}</p>}
+
+      {type === "hotels" && placeDetails.name && (
+        <div style={{ marginTop: "1em" }}>
+          <a
+            href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(placeDetails.name)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn"
+          >
+            Bekijk op Booking.com
+          </a>
         </div>
+      )}
 
-        {type === 'hotel' && (
-          <div className="affiliate-button">
-            <a
-              href={`https://www.booking.com/searchresults.html?aid=7484361&ss=${encodeURIComponent(placeDetails.name + ' ' + placeDetails.address)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="booking-affiliate-link"
-            >
-              Boek dit hotel op Booking.com
-            </a>
-          </div>
-        )}
-
-        <div className="hotel-map">
-          {mapEmbedUrl ? (
-            <iframe
-              src={mapEmbedUrl}
-              allowFullScreen
-              loading="lazy"
-              title="Locatie kaart"
-              className="map-iframe"
-            ></iframe>
-          ) : (
-            <p>Locatie niet beschikbaar</p>
-          )}
+      {coordinates && (
+        <div style={{ marginTop: "2em" }}>
+          <iframe
+            title="Map"
+            width="100%"
+            height="300"
+            frameBorder="0"
+            style={{ border: 0, borderRadius: "8px" }}
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyARMMWTVxjvo8qABcvXgZpHt6FJL63CDpA&q=${coordinates}`}
+            allowFullScreen
+          />
         </div>
-      </div>
+      )}
     </div>
   );
 };
