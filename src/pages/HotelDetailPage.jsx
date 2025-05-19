@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+//import style
+import "../styles/hoteldetails.css";
+
 
 const API_BASE_URL = "https://roamly-api.onrender.com"; // of jouw lokale API
 
