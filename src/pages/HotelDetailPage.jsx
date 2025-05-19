@@ -4,9 +4,9 @@ import '../styles/hoteldetails.css';
 
 const API_BASE_URL = 'https://roamly-api.onrender.com';
 
-const HotelDetailPage = () => {
-  const { id: hotelId } = useParams();
-  const [hotelDetails, setHotelDetails] = useState(null);
+const PlaceDetailPage = () => {
+  const { id, type } = useParams(); // type = hotel | restaurant | activity
+  const [placeDetails, setPlaceDetails] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +20,7 @@ const HotelDetailPage = () => {
 
   useEffect(() => {
     if (coordsString) {
-      fetchHotelById();
+      fetchPlaceById();
     }
   }, [coordsString]);
 
@@ -58,24 +58,31 @@ const HotelDetailPage = () => {
     }
   };
 
-  const fetchHotelById = async () => {
+  const fetchPlaceById = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/places?query=hotels&location=${coordsString}&radius=50000`);
+      const queryMap = {
+        hotel: 'hotels',
+        restaurant: 'restaurants',
+        activity: 'tourist attractions'
+      };
+
+      const query = queryMap[type] || 'hotels'; // fallback op hotels
+      const response = await fetch(`${API_BASE_URL}/api/places?query=${query}&location=${coordsString}&radius=50000`);
       const contentType = response.headers.get("content-type");
+
       if (!contentType || !contentType.includes("application/json")) {
         throw new Error("Server gaf geen geldige JSON terug.");
       }
 
       const data = await response.json();
-
-      const match = data.find(h => String(h.id) === String(hotelId));
+      const match = data.find(p => String(p.id) === String(id));
 
       if (!match) {
-        throw new Error("Hotel niet gevonden.");
+        throw new Error(`${type} niet gevonden.`);
       }
 
-      setHotelDetails(match);
+      setPlaceDetails(match);
 
       if (match.location?.lat && match.location?.lng) {
         const coords = `${match.location.lat},${match.location.lng}`;
@@ -87,7 +94,7 @@ const HotelDetailPage = () => {
       }
 
     } catch (err) {
-      console.error('Fout bij ophalen hotel:', err);
+      console.error('Fout bij ophalen plaats:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -96,40 +103,42 @@ const HotelDetailPage = () => {
 
   if (loading) return <p>Gegevens laden...</p>;
   if (error) return <p style={{ color: 'red' }}>Fout: {error}</p>;
-  if (!hotelDetails) return <p>Geen gegevens gevonden voor dit hotel.</p>;
+  if (!placeDetails) return <p>Geen gegevens gevonden voor deze locatie.</p>;
 
   return (
     <div className="hotel-detail">
       <div className="hotel-header">
         <img
-          src={hotelDetails.photo || 'https://via.placeholder.com/1920x400?text=Geen+afbeelding'}
-          alt={hotelDetails.name || "Hotel"}
+          src={placeDetails.photo || 'https://via.placeholder.com/1920x400?text=Geen+afbeelding'}
+          alt={placeDetails.name || "Locatie"}
           className="hotel-header-image"
         />
       </div>
 
       <div className="hotel-content">
         <div className="hotel-details">
-          <h1>{hotelDetails.name || 'Naam niet beschikbaar'}</h1>
-          <p><strong>Adres:</strong> {hotelDetails.address || 'Onbekend'}</p>
-          <p><strong>Telefoon:</strong> {hotelDetails.phone || 'Niet beschikbaar'}</p>
-          <p><strong>Website:</strong> {hotelDetails.website ? (
-            <a href={hotelDetails.website} target="_blank" rel="noopener noreferrer">{hotelDetails.website}</a>
+          <h1>{placeDetails.name || 'Naam niet beschikbaar'}</h1>
+          <p><strong>Adres:</strong> {placeDetails.address || 'Onbekend'}</p>
+          <p><strong>Telefoon:</strong> {placeDetails.phone || 'Niet beschikbaar'}</p>
+          <p><strong>Website:</strong> {placeDetails.website ? (
+            <a href={placeDetails.website} target="_blank" rel="noopener noreferrer">{placeDetails.website}</a>
           ) : 'Niet beschikbaar'}</p>
-          <p><strong>Beoordeling:</strong> {hotelDetails.rating ? `⭐ ${hotelDetails.rating}` : 'Geen beoordeling beschikbaar'}</p>
-          <p><strong>Beschrijving:</strong> {hotelDetails.description || 'Geen beschrijving beschikbaar.'}</p>
+          <p><strong>Beoordeling:</strong> {placeDetails.rating ? `⭐ ${placeDetails.rating}` : 'Geen beoordeling beschikbaar'}</p>
+          <p><strong>Beschrijving:</strong> {placeDetails.description || 'Geen beschrijving beschikbaar.'}</p>
         </div>
 
-        <div className="affiliate-button">
-          <a
-            href={`https://www.booking.com/searchresults.html?aid=7484361&ss=${encodeURIComponent(hotelDetails.name + ' ' + hotelDetails.address)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="booking-affiliate-link"
-          >
-            Boek dit hotel op Booking.com
-          </a>
-        </div>
+        {type === 'hotel' && (
+          <div className="affiliate-button">
+            <a
+              href={`https://www.booking.com/searchresults.html?aid=7484361&ss=${encodeURIComponent(placeDetails.name + ' ' + placeDetails.address)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="booking-affiliate-link"
+            >
+              Boek dit hotel op Booking.com
+            </a>
+          </div>
+        )}
 
         <div className="hotel-map">
           {mapEmbedUrl ? (
@@ -137,7 +146,7 @@ const HotelDetailPage = () => {
               src={mapEmbedUrl}
               allowFullScreen
               loading="lazy"
-              title="Hotel locatie"
+              title="Locatie kaart"
               className="map-iframe"
             ></iframe>
           ) : (
@@ -149,4 +158,4 @@ const HotelDetailPage = () => {
   );
 };
 
-export default HotelDetailPage;
+export default PlaceDetailPage;
