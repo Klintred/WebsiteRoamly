@@ -136,13 +136,13 @@ const ResultsSection = ({ title, data, filter, type }) => {
     <>
       <h2>{title}</h2>
       <div className="search-results">
-        {data.map((place) => <PlaceCard key={place.id} place={place} />)}
+        {data.map((place) => <PlaceCard key={place.id} place={place} type={type} />)}
       </div>
     </>
   );
 };
 
-const PlaceCard = ({ place }) => (
+const PlaceCard = ({ place, type }) => (
   <div className="place-card">
     <div className="image-container">
       <img src={place.photo} alt={place.name} className="place-image" />
@@ -153,11 +153,12 @@ const PlaceCard = ({ place }) => (
       {place.rating && <p className="review-rating">⭐ {place.rating}</p>}
     </div>
     <div className="button-container">
-      <Link to={`/place-detail/${place.id}`}>
+      <Link to={`/${type}s/${place.id}`}>
         <button className="view-details-button">Bekijk details</button>
       </Link>
     </div>
   </div>
 );
+
 
 export default HomePage;
