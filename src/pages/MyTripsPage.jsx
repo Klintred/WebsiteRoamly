@@ -3,36 +3,30 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "../styles/mytrips.css";
 
-const PROXY_URLS = [
-    "https://api.allorigins.win/raw?url=",
-    "https://cors-anywhere.herokuapp.com/",
-    "https://thingproxy.freeboard.io/fetch/",
-    "https://api.allorigins.win/raw?url=",
-    'https://api.allorigins.win/raw?url=',
-];
+const API_BASE_URL = "https://roamly-api.onrender.com/api";
 
-const PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
-const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+// Nieuw: Haal plaatsgegevens op via eigen backend
+const fetchPlaceDetails = async (placeName, location = "", radius = 50000) => {
+    const params = new URLSearchParams({
+        query: placeName,
+        radius,
+    });
 
-const fetchPlaceDetails = async (placeName, location = '', radius = 50000) => {
-    let url = `${PLACES_API_BASE_URL}?query=${encodeURIComponent(placeName)}&key=${API_KEY}`;
-    
     if (location) {
-        url += `&location=${location}&radius=${radius}`;
+        params.append("location", location);
     }
 
-    for (const proxy of PROXY_URLS) {
-        try {
-            const response = await fetch(proxy + encodeURIComponent(url));
-            if (response.ok) {
-                const data = await response.json();
-                return data.results || [];
-            }
-        } catch (err) {
-            console.warn(`Proxy failed: ${err.message}`);
-        }
+    const url = `${API_BASE_URL}/places?${params.toString()}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch place details");
+        const data = await response.json();
+        return data || [];
+    } catch (err) {
+        console.error("Roamly API failed:", err.message);
+        throw err;
     }
-    throw new Error("All proxy requests failed");
 };
 
 const MyTripsPage = () => {
@@ -50,7 +44,7 @@ const MyTripsPage = () => {
             setLoading(true);
             setError("");
             try {
-                const response = await fetch("https://roamly-api.onrender.com/api/v1/trips");
+                const response = await fetch(`${API_BASE_URL}/v1/trips`);
                 if (!response.ok) throw new Error("Failed to fetch trips");
                 const data = await response.json();
                 setTrips(data.data.trips || []);
@@ -148,16 +142,16 @@ const MyTripsPage = () => {
 
         return (
             <div className="activity-item">
-                {place.photos?.[0] && (
+                {place.photo && (
                     <img
-                        src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&photoreference=${place.photos[0].photo_reference}&key=${API_KEY}`}
+                        src={place.photo}
                         alt={place.name}
                         className="w-24 h-24 object-cover rounded-lg"
                     />
                 )}
                 <div>
                     <h4>{place.name}</h4>
-                    <p>{place.formatted_address}</p>
+                    <p>{place.address}</p>
                     <p>⭐ {place.rating || "N/A"}</p>
                 </div>
             </div>
@@ -312,16 +306,16 @@ const MyTripsPage = () => {
                                                 <div className="suggestions grid gap-4">
                                                     {suggestedPlaces.map((place, idx) => (
                                                         <div key={idx} className="activity-item suggestion">
-                                                            {place.photos?.[0] && (
+                                                            {place.photo && (
                                                                 <img
-                                                                    src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&photoreference=${place.photos[0].photo_reference}&key=${API_KEY}`}
+                                                                    src={place.photo}
                                                                     alt={place.name}
                                                                     className="w-24 h-24 object-cover rounded-lg"
                                                                 />
                                                             )}
                                                             <div>
                                                                 <h4>{place.name}</h4>
-                                                                <p>{place.formatted_address}</p>
+                                                                <p>{place.address}</p>
                                                                 <p>⭐ {place.rating || "N/A"}</p>
                                                                 <button
                                                                     className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
