@@ -5,19 +5,11 @@ import "../styles/mytrips.css";
 
 const API_BASE_URL = "https://roamly-api.onrender.com/api";
 
-// Nieuw: Haal plaatsgegevens op via eigen backend
 const fetchPlaceDetails = async (placeName, location = "", radius = 50000) => {
-    const params = new URLSearchParams({
-        query: placeName,
-        radius,
-    });
-
-    if (location) {
-        params.append("location", location);
-    }
+    const params = new URLSearchParams({ query: placeName, radius });
+    if (location) params.append("location", location);
 
     const url = `${API_BASE_URL}/places?${params.toString()}`;
-
     try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("Failed to fetch place details");
@@ -47,7 +39,19 @@ const MyTripsPage = () => {
                 const response = await fetch(`${API_BASE_URL}/v1/trips`);
                 if (!response.ok) throw new Error("Failed to fetch trips");
                 const data = await response.json();
-                setTrips(data.data.trips || []);
+
+                // Parse Plan fields
+                const parsedTrips = (data.data.trips || []).map((trip) => {
+                    let parsedPlan = {};
+                    try {
+                        parsedPlan = typeof trip.Plan === "string" ? JSON.parse(trip.Plan) : trip.Plan;
+                    } catch (e) {
+                        console.warn("Plan JSON invalid for trip:", trip.TripName);
+                    }
+                    return { ...trip, parsedPlan };
+                });
+
+                setTrips(parsedTrips);
             } catch (err) {
                 setError("Error fetching trips: " + err.message);
             } finally {
@@ -59,16 +63,7 @@ const MyTripsPage = () => {
 
     useEffect(() => {
         if (selectedDay !== null && trips.length > 0) {
-            const trip = trips.find((t) => {
-                let planData = {};
-                try {
-                    planData = JSON.parse(t.Plan);
-                    return planData.itinerary[selectedDay];
-                } catch {
-                    return false;
-                }
-            });
-
+            const trip = trips.find((t) => t.parsedPlan?.itinerary?.[selectedDay]);
             if (trip) {
                 fetchSuggestedActivities(trip.Country || trip.TripName.split(" ").pop());
             }
@@ -82,38 +77,31 @@ const MyTripsPage = () => {
     const handleDropOnDay = (tripId, dayIndex) => {
         if (!dragging) return;
 
-        setTrips((prevTrips) => {
-            return prevTrips.map((trip) => {
+        setTrips((prevTrips) =>
+            prevTrips.map((trip) => {
                 if (trip._id === tripId) {
-                    let planData = {};
-                    try {
-                        planData = JSON.parse(trip.Plan);
-                    } catch (e) {
-                        console.warn("Invalid Plan JSON", e);
-                        return trip;
+                    const itinerary = [...(trip.parsedPlan?.itinerary || [])];
+                    const sourceDay = itinerary[dragging.dayIndex];
+                    sourceDay.activities = sourceDay.activities.filter((a) => a !== dragging.activity);
+
+                    if (!itinerary[dayIndex].activities.includes(dragging.activity)) {
+                        itinerary[dayIndex].activities.push(dragging.activity);
                     }
 
-                    const newItinerary = [...planData.itinerary];
-                    const sourceDay = newItinerary[dragging.dayIndex];
-                    sourceDay.activities = sourceDay.activities.filter(a => a !== dragging.activity);
-
-                    if (!newItinerary[dayIndex].activities.includes(dragging.activity)) {
-                        newItinerary[dayIndex].activities.push(dragging.activity);
-                    }
-
+                    const newPlan = { ...trip.parsedPlan, itinerary };
                     return {
                         ...trip,
-                        Plan: JSON.stringify({ ...planData, itinerary: newItinerary })
+                        parsedPlan: newPlan,
+                        Plan: JSON.stringify(newPlan),
                     };
                 }
                 return trip;
-            });
-        });
+            })
+        );
     };
 
-    const fetchSuggestedActivities = async (country, location = '') => {
+    const fetchSuggestedActivities = async (country, location = "") => {
         let query = "";
-
         switch (filterType) {
             case "places":
                 query = `tourist attractions in ${country}`;
@@ -143,11 +131,7 @@ const MyTripsPage = () => {
         return (
             <div className="activity-item">
                 {place.photo && (
-                    <img
-                        src={place.photo}
-                        alt={place.name}
-                        className="w-24 h-24 object-cover rounded-lg"
-                    />
+                    <img src={place.photo} alt={place.name} className="w-24 h-24 object-cover rounded-lg" />
                 )}
                 <div>
                     <h4>{place.name}</h4>
@@ -162,10 +146,7 @@ const MyTripsPage = () => {
         if (!places[placeName]) {
             try {
                 const placeDetails = await fetchPlaceDetails(placeName);
-                setPlaces((prev) => ({
-                    ...prev,
-                    [placeName]: placeDetails[0]
-                }));
+                setPlaces((prev) => ({ ...prev, [placeName]: placeDetails[0] }));
             } catch (e) {
                 console.error("Place fetch failed", e);
             }
@@ -173,55 +154,43 @@ const MyTripsPage = () => {
     };
 
     const handleAddActivity = (tripId, dayIndex, activity) => {
-        setTrips((prevTrips) => {
-            return prevTrips.map((trip) => {
+        setTrips((prevTrips) =>
+            prevTrips.map((trip) => {
                 if (trip._id === tripId) {
-                    let planData = {};
-                    try {
-                        planData = JSON.parse(trip.Plan);
-                    } catch (e) {
-                        console.warn("Invalid Plan JSON", e);
-                        return trip;
+                    const itinerary = [...(trip.parsedPlan?.itinerary || [])];
+                    if (!itinerary[dayIndex].activities.includes(activity)) {
+                        itinerary[dayIndex].activities.push(activity);
                     }
 
-                    const newItinerary = [...planData.itinerary];
-                    if (!newItinerary[dayIndex].activities.includes(activity)) {
-                        newItinerary[dayIndex].activities.push(activity);
-                    }
-
+                    const newPlan = { ...trip.parsedPlan, itinerary };
                     return {
                         ...trip,
-                        Plan: JSON.stringify({ ...planData, itinerary: newItinerary })
+                        parsedPlan: newPlan,
+                        Plan: JSON.stringify(newPlan),
                     };
                 }
                 return trip;
-            });
-        });
+            })
+        );
     };
 
     const handleRemoveActivity = (tripId, dayIndex, activity) => {
-        setTrips((prevTrips) => {
-            return prevTrips.map((trip) => {
+        setTrips((prevTrips) =>
+            prevTrips.map((trip) => {
                 if (trip._id === tripId) {
-                    let planData = {};
-                    try {
-                        planData = JSON.parse(trip.Plan);
-                    } catch (e) {
-                        console.warn("Invalid Plan JSON", e);
-                        return trip;
-                    }
+                    const itinerary = [...(trip.parsedPlan?.itinerary || [])];
+                    itinerary[dayIndex].activities = itinerary[dayIndex].activities.filter((a) => a !== activity);
 
-                    const newItinerary = [...planData.itinerary];
-                    newItinerary[dayIndex].activities = newItinerary[dayIndex].activities.filter(a => a !== activity);
-
+                    const newPlan = { ...trip.parsedPlan, itinerary };
                     return {
                         ...trip,
-                        Plan: JSON.stringify({ ...planData, itinerary: newItinerary })
+                        parsedPlan: newPlan,
+                        Plan: JSON.stringify(newPlan),
                     };
                 }
                 return trip;
-            });
-        });
+            })
+        );
     };
 
     return (
@@ -236,21 +205,17 @@ const MyTripsPage = () => {
 
             <div className="space-y-6">
                 {trips.map((trip) => {
-                    let planData = {};
-                    try {
-                        planData = JSON.parse(trip.Plan);
-                    } catch (e) {
-                        console.warn("Invalid Plan JSON", e);
-                    }
+                    const planData = trip.parsedPlan || {};
+                    const itinerary = planData.itinerary || [];
 
                     return (
                         <div key={trip._id} className="trip-card">
                             <h3 className="trip-title">{trip.TripName}</h3>
 
-                            {planData.itinerary && (
+                            {Array.isArray(itinerary) && itinerary.length > 0 && (
                                 <>
                                     <div className="day-buttons">
-                                        {planData.itinerary.map((day, index) => (
+                                        {itinerary.map((day, index) => (
                                             <button
                                                 key={index}
                                                 className={selectedDay === index ? "active" : ""}
@@ -260,12 +225,12 @@ const MyTripsPage = () => {
                                                 }}
                                                 onDragOver={() => setSelectedDay(index)}
                                             >
-                                                {day.day}
+                                                {day?.day || `Day ${index + 1}`}
                                             </button>
                                         ))}
                                     </div>
 
-                                    {selectedDay !== null && (
+                                    {selectedDay !== null && itinerary[selectedDay] && (
                                         <div
                                             className="day-panel"
                                             onDragOver={(e) => {
@@ -274,9 +239,9 @@ const MyTripsPage = () => {
                                             }}
                                             onDrop={() => handleDropOnDay(trip._id, selectedDay)}
                                         >
-                                            <h4 className="day-title">{planData.itinerary[selectedDay].day}</h4>
+                                            <h4 className="day-title">{itinerary[selectedDay]?.day}</h4>
                                             <ul className="activity-list">
-                                                {planData.itinerary[selectedDay].activities?.map((activity, idx) => (
+                                                {itinerary[selectedDay].activities?.map((activity, idx) => (
                                                     <li
                                                         key={idx}
                                                         className="activity-item"
@@ -285,7 +250,9 @@ const MyTripsPage = () => {
                                                     >
                                                         <FaMapMarkerAlt />
                                                         {renderPlaceCard(activity)}
-                                                        <button onClick={() => handleRemoveActivity(trip._id, selectedDay, activity)}>Verwijderen</button>
+                                                        <button onClick={() => handleRemoveActivity(trip._id, selectedDay, activity)}>
+                                                            Verwijderen
+                                                        </button>
                                                     </li>
                                                 ))}
                                             </ul>
