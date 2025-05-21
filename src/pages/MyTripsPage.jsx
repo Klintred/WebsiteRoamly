@@ -26,8 +26,10 @@ const MyTripsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [dragging, setDragging] = useState(null);
+    const [selectedTripId, setSelectedTripId] = useState(null);
     const [selectedDay, setSelectedDay] = useState(null);
     const [places, setPlaces] = useState({});
+    const [suggestedPlacesCache, setSuggestedPlacesCache] = useState({});
     const [suggestedPlaces, setSuggestedPlaces] = useState([]);
     const [filterType, setFilterType] = useState("all");
 
@@ -40,7 +42,6 @@ const MyTripsPage = () => {
                 if (!response.ok) throw new Error("Failed to fetch trips");
                 const data = await response.json();
 
-                // Parse Plan fields
                 const parsedTrips = (data.data.trips || []).map((trip) => {
                     let parsedPlan = {};
                     try {
@@ -62,13 +63,13 @@ const MyTripsPage = () => {
     }, []);
 
     useEffect(() => {
-        if (selectedDay !== null && trips.length > 0) {
-            const trip = trips.find((t) => t.parsedPlan?.itinerary?.[selectedDay]);
+        if (selectedTripId && selectedDay !== null) {
+            const trip = trips.find((t) => t._id === selectedTripId);
             if (trip) {
                 fetchSuggestedActivities(trip.Country || trip.TripName.split(" ").pop());
             }
         }
-    }, [filterType, selectedDay, trips]);
+    }, [filterType, selectedTripId, selectedDay]);
 
     const handleDragStart = (tripId, dayIndex, activity) => {
         setDragging({ tripId, dayIndex, activity });
@@ -98,6 +99,7 @@ const MyTripsPage = () => {
                 return trip;
             })
         );
+        setDragging(null);
     };
 
     const fetchSuggestedActivities = async (country, location = "") => {
@@ -113,9 +115,17 @@ const MyTripsPage = () => {
                 query = `things to do in ${country}`;
         }
 
+        const cacheKey = `${query}|${location}`;
+        if (suggestedPlacesCache[cacheKey]) {
+            setSuggestedPlaces(suggestedPlacesCache[cacheKey]);
+            return;
+        }
+
         try {
             const suggestions = await fetchPlaceDetails(query, location);
-            setSuggestedPlaces(suggestions.slice(0, 3));
+            const limitedSuggestions = suggestions.slice(0, 3);
+            setSuggestedPlaces(limitedSuggestions);
+            setSuggestedPlacesCache((prev) => ({ ...prev, [cacheKey]: limitedSuggestions }));
         } catch (e) {
             console.error("Failed to fetch suggestions", e);
         }
@@ -218,23 +228,28 @@ const MyTripsPage = () => {
                                         {itinerary.map((day, index) => (
                                             <button
                                                 key={index}
-                                                className={selectedDay === index ? "active" : ""}
+                                                className={selectedDay === index && selectedTripId === trip._id ? "active" : ""}
                                                 onClick={() => {
-                                                    setSelectedDay(selectedDay === index ? null : index);
-                                                    fetchSuggestedActivities(trip.Country || trip.TripName.split(" ").pop());
+                                                    const isSelected = selectedDay === index && selectedTripId === trip._id;
+                                                    setSelectedTripId(trip._id);
+                                                    setSelectedDay(isSelected ? null : index);
                                                 }}
-                                                onDragOver={() => setSelectedDay(index)}
+                                                onDragOver={() => {
+                                                    setSelectedTripId(trip._id);
+                                                    setSelectedDay(index);
+                                                }}
                                             >
                                                 {day?.day || `Day ${index + 1}`}
                                             </button>
                                         ))}
                                     </div>
 
-                                    {selectedDay !== null && itinerary[selectedDay] && (
+                                    {selectedTripId === trip._id && selectedDay !== null && itinerary[selectedDay] && (
                                         <div
                                             className="day-panel"
                                             onDragOver={(e) => {
                                                 e.preventDefault();
+                                                setSelectedTripId(trip._id);
                                                 setSelectedDay(selectedDay);
                                             }}
                                             onDrop={() => handleDropOnDay(trip._id, selectedDay)}
