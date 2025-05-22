@@ -16,18 +16,47 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('Paris, France');
   const [coordinates, setCoordinates] = useState('48.8566,2.3522');
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
+  // Haal coordinaten op als locatie verandert
   useEffect(() => {
     if (location) {
       fetchCoordinates(location);
     }
   }, [location]);
 
+  // Fetch plaatsen als filter, searchQuery of coordinates veranderen
   useEffect(() => {
     if (coordinates) {
       fetchAllPlaces();
     }
   }, [filter, searchQuery, coordinates]);
+
+  // Debounced suggesties ophalen
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (location.length < 2) return setSuggestions([]);
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/autocomplete?query=${encodeURIComponent(location)}`);
+        const data = await response.json();
+        if (data.suggestions) {
+          setSuggestions(data.suggestions);
+          setShowSuggestions(true);
+        }
+      } catch (error) {
+        console.error("Suggesties ophalen mislukt:", error);
+        setSuggestions([]);
+      }
+    };
+
+    const delayDebounce = setTimeout(() => {
+      fetchSuggestions();
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [location]);
 
   const fetchCoordinates = async (location) => {
     setLoading(true);
@@ -84,7 +113,7 @@ const HomePage = () => {
   const fetchPlaces = async (query, location, radius) => {
     try {
       const cleanedQuery = query.trim();
-const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(cleanedQuery)}&location=${location}&radius=${radius}`);
+      const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(cleanedQuery)}&location=${location}&radius=${radius}`);
 
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
@@ -101,18 +130,69 @@ const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURICompon
     }
   };
 
+  // Wanneer gebruiker iets typt in de zoekbalk, updaten we location en zoeken we ook direct op naam
+  const handleSearchInputChange = (e) => {
+    setLocation(e.target.value);
+    setSearchQuery(e.target.value); // zodat zoekresultaten mee filteren op naam
+    setShowSuggestions(true);
+  };
+
   return (
     <div className="home-page">
       <h1>Ontdek Plaatsen</h1>
+
       <div className="search-filter">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Voer een stad of land in..."
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-        <select className="filter-dropdown" value={filter} onChange={(e) => setFilter(e.target.value)}>
+        <div className="search-wrapper" style={{ position: 'relative', maxWidth: '500px', width: '100%' }}>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Voer een stad, plaats of naam in..."
+            value={location}
+            onChange={handleSearchInputChange}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+            onFocus={() => location && setShowSuggestions(true)}
+            autoComplete="off"
+          />
+          {showSuggestions && suggestions.length > 0 && (
+            <ul className="suggestions-list" style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              backgroundColor: 'white',
+              border: '1px solid #ccc',
+              borderTop: 'none',
+              maxHeight: '200px',
+              overflowY: 'auto',
+              zIndex: 10,
+              margin: 0,
+              padding: 0,
+              listStyle: 'none',
+            }}>
+              {suggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    setLocation(suggestion);
+                    setSearchQuery(suggestion);
+                    setShowSuggestions(false);
+                  }}
+                  style={{ padding: '10px', cursor: 'pointer' }}
+                  onMouseDown={e => e.preventDefault()} // voorkomt dat blur afbreekt click
+                >
+                  {suggestion}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <select
+          className="filter-dropdown"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          style={{ marginLeft: '10px' }}
+        >
           <option value="all">Alle</option>
           <option value="hotel">Hotels</option>
           <option value="restaurant">Restaurants</option>
@@ -159,6 +239,5 @@ const PlaceCard = ({ place, type }) => (
     </div>
   </div>
 );
-
 
 export default HomePage;
