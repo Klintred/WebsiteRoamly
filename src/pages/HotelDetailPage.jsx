@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-//import style
-import "../styles/hoteldetails.css";
-
 
 const API_BASE_URL = "https://roamly-api.onrender.com"; // of jouw lokale API
 
@@ -109,8 +106,8 @@ const PlaceDetailPage = () => {
             height="300"
             frameBorder="0"
             style={{ border: 0, borderRadius: "8px" }}
-            //src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyARMMWTVxjvo8qABcvXgZpHt6FJL63CDpA&q=${coordinates}`}
                         src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
+            //src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyARMMWTVxjvo8qABcvXgZpHt6FJL63CDpA&q=${coordinates}`}
             allowFullScreen
           />
         </div>
@@ -118,5 +115,7 @@ const PlaceDetailPage = () => {
     </div>
   );
 };
+
+//test
 
 export default PlaceDetailPage;
