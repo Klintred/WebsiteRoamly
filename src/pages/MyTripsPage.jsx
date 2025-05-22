@@ -38,7 +38,15 @@ const MyTripsPage = () => {
             setLoading(true);
             setError("");
             try {
-                const response = await fetch(`${API_BASE_URL}/v1/trips`);
+                const token = localStorage.getItem("token"); // 🔐 Get the JWT token
+
+const response = await fetch(`${API_BASE_URL}/v1/trips`, {
+  method: "GET",
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json"
+  }
+});
                 if (!response.ok) throw new Error("Failed to fetch trips");
                 const data = await response.json();
 

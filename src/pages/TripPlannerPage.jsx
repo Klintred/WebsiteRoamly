@@ -85,17 +85,22 @@ function TripPlannerPage() {
       const cleanedResponse = jsonMatch[0];
 
       // Save the trip
-      await fetch("https://roamly-api.onrender.com/api/v1/trips", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          TripName: destination,
-          Place: destination,
-          StartDate: dates[0].toISOString(),
-          EndDate: dates[1].toISOString(),
-          Plan: cleanedResponse,
-        }),
-      });
+      const token = localStorage.getItem("token"); // 🔐 Get auth token
+
+await fetch("https://roamly-api.onrender.com/api/v1/trips", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}` // ✅ Include token
+  },
+  body: JSON.stringify({
+    TripName: destination,
+    Place: destination,
+    StartDate: dates[0].toISOString(),
+    EndDate: dates[1].toISOString(),
+    Plan: cleanedResponse,
+  }),
+});
 
       // 🛑 NO MORE fetching all trips
       // ✅ Just show the newly generated trip plan:
