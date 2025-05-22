@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaPen, FaLock, FaLockOpen, FaTimes, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaPen,
+  FaLock,
+  FaLockOpen,
+  FaTimes,
+  FaShoppingCart,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import "../styles/profile.css";
 
 const Profile = () => {
@@ -47,9 +54,51 @@ const Profile = () => {
     navigate("/login-screen");
   };
 
-  const handleEditProfile = () => {
-    setEditMode((prev) => !prev);
+  const handleEditProfile = async () => {
+    if (!editMode) {
+      setEditMode(true); // Enter edit mode
+      return;
+    }
+  
+    try {
+      const token = localStorage.getItem("token");
+  
+      if (!token) {
+        throw new Error("No auth token found. Please log in again.");
+      }
+  
+      const response = await fetch("https://roamly-api.onrender.com/api/v1/users/me", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        }),
+      });
+  
+      // Clone and log full response for debugging
+      const debugJson = await response.clone().json();
+      console.log("🔍 Update API Response:", debugJson);
+  
+      if (!response.ok) {
+        // Show clear error message in UI
+        throw new Error(debugJson.message || "Update mislukt (server gaf fout).");
+      }
+  
+      // Update UI
+      setUser(debugJson.data.user);
+      setEditMode(false);
+      setError(""); // clear any previous error
+    } catch (err) {
+      console.error("🚨 Profile update error:", err);
+      setError("Profiel update mislukt: " + err.message);
+    }
   };
+    
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -68,14 +117,17 @@ const Profile = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://roamly-api.onrender.com/api/v1/users/update-password", {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password: newPassword }),
-      });
+      const response = await fetch(
+        "https://roamly-api.onrender.com/api/v1/users/update-password",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password: newPassword }),
+        }
+      );
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Password update failed.");
@@ -96,7 +148,11 @@ const Profile = () => {
   }, []);
 
   if (loading) {
-    return <div className="profile-wrapper"><h2>Loading profile...</h2></div>;
+    return (
+      <div className="profile-wrapper">
+        <h2>Loading profile...</h2>
+      </div>
+    );
   }
 
   if (error) {
@@ -116,8 +172,15 @@ const Profile = () => {
       <div className="profile-top-box">
         <div className="profile-left">
           <div className="profile-image-wrapper">
-            <img src="/assets/images/default-profile.png" alt="" className="profile-image" />
-            <div className="edit-photo-icon" onClick={() => alert("Open upload modal here!")}>
+            <img
+              src="/assets/images/default-profile.png"
+              alt=""
+              className="profile-image"
+            />
+            <div
+              className="edit-photo-icon"
+              onClick={() => alert("Open upload modal here!")}
+            >
               <FaPen />
             </div>
           </div>
@@ -127,12 +190,16 @@ const Profile = () => {
           <div className="info-grid">
             {["firstName", "lastName", "email"].map((field) => (
               <div key={field} className="info-item">
-                <label>{field === "email" ? "Email" : field.replace("Name", " Name")}</label>
+                <label>
+                  {field === "email" ? "Email" : field.replace("Name", " Name")}
+                </label>
                 {editMode ? (
                   <input
                     className="info-input editable"
                     value={user?.[field] || ""}
-                    onChange={(e) => setUser({ ...user, [field]: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, [field]: e.target.value })
+                    }
                   />
                 ) : (
                   <div className="info-input locked">
@@ -148,7 +215,10 @@ const Profile = () => {
               <div className="info-input locked">
                 <FaLock className="lock-icon" />
                 ***************
-                <button className="change-password-button" onClick={() => setShowPasswordModal(true)}>
+                <button
+                  className="change-password-button"
+                  onClick={() => setShowPasswordModal(true)}
+                >
                   <FaPen style={{ marginRight: "4px" }} /> Change
                 </button>
               </div>
@@ -162,7 +232,15 @@ const Profile = () => {
             <div className="info-value-bold">English</div>
           </div>
           <button className="edit-profile-button" onClick={handleEditProfile}>
-            {editMode ? <><FaLockOpen /> Save</> : <><FaLock /> Change Profile</>}
+            {editMode ? (
+              <>
+                <FaLockOpen /> Save
+              </>
+            ) : (
+              <>
+                <FaLock /> Change Profile
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -172,7 +250,7 @@ const Profile = () => {
         {[
           { title: "Day Pass (7x)", price: "€14" },
           { title: "Day Pass (14x)", price: "€20" },
-          { title: "Unlimited Plan", price: "€125" }
+          { title: "Unlimited Plan", price: "€125" },
         ].map((pkg) => (
           <div key={pkg.title} className="package-card">
             <h3>{pkg.title}</h3>
@@ -194,7 +272,10 @@ const Profile = () => {
       {showPasswordModal && (
         <div className="modal-overlay">
           <div className="password-modal">
-            <button className="close-modal" onClick={() => setShowPasswordModal(false)}>
+            <button
+              className="close-modal"
+              onClick={() => setShowPasswordModal(false)}
+            >
               <FaTimes />
             </button>
             <h2>Change Password</h2>
@@ -213,8 +294,12 @@ const Profile = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
-              {passwordError && <div className="error-message">{passwordError}</div>}
-              {passwordSuccess && <div className="success-message">{passwordSuccess}</div>}
+              {passwordError && (
+                <div className="error-message">{passwordError}</div>
+              )}
+              {passwordSuccess && (
+                <div className="success-message">{passwordSuccess}</div>
+              )}
               <button type="submit" className="edit-profile-button">
                 <FaLockOpen /> Update Password
               </button>
