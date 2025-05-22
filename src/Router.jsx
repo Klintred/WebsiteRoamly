@@ -48,7 +48,7 @@ const AppLayout = () => {
     "/register",
     "/forgot-password",
     "/reset-password",
-    "/set-new-password", // ✅ Added here
+    "/set-new-password",
   ].includes(location.pathname);
 
   return (
@@ -61,7 +61,7 @@ const AppLayout = () => {
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/set-new-password" element={<SetNewPassword />} /> {/* ✅ Added */}
+        <Route path="/set-new-password" element={<SetNewPassword />} />
 
         <Route
           path="/"
@@ -87,14 +87,33 @@ const AppLayout = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* ✅ Fixed dynamic detail routes */}
         <Route
-          path="/place-detail/:id"
+          path="/hotels/:id"
           element={
             <ProtectedRoute>
               <HotelDetailPage />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/restaurants/:id"
+          element={
+            <ProtectedRoute>
+              <HotelDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/activities/:id"
+          element={
+            <ProtectedRoute>
+              <HotelDetailPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/points"
           element={
@@ -143,31 +162,38 @@ const AppLayout = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/review/parking/:id" element={
-          <ProtectedRoute>
-            <ParkingReviewPage />
-          </ProtectedRoute>
-
-        } />
-         <Route path="/review/entrance/:id" element={
-          <ProtectedRoute>
-            <EntranceReviewPage />
-          </ProtectedRoute>
-
-        } />
-         <Route path="/review/internal/:id" element={
-          <ProtectedRoute>
-            <InternalReviewPage />
-          </ProtectedRoute>
-
-        } />
-        <Route path="/review/sanitary/:id" element={
-          <ProtectedRoute>
-            <SanitaryReviewPage />
-          </ProtectedRoute>
-
-        } />
-        
+        <Route
+          path="/review/parking/:id"
+          element={
+            <ProtectedRoute>
+              <ParkingReviewPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review/entrance/:id"
+          element={
+            <ProtectedRoute>
+              <EntranceReviewPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review/internal/:id"
+          element={
+            <ProtectedRoute>
+              <InternalReviewPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review/sanitary/:id"
+          element={
+            <ProtectedRoute>
+              <SanitaryReviewPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {!isAuthPage && <Footer />}
@@ -184,4 +210,4 @@ const AppRouter = () => {
   );
 };
 
-export default AppRouter;
+export default AppRouter;
