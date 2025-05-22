@@ -11,8 +11,6 @@
 /* === Profile Top Box === */
 .profile-top-box {
   width: 100%;
-  background-color: var(--background-color);
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
   padding: 40px;
   box-sizing: border-box;
   display: flex;
@@ -20,7 +18,7 @@
   gap: 40px;
 }
 
-/* === Left: Profile Picture === */
+/* === Profile Picture === */
 .profile-left {
   display: flex;
   justify-content: center;
@@ -46,7 +44,6 @@
   border: 4px solid var(--primary-color);
 }
 
-/* === Pen Icon on Profile Image === */
 .edit-photo-icon {
   position: absolute;
   bottom: 0;
@@ -62,7 +59,7 @@
   cursor: pointer;
 }
 
-/* === Middle: Info === */
+/* === Info Grid === */
 .profile-middle {
   flex: 1;
 }
@@ -82,16 +79,57 @@
   display: block;
 }
 
-.info-value {
+.info-input {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
-  background-color: #f7f7f7;
   padding: 12px;
   border-radius: 10px;
-  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* === Right: Language + Change Profile Button === */
+.info-input.locked {
+  background-color: var(--border-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.info-input.editable {
+  background-color: #f0f4ff;
+  color: var(--text-color);
+  border: 2px solid var(--primary-color);
+}
+
+.info-input input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 16px;
+}
+
+.lock-icon {
+  color: #999999;
+  font-size: 14px;
+}
+
+.change-password-button {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-weight: bold;
+  cursor: pointer;
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* === Right Section === */
 .profile-right {
   flex: 0 0 200px;
   display: flex;
@@ -117,19 +155,22 @@
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .edit-profile-button:hover {
   background-color: rgba(19, 64, 151, 0.8);
 }
 
-/* === Packages Section === */
+/* === Section Heading === */
 .section-heading {
-  font-family: 'AcuminPro', sans-serif;
-  font-size: 24px;
+  font-family: 'San Francisco', 'AcuminPro', sans-serif;
+  font-size: 26px;
   font-weight: 700;
   color: var(--primary-color);
-  margin: 40px 0 20px 0;
+  margin: 60px 0 20px 0;
   width: 100%;
   text-align: left;
   max-width: 1200px;
@@ -139,60 +180,162 @@
 .packages-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 32px;
   width: 100%;
   max-width: 1200px;
+  padding: 0 20px;
   margin-bottom: 40px;
 }
 
-/* === Single Package Card === */
+/* === Apple-Like Package Card === */
 .package-card {
-  background-color: rgba(19, 64, 151, 0.08);
-  border: 1px solid var(--primary-color);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: left;
+  font-family: 'San Francisco', 'Roboto', sans-serif;
   color: var(--text-color);
+  box-shadow: var(--card-shadow, 0 4px 14px rgba(0, 0, 0, 0.05));
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.package-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-hover-shadow, 0 8px 24px rgba(0, 0, 0, 0.1));
 }
 
 .package-card h3 {
-  font-family: 'AcuminPro', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 8px;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-color);
 }
 
 .package-price {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--accent-color);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .package-description {
-  font-size: 16px;
-  margin-bottom: 16px;
+  font-size: 15px;
+  color: var(--text-color);
+  opacity: 0.7;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 .package-button {
   background-color: var(--primary-color);
   color: var(--background-color);
   border: none;
-  padding: 12px 24px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .package-button:hover {
   background-color: rgba(19, 64, 151, 0.8);
 }
 
-/* === Responsive (Mobile screens) === */
+/* === Logout === */
+.logout-button {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-button:hover {
+  background-color: #cc2b2b;
+}
+
+/* === Modal Overlay === */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* === Password Modal === */
+.password-modal {
+  background: var(--background-color);
+  padding: 30px 40px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.password-modal h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: var(--primary-color);
+}
+
+.password-modal label {
+  font-weight: 600;
+  display: block;
+  margin: 10px 0 6px;
+}
+
+.password-modal input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.password-modal .error-message {
+  color: var(--error-color);
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.password-modal .success-message {
+  color: var(--success-color);
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.close-modal {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #666;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* === Responsive === */
 @media (max-width: 768px) {
   .profile-top-box {
     flex-direction: column;
@@ -202,5 +345,9 @@
   .profile-right {
     width: 100%;
     align-items: flex-start;
+  }
+
+  .packages-grid {
+    padding: 0;
   }
 }
