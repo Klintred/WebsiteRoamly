@@ -85,18 +85,22 @@ const PlaceDetailPage = () => {
       {placeDetails.rating && <p><strong>Rating:</strong> ⭐ {placeDetails.rating}</p>}
       {placeDetails.description && <p><strong>Beschrijving:</strong> {placeDetails.description}</p>}
 
-      {type === "hotels" && placeDetails.name && (
-        <div style={{ marginTop: "1em" }}>
-          <a
-            href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(placeDetails.name)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn"
-          >
-            Bekijk op Booking.com
-          </a>
-        </div>
-      )}
+{placeDetails.name && (
+  <div style={{ marginTop: "1em" }}>
+    <a
+      href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(placeDetails.name)}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="btn"
+      style={{ padding: "10px", backgroundColor: "#0071c2", color: "white", textDecoration: "none", borderRadius: "5px", display: "inline-block" }}
+    >
+      Bekijk op Booking.com
+    </a>
+  </div>
+)}
+
+
+      
 
       {coordinates && (
         <div style={{ marginTop: "2em" }}>
