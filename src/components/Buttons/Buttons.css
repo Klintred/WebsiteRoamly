@@ -111,9 +111,14 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .accessibility-btn:hover {
+}
+
+.feedback-subject{
+  font-weight: bold;
 }
 
 .accessibility-text{
@@ -143,34 +148,31 @@
   border-color: var(--success-color);
 }
 
-.tag-indicator {
+.accessibility-green .tag-indicator{
   color: var(--success-color);
 }
 
 .accessibility-orange {
   border-color: var(--warning-color);
 }
-.tag-indicator {
-  color: var(--warning-color);
-}
 
 .accessibility-red {
   border-color: var(--error-color);
-}
-
- .tag-indicator {
-  color: var(--error-color);
 }
 
 .accessibility-gray {
   border-color: var(--border-color);
 }
 
- .tag-indicator {
-  color: var(--border-color);
-}
 
 .link {
   width: fit-content;
   border-color: black;
+}
+
+.accessibility-score{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
 }
