@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import AccessibilityButton from '../components/Buttons/AccessibilityButton';
 
 const API_BASE_URL = "https://roamly-api.onrender.com"; // of jouw lokale API
 
@@ -85,22 +86,24 @@ const PlaceDetailPage = () => {
       {placeDetails.rating && <p><strong>Rating:</strong> ⭐ {placeDetails.rating}</p>}
       {placeDetails.description && <p><strong>Beschrijving:</strong> {placeDetails.description}</p>}
 
-{placeDetails.name && (
-  <div style={{ marginTop: "1em" }}>
-    <a
-      href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(placeDetails.name)}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="btn"
-      style={{ padding: "10px", backgroundColor: "#0071c2", color: "white", textDecoration: "none", borderRadius: "5px", display: "inline-block" }}
-    >
-      Bekijk op Booking.com
-    </a>
-  </div>
-)}
-
-
-      
+      {placeDetails.name && (
+        <div style={{ marginTop: "1em" }}>
+          <a
+            href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(placeDetails.name)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn"
+            style={{ padding: "10px", backgroundColor: "#0071c2", color: "white", textDecoration: "none", borderRadius: "5px", display: "inline-block" }}
+          >
+            Bekijk op Booking.com
+          </a>
+        </div>
+      )}
+      <AccessibilityButton
+        feedbackSubject="General accessibility"
+        accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
+        borderColor="green"
+      />
 
       {coordinates && (
         <div style={{ marginTop: "2em" }}>
@@ -110,7 +113,7 @@ const PlaceDetailPage = () => {
             height="300"
             frameBorder="0"
             style={{ border: 0, borderRadius: "8px" }}
-                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
             //src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyARMMWTVxjvo8qABcvXgZpHt6FJL63CDpA&q=${coordinates}`}
             allowFullScreen
           />

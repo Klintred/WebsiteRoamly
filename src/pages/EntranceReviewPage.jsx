@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Tag from '../components/Buttons/Tag';
 import PrimaryButton from '../components/Buttons/PrimaryButton';

@@ -1,4 +1,3 @@
-import React from "react";
 import "./Buttons.css";
 
 const Tag = ({ text, color = "gray", onClick, isSelected = false, className = "" }) => {

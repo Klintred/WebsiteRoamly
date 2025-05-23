@@ -1,107 +1,176 @@
 /* Buttons */
 .btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 350px;
-    padding: 20px;
-    font-size: 16px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 350px;
+  padding: 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: var(--background-color);
+  border: 2px solid var(--border-color);
+}
 
-  }
-  
-  /* Login Button */
-  .login-btn {
-    background-color: var(--primary-color);
-    color: var(--background-color) !important;
-  }
-  
-  /* Register Button */
-  .register-btn {
-    background-color: var(--background-color);
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
-  }
-  
-  /* Guest Button (No Background, Black Text) */
-  .guest-btn {
-    background: none;
-    color: var(--text-color);
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    border: none;
-    padding: 10px;
-  }
-  
-  /* Guest Button Hover Effect */
-  .guest-btn:hover {
-    opacity: 0.8;
-  }
+/* Login Button */
+.login-btn {
+  background-color: var(--primary-color);
+  color: var(--background-color) !important;
+}
 
-  .tag-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.4em 0.8em;
-    border: 2px solid #ccc;
-    border-radius: 9999px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    background-color: #f5f5f5;
-    transition: background-color 0.2s;
-  }
+/* Register Button */
+.register-btn {
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
 
-  .tag-btn:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .tag-indicator {
-    width: 0.7em;
-    height: 0.7em;
-    border-radius: 9999px;
-    background-color: currentColor;
-  }
-  
-  .tag-green {
-    border-color: var(--success-color);
-  }
-  
-  .tag-green .tag-indicator {
-    color: var(--success-color);
-  }
-  
-  .tag-orange {
-    border-color: var(--warning-color);
-  }
-  
-  .tag-orange .tag-indicator {
-    color: var(--warning-color);
-  }
-  
-  .tag-red {
-    border-color: var(--error-color);
-  }
-  
-  .tag-red .tag-indicator {
-    color: var(--error-color);
-  }
-  
-  .tag-gray {
-    border-color: var(--border-color);
-  }
-  
-  .tag-gray .tag-indicator {
-    color: var(--border-color);
-  }
+/* Guest Button (No Background, Black Text) */
+.guest-btn {
+  background: none;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  padding: 10px;
+}
 
-  .tag-selected {
-    background-color: #e0e0e0;
-  }
+/* Guest Button Hover Effect */
+.guest-btn:hover {
+  opacity: 0.8;
+}
+
+.tag-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4em 0.8em;
+  border: 2px solid #ccc;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  transition: background-color 0.2s;
+}
+
+.tag-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.tag-indicator {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 9999px;
+  background-color: currentColor;
+}
+
+.tag-green {
+  border-color: var(--success-color);
+}
+
+.tag-green .tag-indicator {
+  color: var(--success-color);
+}
+
+.tag-orange {
+  border-color: var(--warning-color);
+}
+
+.tag-orange .tag-indicator {
+  color: var(--warning-color);
+}
+
+.tag-red {
+  border-color: var(--error-color);
+}
+
+.tag-red .tag-indicator {
+  color: var(--error-color);
+}
+
+.tag-gray {
+  border-color: var(--border-color);
+}
+
+.tag-gray .tag-indicator {
+  color: var(--border-color);
+}
+
+.tag-selected {
+  background-color: #e0e0e0;
+}
+
+.accessibility-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accessibility-btn:hover {
+}
+
+.accessibility-text{
+  display: flex;
+  flex-direction: column;
+}
+
+.accessibility-text p{
+  margin: 0;
+  text-align: left;
+}
+
+.accessibility-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.accessibility-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accessibility-green {
+  border-color: var(--success-color);
+}
+
+.tag-indicator {
+  color: var(--success-color);
+}
+
+.accessibility-orange {
+  border-color: var(--warning-color);
+}
+.tag-indicator {
+  color: var(--warning-color);
+}
+
+.accessibility-red {
+  border-color: var(--error-color);
+}
+
+ .tag-indicator {
+  color: var(--error-color);
+}
+
+.accessibility-gray {
+  border-color: var(--border-color);
+}
+
+ .tag-indicator {
+  color: var(--border-color);
+}
+
+.link {
+  width: fit-content;
+  border-color: black;
+}
