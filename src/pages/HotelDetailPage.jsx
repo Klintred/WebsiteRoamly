@@ -68,8 +68,7 @@ const PlaceDetailPage = () => {
     <div className="place-detail-container">
       <div className="place-detail-subcontainer">
         <div className="go-back-link">
-          <Link to={`/${type}`}> Go back {type}</Link>
-        </div>
+          <Link to={`/${type || ''}`}>Go back to {type || 'home'}</Link>        </div>
         <div className="place-details-text">
           <div>
             <h1>{placeDetails.name}</h1>
@@ -134,21 +133,22 @@ const PlaceDetailPage = () => {
 
       <div className="line" />
       <h2>Location</h2>
-      <p>{placeDetails.address}</p>
+      <div className="flex-row">
+        <p>{placeDetails.address}</p>
 
-
-      {coordinates && (
-        <div>
-          <iframe
-            title="Map"
-            width="100%"
-            height="400px"
-            style={{ border: 0, borderRadius: "8px" }}
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
-            allowFullScreen
-          />
-        </div>
-      )}
+        {coordinates && (
+          <div>
+            <iframe
+              title="Map"
+              width="100%"
+              height="400px"
+              style={{ border: 0, borderRadius: "8px" }}
+              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
+              allowFullScreen
+            />
+          </div>
+        )}
+      </div>
       <div className="book-button-container-mobile">
         {placeDetails.name && (
           <BookingButton placeName={placeDetails.name} />

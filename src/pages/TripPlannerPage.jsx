@@ -15,7 +15,8 @@ function TripPlannerPage() {
   const [transportMode, setTransportMode] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
-  const [tripName, setTripName] = useState("");    // 📝 Trip Title
+  const [tripName, setTripName] = useState("");
+
 
   const handleActivityChange = (activity) => {
     setActivities((prev) => ({ ...prev, [activity]: !prev[activity] }));
@@ -26,8 +27,8 @@ function TripPlannerPage() {
     console.log("Current Form State:");
     console.log({ tripName, destination, dates, people, activities, departureLocation, transportMode });
 
-    if (!destination || !dates[0] || !dates[1] || !people || !Object.values(activities).includes(true) || !departureLocation){
-    console.log("Form validation failed!");
+    if (!destination || !dates[0] || !dates[1] || !people || !Object.values(activities).includes(true) || !departureLocation) {
+      console.log("Form validation failed!");
       if (!destination) console.log("❌ Destination missing");
       if (!dates[0] || !dates[1]) console.log("❌ Dates missing");
       if (!people) console.log("❌ People missing");
@@ -70,11 +71,11 @@ function TripPlannerPage() {
 
     try {
       const res = await fetch(
-"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDltrr08aNnNRhkZXyVTL7mVCPxC-MpSJ4",        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-        }
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDltrr08aNnNRhkZXyVTL7mVCPxC-MpSJ4", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+      }
       );
 
       const data = await res.json();
@@ -87,20 +88,20 @@ function TripPlannerPage() {
       // Save the trip
       const token = localStorage.getItem("token"); // 🔐 Get auth token
 
-await fetch("https://roamly-api.onrender.com/api/v1/trips", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}` // ✅ Include token
-  },
-  body: JSON.stringify({
-    TripName: destination,
-    Place: destination,
-    StartDate: dates[0].toISOString(),
-    EndDate: dates[1].toISOString(),
-    Plan: cleanedResponse,
-  }),
-});
+      await fetch("https://roamly-api.onrender.com/api/v1/trips", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` // ✅ Include token
+        },
+        body: JSON.stringify({
+          TripName: destination,
+          Place: destination,
+          StartDate: dates[0].toISOString(),
+          EndDate: dates[1].toISOString(),
+          Plan: cleanedResponse,
+        }),
+      });
 
       // 🛑 NO MORE fetching all trips
       // ✅ Just show the newly generated trip plan:
@@ -136,7 +137,7 @@ await fetch("https://roamly-api.onrender.com/api/v1/trips", {
 
         <div className="planner-input-container">
           <div>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               search
             </span>
 
@@ -198,6 +199,8 @@ await fetch("https://roamly-api.onrender.com/api/v1/trips", {
                     setCalendarOpen(false);
                   }
                 }}
+                variant="tripplanner"
+
               />
             </div>
           )}
