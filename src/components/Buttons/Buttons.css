@@ -17,14 +17,12 @@
   max-height: fit-content
 }
 
-/* Login Button */
 .login-btn {
   border: none;
   background-color: var(--primary-color);
   color: var(--background-color) !important;
 }
 
-/* Register Button */
 .register-btn {
   background-color: var(--background-color);
   color: var(--primary-color);
