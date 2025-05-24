@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   width: 350px;
-  padding: 12px;
+  padding: 20px;
   font-size: 16px;
   border: none;
   border-radius: 5px;
@@ -13,12 +13,13 @@
   text-align: center;
   text-decoration: none;
   background-color: var(--background-color);
-  border: 2px solid var(--border-color);
+  border: 3px solid var(--border-color);
   max-height: fit-content
 }
 
 /* Login Button */
 .login-btn {
+  border: none;
   background-color: var(--primary-color);
   color: var(--background-color) !important;
 }
@@ -27,7 +28,7 @@
 .register-btn {
   background-color: var(--background-color);
   color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 /* Guest Button (No Background, Black Text) */
@@ -196,3 +197,4 @@
   color: white;
   width: fit-content;
 }
+

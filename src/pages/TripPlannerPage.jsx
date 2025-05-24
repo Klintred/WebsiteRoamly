@@ -85,14 +85,13 @@ function TripPlannerPage() {
 
       const cleanedResponse = jsonMatch[0];
 
-      // Save the trip
-      const token = localStorage.getItem("token"); // 🔐 Get auth token
+      const token = localStorage.getItem("token");
 
       await fetch("https://roamly-api.onrender.com/api/v1/trips", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}` // ✅ Include token
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           TripName: destination,
@@ -103,8 +102,6 @@ function TripPlannerPage() {
         }),
       });
 
-      // 🛑 NO MORE fetching all trips
-      // ✅ Just show the newly generated trip plan:
       setResponse(cleanedResponse);
 
     } catch (error) {
@@ -116,19 +113,19 @@ function TripPlannerPage() {
 
   return (
     <div className="planner-container">
-      <h1 className="planner-header">Create a new trip</h1>
+      <h1 className="planner-header">Generate an AI-generated trip</h1>
       <div className="planner-subcontainer">
 
         <div className="planner-input-container">
           <div>
             <span className="material-symbols-outlined">
-              search
+              bookmark
             </span>
 
           </div>
           <input
             type="text"
-            placeholder="Trip Name"
+            placeholder="Trip name"
             value={tripName}
             onChange={(e) => setTripName(e.target.value)}
             className="planner-input"
@@ -138,7 +135,7 @@ function TripPlannerPage() {
         <div className="planner-input-container">
           <div>
             <span className="material-symbols-outlined">
-              search
+              flight_takeoff
             </span>
 
           </div>
@@ -154,7 +151,7 @@ function TripPlannerPage() {
         <div className="planner-input-container">
           <div>
             <span className="material-symbols-outlined">
-              search
+              flight_land
             </span>
 
           </div>
@@ -210,7 +207,7 @@ function TripPlannerPage() {
           <div className="planner-input-container">
             <div>
               <span className="material-symbols-outlined">
-                calendar_today
+                local_activity
               </span>
             </div>
             <button
@@ -249,10 +246,11 @@ function TripPlannerPage() {
 
       </div>
       <PrimaryButton
-        text={loading ? "Planning..." : "Generate Travel Plan"}
+        text={loading ? "Planning..." : "Generate with AI"}
         onClick={handleSubmit}
         variant="primary"
         disabled={loading}
+
       />
       {response && (
         <div className="planner-response">
