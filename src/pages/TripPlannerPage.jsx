@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CustomCalendar from "../components/Forms/callender";
 import "../styles/TripPlannerPage.css";
 import PrimaryButton from '../components/Buttons/PrimaryButton';
+import { useNavigate } from "react-router-dom";
 
 
 function TripPlannerPage() {
@@ -21,23 +22,12 @@ function TripPlannerPage() {
   const handleActivityChange = (activity) => {
     setActivities((prev) => ({ ...prev, [activity]: !prev[activity] }));
   };
-
+  const navigate = useNavigate();
   const handleSubmit = async () => {
-    console.log("Button clicked!");
-    console.log("Current Form State:");
-    console.log({ tripName, destination, dates, people, activities, departureLocation, transportMode });
-
     if (!destination || !dates[0] || !dates[1] || !people || !Object.values(activities).includes(true) || !departureLocation) {
       console.log("Form validation failed!");
-      if (!destination) console.log("❌ Destination missing");
-      if (!dates[0] || !dates[1]) console.log("❌ Dates missing");
-      if (!people) console.log("❌ People missing");
-      if (!Object.values(activities).includes(true)) console.log("❌ No activity selected");
-      if (!departureLocation) console.log("❌ Departure location missing");
-      if (!transportMode) console.log("❌ Transport mode missing");
       return;
     }
-    console.log("✅ Form is valid. Submitting...");
 
     const selectedActivities = Object.entries(activities)
       .filter(([_, value]) => value)
@@ -45,32 +35,31 @@ function TripPlannerPage() {
       .join(", ");
 
     const formattedDates = `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`;
-
     const prompt = `Create a detailed travel plan with the following details and structure:
-    - Departure location: ${departureLocation}
-    - Transport mode: ${transportMode}
-    - Destination: ${destination}
-    - Dates: ${formattedDates}
-    - Number of people: ${people}
-    - Preferred activities: ${selectedActivities}
+  - Departure location: ${departureLocation}
+  - Transport mode: ${transportMode}
+  - Destination: ${destination}
+  - Dates: ${formattedDates}
+  - Number of people: ${people}
+  - Preferred activities: ${selectedActivities}
 
-    Please provide the following information in a structured format:
-    {
-      "hotel": "Hotel Name",
-      "itinerary": [
-        {
-          "day": "Day 1",
-          "activities": ["Wheelchair accessible Activity 1", "Wheelchair accessible Activity 2", "Wheelchair accessible Activity 3"],
-          "restaurants": ["Wheelchair accessible Restaurant 1", "Wheelchair accessible Restaurant 2"]
-        }
-      ]
-    }`;
+  Please provide the following information in a structured format:
+  {
+    "hotel": "Hotel Name",
+    "itinerary": [
+      {
+        "day": "Day 1",
+        "activities": ["Wheelchair accessible Activity 1", "Wheelchair accessible Activity 2"],
+        "restaurants": ["Wheelchair accessible Restaurant 1"]
+      }
+    ]
+  }`;
 
     setLoading(true);
     setResponse("");
 
     try {
-      const res = await fetch(
+      const aiRes = await fetch(
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDltrr08aNnNRhkZXyVTL7mVCPxC-MpSJ4", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -78,16 +67,14 @@ function TripPlannerPage() {
       }
       );
 
-      const data = await res.json();
-      const output = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
+      const aiData = await aiRes.json();
+      const output = aiData?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       const jsonMatch = output.match(/{[\s\S]*}/);
       if (!jsonMatch) throw new Error("No valid JSON found.");
-
       const cleanedResponse = jsonMatch[0];
 
       const token = localStorage.getItem("token");
-
-      await fetch("https://roamly-api.onrender.com/api/v1/trips", {
+      const tripRes = await fetch("https://roamly-api.onrender.com/api/v1/trips", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,15 +89,19 @@ function TripPlannerPage() {
         }),
       });
 
-      setResponse(cleanedResponse);
+      const tripData = await tripRes.json();
+      const newTripId = tripData?.data?.trip?._id;
+      if (!newTripId) throw new Error("Failed to create trip.");
+
+      navigate(`/my-trips?tripId=${newTripId}`);
 
     } catch (error) {
-      setResponse("An error occurred. Please check your API key.");
+      console.error("Error:", error);
+      setResponse("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
-  }
-
+  };
   return (
     <div className="planner-container">
       <h1 className="planner-header">Generate an AI-generated trip</h1>

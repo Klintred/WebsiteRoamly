@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "../styles/mytrips.css";
 
 const API_BASE_URL = "https://roamly-api.onrender.com/api";
@@ -32,21 +32,26 @@ const MyTripsPage = () => {
     const [suggestedPlacesCache, setSuggestedPlacesCache] = useState({});
     const [suggestedPlaces, setSuggestedPlaces] = useState([]);
     const [filterType, setFilterType] = useState("all");
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const preselectTripId = params.get("tripId");
+
 
     useEffect(() => {
+
         const fetchTrips = async () => {
             setLoading(true);
             setError("");
             try {
                 const token = localStorage.getItem("token"); // 🔐 Get the JWT token
 
-const response = await fetch(`${API_BASE_URL}/v1/trips`, {
-  method: "GET",
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json"
-  }
-});
+                const response = await fetch(`${API_BASE_URL}/v1/trips`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
                 if (!response.ok) throw new Error("Failed to fetch trips");
                 const data = await response.json();
 
@@ -60,7 +65,21 @@ const response = await fetch(`${API_BASE_URL}/v1/trips`, {
                     return { ...trip, parsedPlan };
                 });
 
-                setTrips(parsedTrips);
+                setTrips(parsedTrips.reverse()); 
+                if (preselectTripId) {
+                    const matchedTrip = parsedTrips.find((trip) => trip._id === preselectTripId);
+                    if (matchedTrip && matchedTrip.Plan) {
+                        try {
+                            setSelectedTripId(preselectTripId);
+                            if (matchedTrip.parsedPlan.itinerary?.length > 0) {
+                                setSelectedDay(0); 
+                            }
+                        } catch (e) {
+                            console.warn("Failed to parse Plan JSON");
+                        }
+                    }
+                }
+
             } catch (err) {
                 setError("Error fetching trips: " + err.message);
             } finally {
@@ -213,7 +232,7 @@ const response = await fetch(`${API_BASE_URL}/v1/trips`, {
 
     return (
         <div className="max-w-4xl mx-auto mt-12 p-6">
-            <h1 className="text-4xl font-bold text-center mb-8">My Trips</h1>
+            <h1 className="text-4xl font-bold text-center mb-8">My trips</h1>
 
             {loading && <p className="text-center text-muted">Loading trips...</p>}
             {error && <p className="text-error">{error}</p>}
