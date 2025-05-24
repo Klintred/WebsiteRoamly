@@ -301,23 +301,23 @@ const HomePage = () => {
 
           </div>
           <div className='vertical-line'></div>
-            <label className='search-label' style={{ display: 'none' }}>Search</label>
-              <button
-                className="search-button"
-                onClick={fetchAllPlaces}
-                aria-label='Search for places'
-                style={{ backgroundColor: 'white', border: 'none', cursor: 'pointer' }}
-              >
-                <span className="material-symbols-outlined">search</span>
-              </button>
+          <label className='search-label' style={{ display: 'none' }}>Search</label>
+          <button
+            className="search-button"
+            onClick={fetchAllPlaces}
+            aria-label='Search for places'
+            style={{ backgroundColor: 'white', border: 'none', cursor: 'pointer' }}
+          >
+            <span className="material-symbols-outlined">search</span>
+          </button>
         </div>
 
       </div>
       {error && <p className="error-message">{error}</p>}
 
-   <ResultsSection title="Hotels" data={hotels} filter={filter} type="hotel" loading={loading} />
-<ResultsSection title="Restaurants" data={restaurants} filter={filter} type="restaurant" loading={loading} />
-<ResultsSection title="Activities" data={activities} filter={filter} type="activity" loading={loading} />
+      <ResultsSection title="Hotels" data={hotels} filter={filter} type="hotel" loading={loading} />
+      <ResultsSection title="Restaurants" data={restaurants} filter={filter} type="restaurant" loading={loading} />
+      <ResultsSection title="Activities" data={activities} filter={filter} type="activity" loading={loading} />
 
     </div>
   );
@@ -329,14 +329,12 @@ const ResultsSection = ({ title, data, filter, type, loading }) => {
     <>
       <div className='line'></div>
       <h2>{title}</h2>
-      <div className="search-results-wrapper">
-  <div className="search-results">
-    {loading
-      ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
-      : data.map((place) => <PlaceCard key={place.id} place={place} type={type} />)
-    }
-  </div>
-</div>
+      <div className="search-results">
+        {loading
+          ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
+          : data.map((place) => <PlaceCard key={place.id} place={place} type={type} />)
+        }
+      </div>
     </>
   );
 };
@@ -365,7 +363,7 @@ const PlaceCard = ({ place, type }) => (
       </Link>
     </div>
   </div>
-  
+
 );
 const SkeletonCard = () => (
   <div className="place-card">
