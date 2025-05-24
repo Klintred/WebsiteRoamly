@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import AccessibilityButton from '../components/Buttons/AccessibilityButton';
+import BookingButton from '../components/Buttons/BookingButton';
+import "../styles/hoteldetails.css";
 
 const API_BASE_URL = "https://roamly-api.onrender.com"; // of jouw lokale API
 
@@ -63,62 +65,95 @@ const PlaceDetailPage = () => {
   if (!placeDetails) return <p>Geen gegevens gevonden.</p>;
 
   return (
-    <div className="place-detail" style={{ maxWidth: "800px", margin: "0 auto" }}>
-      <Link to={`/${type}`}>&larr; Terug naar {type}</Link>
-      <h1>{placeDetails.name}</h1>
-
-      <img
-        src={placeDetails.photo || "https://placehold.co/320x200?text=Geen+afbeelding"}
-        alt={placeDetails.name}
-        style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}
-      />
-
-      <p><strong>Adres:</strong> {placeDetails.address}</p>
-      {placeDetails.phone && <p><strong>Telefoon:</strong> {placeDetails.phone}</p>}
-      {placeDetails.website && (
-        <p>
-          <strong>Website:</strong>{" "}
-          <a href={placeDetails.website} target="_blank" rel="noopener noreferrer">
-            {placeDetails.website}
-          </a>
-        </p>
-      )}
-      {placeDetails.rating && <p><strong>Rating:</strong> ⭐ {placeDetails.rating}</p>}
-      {placeDetails.description && <p><strong>Beschrijving:</strong> {placeDetails.description}</p>}
-
-      {placeDetails.name && (
-        <div style={{ marginTop: "1em" }}>
-          <a
-            href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(placeDetails.name)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn"
-            style={{ padding: "10px", backgroundColor: "#0071c2", color: "white", textDecoration: "none", borderRadius: "5px", display: "inline-block" }}
-          >
-            Bekijk op Booking.com
-          </a>
+    <div className="place-detail-container">
+      <div className="place-detail-subcontainer">
+        <div className="go-back-link">
+          <Link to={`/${type}`}> Go back {type}</Link>
         </div>
-      )}
-      <AccessibilityButton
-        feedbackSubject="General accessibility"
-        accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
-        borderColor="green"
-      />
+        <div className="place-details-text">
+          <div>
+            <h1>{placeDetails.name}</h1>
+
+          </div>
+          <div className="book-button-container-desktop">
+            {placeDetails.name && (
+              <BookingButton placeName={placeDetails.name} />
+            )}
+          </div>
+        </div>
+        <div className="place-details-image">
+          <img
+            src={placeDetails.photo || "https://placehold.co/320x200?text=Geen+afbeelding"}
+            alt={placeDetails.name}
+            style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}
+          />
+
+        </div>
+        <AccessibilityButton
+          feedbackSubject="General accessibility"
+          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
+          borderColor="green"
+        />
+
+        <div className="line" />
+
+        <h2>About this property</h2>
+        {placeDetails.description && <p>
+          {placeDetails.description}</p>}
+
+        <div className="line" />
+
+        <h2>Accessibility overview</h2>
+        <AccessibilityButton
+          feedbackSubject="General accessibility"
+          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
+          borderColor="green"
+        />
+        <AccessibilityButton
+          feedbackSubject="General accessibility"
+          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
+          borderColor="green"
+        />
+        <AccessibilityButton
+          feedbackSubject="General accessibility"
+          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
+          borderColor="green"
+        />
+        <AccessibilityButton
+          feedbackSubject="General accessibility"
+          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
+          borderColor="green"
+        />
+        <AccessibilityButton
+          feedbackSubject="General accessibility"
+          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
+          borderColor="green"
+        />
+
+      </div>
+
+      <div className="line" />
+      <h2>Location</h2>
+      <p>{placeDetails.address}</p>
+
 
       {coordinates && (
-        <div style={{ marginTop: "2em" }}>
+        <div>
           <iframe
             title="Map"
             width="100%"
-            height="300"
-            frameBorder="0"
+            height="400px"
             style={{ border: 0, borderRadius: "8px" }}
             src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
-            //src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyARMMWTVxjvo8qABcvXgZpHt6FJL63CDpA&q=${coordinates}`}
             allowFullScreen
           />
         </div>
       )}
+      <div className="book-button-container-mobile">
+        {placeDetails.name && (
+          <BookingButton placeName={placeDetails.name} />
+        )}
+      </div>
     </div>
   );
 };

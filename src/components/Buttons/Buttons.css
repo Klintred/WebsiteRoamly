@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   width: 350px;
-  padding: 20px;
+  padding: 12px;
   font-size: 16px;
   border: none;
   border-radius: 5px;
@@ -14,6 +14,7 @@
   text-decoration: none;
   background-color: var(--background-color);
   border: 2px solid var(--border-color);
+  max-height: fit-content
 }
 
 /* Login Button */
@@ -111,7 +112,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: auto;
 }
 
 .accessibility-btn:hover {
@@ -175,4 +176,23 @@
   flex-direction: row;
   align-items: center;
   gap: 6px;
+}
+
+.booking-btn{
+  background-color: #003580;
+  border: none;
+  justify-content: space-between;
+
+}
+
+.booking-btn img{
+  width: 130px;
+  height: auto;
+}
+
+.book-now-btn{
+  background-color: transparent;
+  border-color: white;
+  color: white;
+  width: fit-content;
 }

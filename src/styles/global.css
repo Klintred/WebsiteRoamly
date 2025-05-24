@@ -1,113 +1,134 @@
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
 :root {
-    --primary-color: #134097;
-    --secondary-color: #6C63FF;
-    --accent-color: #FF9B42;
-    --background-color: #FCFCFC;
-    --text-color: #231F20;
-    --success-color: #4CAF50;
-    --error-color: #E74C3C;
-    --warning-color: #F39C12;
-    --border-color: #DADADA;
+  --primary-color: #134097;
+  --secondary-color: #6c63ff;
+  --accent-color: #ff9b42;
+  --background-color: #fcfcfc;
+  --text-color: #231f20;
+  --success-color: #4caf50;
+  --error-color: #e74c3c;
+  --warning-color: #f39c12;
+  --border-color: #dadada;
 }
 
-html, body {
-    margin: 0 0px;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    overflow-x: hidden;
-  }
-
-/* Roboto Font */
-@font-face {
-    font-family: 'Roboto';
-    src: url('../assets/fonts/Roboto/Roboto-regular.ttf');
-    font-weight: 400;
-    font-style: normal;
-  }
-
-@font-face {
-    font-family: 'Roboto';
-    src: url('../assets/fonts/Roboto/Roboto-Bold.ttf');
-    font-weight: 700;
-    font-style: normal;
+html,
+body {
+  margin: 0 0px;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  overflow-x: hidden;
 }
 
 /* Roboto Font */
 @font-face {
-    font-family: 'AcuminPro';
-    src: url('../assets/fonts/AcuminPro/Acumin-Regular.otf');
-    font-weight: 400;
-    font-style: normal;
-  }
+  font-family: "Roboto";
+  src: url("../assets/fonts/Roboto/Roboto-regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
 
 @font-face {
-    font-family: 'AcuminPro';
-    src: url('../assets/fonts/AcuminPro/Acumin-Bold.otf');
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("../assets/fonts/Roboto/Roboto-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Roboto Font */
+@font-face {
+  font-family: "AcuminPro";
+  src: url("../assets/fonts/AcuminPro/Acumin-Regular.otf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "AcuminPro";
+  src: url("../assets/fonts/AcuminPro/Acumin-Bold.otf");
+  font-weight: 700;
+  font-style: normal;
 }
 
 h1 {
-    font-family: 'AcumixnPro', sans-serif;
-    font-size: 1.75rem; 
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-    color: var(--text-color);
-    text-align: left;
+  font-family: "AcumixnPro", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  text-align: left;
 }
 
 h2 {
-    font-family: 'AcuminPro', sans-serif;
-    font-size: 1.25rem; /* 40px */
-    font-weight: 400;
-    margin-bottom: 0.5rem;
+  font-family: "AcuminPro", sans-serif;
+  font-size: 1.25rem; /* 40px */
+  font-weight: 400;
+  margin-bottom: 0.5rem;
 }
 
-p{
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem; 
-    font-weight: 400;
-    margin-bottom: 0.5rem;
+p {
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 0.5rem;
 }
 
-.cta{
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem; 
-    font-weight: 700;
+.cta {
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
-.descriptions{
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.875rem; 
-    font-weight: 400;
-    margin-bottom: 0.5rem;
+.descriptions {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
 }
 
-.container{
-    margin: 0 20px;
+.container {
+  margin: 0 20px;
 }
 
 .profile-button {
-    padding: 10px 20px;
-    background-color: var(--primary-color); /* Green */
-    color: var(--background-color);
-    font-weight: bold;
-    text-align: center;
-    border-radius: 10px;
-    transition: background-color 0.3s ease-in-out;
-  }
-  .profile-button .nav-link {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .profile-button:hover {
-    background-color: #45a049;
-    cursor: pointer;
-  }
+  padding: 10px 20px;
+  background-color: var(--primary-color); /* Green */
+  color: var(--background-color);
+  font-weight: bold;
+  text-align: center;
+  border-radius: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+.profile-button .nav-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.profile-button:hover {
+  background-color: #45a049;
+  cursor: pointer;
+}
+
+.line {
+  height: 2px;
+  background-color: #ccc;
+  margin: 1em 0;
+  opacity: 0.6;
+}
+
+.go-back-link a {
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  border: 2px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out;
+  color: var(--text-color)
+}

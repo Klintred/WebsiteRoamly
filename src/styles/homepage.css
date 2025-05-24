@@ -4,9 +4,11 @@
   text-align: left;
   overflow-x: hidden;
   font-family: Arial, sans-serif;
-  margin: 0 auto;
   text-align: left;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0 1.5rem;
 }
 
 .home-page h2 {
@@ -14,7 +16,6 @@
   font-weight: bold;
   font-size: 1.8rem;
   color: var(--text-color);
-  margin: 0 20px;
 }
 
 .search-results {
@@ -37,7 +38,7 @@
 
 .place-card {
   flex: 0 0 320px;
-  height: 470px;
+  height: 500px;
   background: white;
   border-radius: 12px;
   text-align: left;
@@ -340,8 +341,6 @@
   }
 }}
 
-@media (max-width: 1024px) {
-}
 
 @media (max-width: 1024px) {
 

@@ -120,7 +120,7 @@ await fetch("https://roamly-api.onrender.com/api/v1/trips", {
 
         <div className="planner-input-container">
           <div>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               search
             </span>
 

@@ -1,386 +1,416 @@
 /* ✅ Ensures the page layout has no hidden width restrictions */
-body, html {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    font-family: 'Roboto', sans-serif;
+body,
+html {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: "Roboto", sans-serif;
 }
 
 /* ✅ Ensures image takes the entire width */
 .hotel-header {
-    width: 100vw;
-    overflow: hidden;
-    margin: 0;
-    margin-top: -60px;
+  width: 100vw;
+  overflow: hidden;
+  margin: 0;
+  margin-top: -60px;
 }
 
 .hotel-header-image {
-    width: 100%;
-    height: 600px;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  display: block;
 }
 
 /* ✅ Removes any hidden container restriction */
 .hotel-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100vw;
-    margin: 20px 0;
-    gap: 40px;
-    padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100vw;
+  margin: 20px 0;
+  gap: 40px;
+  padding: 0 40px;
 }
 
 /* ✅ Aligns text & details to the far left */
 /* ✅ Ensures the page layout has no hidden width restrictions */
-body, html {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    font-family: 'Roboto', sans-serif;
+body,
+html {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: "Roboto", sans-serif;
 }
 
 /* ✅ Ensures image takes the entire width */
 .hotel-header {
-    width: 100vw;
-    overflow: hidden;
-    margin: 0;
-    margin-top: -60px;
+  width: 100vw;
+  overflow: hidden;
+  margin: 0;
+  margin-top: -60px;
 }
 
 .hotel-header-image {
-    width: 100%;
-    height: 600px;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  display: block;
 }
 
 /* ✅ Removes any hidden container restriction */
 .hotel-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100vw;
-    margin: 20px 0;
-    gap: 40px;
-    padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100vw;
+  margin: 20px 0;
+  gap: 40px;
+  padding: 0 40px;
 }
 
 /* ✅ Aligns text & details to the far left */
 .hotel-details {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 40px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 40px;
 }
 
 /* ✅ Ensures the map is fully on the right and larger */
 
 /* ✅ Ensures the map is fully on the right and larger */
 .hotel-map {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 30px;
-    border-radius: 12px;
-    margin-right: 80px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 30px;
+  border-radius: 12px;
+  margin-right: 80px;
 }
 
 /* ✅ Map Heading Styling */
 .hotel-map h3 {
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-align: left;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
 /* ✅ Map Resized to Fit */
 .hotel-map iframe {
-    width: 100%;
-    height: 1000px;
-    border-radius: 12px;
-    border: none;
+  width: 100%;
+  height: 1000px;
+  border-radius: 12px;
+  border: none;
 }
 
 /* ✅ Accessibility Box Styling */
 .hotel-accesibility {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 400px;
-    padding: 12px 20px;
-    border: 2px solid #44B800;
-    border-radius: 12px;
-    background: #ECFCE5;
-    font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 20px;
+  border: 2px solid #44b800;
+  border-radius: 12px;
+  background: #ecfce5;
+  font-family: "Roboto", sans-serif;
 }
 
 /* ✅ Left Side: Icon + Text */
 .hotel-accesibility-text {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* ✅ Accessibility Icon */
 .accessibility-icon {
-    background-color: #6C47FF;
-    color: white;
-    font-size: 20px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
+  background-color: #6c47ff;
+  color: white;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
 }
 
 /* ✅ Heading Styling for Sections */
 h2 {
-    font-size: 1.3em;
-    color: #000;
-    font-weight: 800;
-    font-family: 'AcuminPro';
-    src: url('../assets/fonts/AcuminPro/Acumin-Regular.otf');
-    font-style: normal;
-    margin-bottom: 5px; /* Makes sure title is closer to its corresponding text */
+  font-size: 1.3em;
+  color: #000;
+  font-weight: 800;
+  font-family: "AcuminPro";
+  src: url("../assets/fonts/AcuminPro/Acumin-Regular.otf");
+  font-style: normal;
+  margin-bottom: 5px; /* Makes sure title is closer to its corresponding text */
 }
 
 /* ✅ Increased spacing between different sections */
 .hotel-info h2 {
-    margin-top: 30px; /* Creates better distinction between sections */
+  margin-top: 30px; /* Creates better distinction between sections */
 }
 
 /* ✅ Keep `p` close to `h2` */
 .hotel-info p {
-    font-size: 1rem;
-    color: #333;
-    margin: 5px 0 0 0; /* Keeps text right under title */
+  font-size: 1rem;
+  color: #333;
+  margin: 5px 0 0 0; /* Keeps text right under title */
 }
 
 /* ✅ Subtitle (Adjustments Needed/No Adjustments Needed) */
 .hotel-accesibility p {
-    font-size: 0.9rem;
-    color: #333;
-    margin: 0;
+  font-size: 0.9rem;
+  color: #333;
+  margin: 0;
 }
 
 /* ✅ Orange Dot */
 .adjustment-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
 }
 
 .hotel-accesibility h2 {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #000;
-    margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
 }
 
 /* ✅ Dot */
 .adjustment-status span {
-    width: 10px;
-    height: 10px;
-    background: #44B800;
-    border-radius: 50%;
-    display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #44b800;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 /* ✅ "See Details" Button */
 .accessibility-details-button {
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.9rem;
-    font-weight: bold;
-/* ✅ Map Heading Styling */}
+  font-family: "Roboto", sans-serif;
+  font-size: 0.9rem;
+  font-weight: bold;
+  /* ✅ Map Heading Styling */
+}
 .hotel-map h3 {
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-align: left;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
 /* ✅ Map Resized to Fit */
 .hotel-map iframe {
-    width: 100%;
-    height: 1000px;
-    border-radius: 12px;
-    border: none;
+  width: 100%;
+  height: 1000px;
+  border-radius: 12px;
+  border: none;
 }
 
 /* ✅ Accessibility Box Styling */
 .hotel-accesibility {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 400px;
-    padding: 12px 20px;
-    border: 2px solid #44B800;
-    border-radius: 12px;
-    background: #ECFCE5;
-    font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 20px;
+  border: 2px solid #44b800;
+  border-radius: 12px;
+  background: #ecfce5;
+  font-family: "Roboto", sans-serif;
 }
 
 /* ✅ Left Side: Icon + Text */
 .hotel-accesibility-text {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* ✅ Accessibility Icon */
 .accessibility-icon {
-    background-color: #6C47FF;
-    color: white;
-    font-size: 20px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
+  background-color: #6c47ff;
+  color: white;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
 }
 
 /* ✅ Heading Styling for Sections */
 h2 {
-    font-size: 1.3em;
-    color: #000;
-    font-weight: 800;
-    font-family: 'AcuminPro';
-    src: url('../assets/fonts/AcuminPro/Acumin-Regular.otf');
-    font-style: normal;
-    margin-bottom: 5px; /* Makes sure title is closer to its corresponding text */
+  font-size: 1.3em;
+  color: #000;
+  font-weight: 800;
+  font-family: "AcuminPro";
+  src: url("../assets/fonts/AcuminPro/Acumin-Regular.otf");
+  font-style: normal;
+  margin-bottom: 5px; /* Makes sure title is closer to its corresponding text */
 }
 
 /* ✅ Increased spacing between different sections */
 .hotel-info h2 {
-    margin-top: 30px; /* Creates better distinction between sections */
+  margin-top: 30px; /* Creates better distinction between sections */
 }
 
 /* ✅ Keep `p` close to `h2` */
 .hotel-info p {
-    font-size: 1rem;
-    color: #333;
-    margin: 5px 0 0 0; /* Keeps text right under title */
+  font-size: 1rem;
+  color: #333;
+  margin: 5px 0 0 0; /* Keeps text right under title */
 }
 
 /* ✅ Subtitle (Adjustments Needed/No Adjustments Needed) */
 .hotel-accesibility p {
-    font-size: 0.9rem;
-    color: #333;
-    margin: 0;
+  font-size: 0.9rem;
+  color: #333;
+  margin: 0;
 }
 
 /* ✅ Orange Dot */
 .adjustment-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
 }
 
 .hotel-accesibility h2 {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #000;
-    margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
 }
 
 /* ✅ Dot */
 .adjustment-status span {
-    width: 10px;
-    height: 10px;
-    background: #44B800;
-    border-radius: 50%;
-    display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #44b800;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 /* ✅ "See Details" Button */
 .accessibility-details-button {
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.9rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-    border: 2px solid black;
-    padding: 8px 16px;
-    border-radius: 8px;
-    transition: all 0.3s ease-in-out;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+  border: 2px solid black;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
 }
 
 .accessibility-details-button:hover {
-    background: black;
-    color: white;
+  background: black;
+  color: white;
 }
 
 /* ✅ Fixes Review Section */
 .review {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
-/* ✅ Fully Responsive */
-@media (max-width: 1024px) {
-    .hotel-content {
-        flex-direction: column;
-        align-items: center;
-        padding: 0 20px;
-    }
-    .hotel-details {
-        width: 100%;
-        margin-left: 20px;
-    }
-    .hotel-map {
-        width: 100%;
-        max-width: 900px;
-        margin-right: 20px;
-    }
-    .hotel-map iframe {
-        height: 400px;
-    }
-}
-
-@media (max-width: 768px) {
-    .hotel-content {
-        padding: 0 15px;
-    }
-    .hotel-details {
-        width: 100%;
-    }
-    .hotel-map {
-        width: 90%;
-    }
-    .hotel-map iframe {
-        height: 350px;
-    }
+.place-details-text {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: space-between;
 }
 
 .booking-affiliate-link {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 20px;
-    background-color: #003580;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 20px;
+  background-color: #003580;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.booking-affiliate-link:hover {
+  background-color: #002766;
+}
+
+.place-detail-container {
+  max-width: 1200px;
+  margin: 0 1.5rem;
+  margin-bottom: 20px;
+}
+
+.place-detail-subcontainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%;
+}
+.place-details-image {
+  display: flex;
+  gap: 12px;
+}
+
+.book-button-container-mobile {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--background-color);
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #ddd;
+}
+
+.book-button-container-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .book-button-container-mobile {
+    display: none;
   }
-  
-  .booking-affiliate-link:hover {
-    background-color: #002766;
+  .book-button-container-desktop {
+    display: flex;
+    position: static;
+    width: auto;
+    padding: 0;
+    box-shadow: none;
+    border-top: none;
   }
-  
+}
+
+@media (min-width: 1280px) {
+  .place-detail-container {
+    margin: 20px auto;
+  }
+}
