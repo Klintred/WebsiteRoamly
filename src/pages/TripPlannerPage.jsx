@@ -37,14 +37,24 @@ function TripPlannerPage() {
     }
 
     const formattedDates = `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`;
-    const prompt = `Create a detailed travel plan with the following details:
-- Trip name: ${tripName}
-- Departure location: ${departureLocation}
-- Destination: ${destination}
-- Dates: ${formattedDates}
-- Preferred activities: ${activities.join(", ")}
+    const prompt = `You are a travel planner AI helping a user plan a personalized trip.
 
-Format the result like this:
+Use the details below to create a travel plan strictly tailored to their preferences:
+- Trip Name: ${tripName}
+- Departure Location: ${departureLocation}
+- Destination City: ${destination}
+- Dates: ${formattedDates}
+- Preferred Activities: ${activities.join(", ")}
+
+The user must see these activities reflected in the itinerary suggestions.
+
+⚠️ VERY IMPORTANT:
+- Do NOT recommend places outside ${destination}
+- Focus only on ${destination} and surrounding areas
+- Choose well-known places or hidden gems inside that region
+- Include the user's preferred activity keywords where relevant
+
+Format the output strictly in this JSON structure:
 {
   "hotel": "Hotel Name",
   "itinerary": [
@@ -54,7 +64,9 @@ Format the result like this:
       "restaurants": ["Restaurant 1", "Restaurant 2"]
     }
   ]
-}`;
+}
+
+Return only this JSON.`;
 
     setLoading(true);
     setResponse("");
