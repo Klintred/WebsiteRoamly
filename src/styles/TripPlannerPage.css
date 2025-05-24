@@ -15,6 +15,33 @@
   gap: 16px;
 
 }
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+.tag-chip {
+  border: 2px solid var(--success-color);
+  color: var(--success-color);
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.tag-chip button {
+  margin-left: 6px;
+  background: none;
+  border: none;
+  color: var(--error-color) ;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 
 .planner-input-container {
   display: flex;
