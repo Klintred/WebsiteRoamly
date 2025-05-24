@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./CustomCalendar.css";
 
-const CustomCalendar = ({ selectedDates, setSelectedDates }) => {
+const CustomCalendar = ({ selectedDates, setSelectedDates, variant }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const getDaysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
@@ -85,7 +85,7 @@ const CustomCalendar = ({ selectedDates, setSelectedDates }) => {
   };
 
   return (
-    <div className="calendar-container">
+<div className={`calendar-container ${variant ? `calendar-${variant}` : ''}`}>
       <div className="calendar-controls">
         <select value={currentDate.getMonth()} onChange={handleMonthChange}>
           {months.map((month, idx) => (

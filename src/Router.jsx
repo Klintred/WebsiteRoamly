@@ -196,7 +196,7 @@ const AppLayout = () => {
         />
       </Routes>
 
-      {!isAuthPage && <Footer />}
+      {!isAuthPage}
     </>
   );
 };

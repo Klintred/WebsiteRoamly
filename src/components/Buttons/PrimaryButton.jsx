@@ -1,17 +1,15 @@
 import { Link } from "react-router-dom";
-import "./Buttons.css"; // Import button styles
+import "./Buttons.css"; 
 
 const PrimaryButton = ({ text, onClick, to, variant = "primary" }) => {
-  const buttonClass = `btn ${
-    variant === "secondary"
+  const buttonClass = `btn ${variant === "secondary"
       ? "register-btn"
       : variant === "guest"
-      ? "guest-btn"
-      : "login-btn"
-  }`;
+        ? "guest-btn"
+        : "login-btn"
+    }`;
 
 
-  // If a 'to' prop is passed, render a <Link> for navigation
   if (to) {
     return (
       <Link to={to} className={buttonClass} onClick={onClick}>
@@ -20,7 +18,6 @@ const PrimaryButton = ({ text, onClick, to, variant = "primary" }) => {
     );
   }
 
-  // Otherwise, render a regular <button>
   return (
     <button className={buttonClass} onClick={onClick}>
       {text}

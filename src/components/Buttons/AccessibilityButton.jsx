@@ -1,6 +1,6 @@
 import "./Buttons.css";
 
-const AccessibilityButton = ({ feedbackSubject, accessibilityScore = "No score found", borderColor = "gray", className = "" }) => {
+const AccessibilityButton = ({ feedbackSubject, accessibilityScore = "No score found", borderColor, className = "" }) => {
   const buttonClass = `btn accessibility-btn accessibility-${borderColor} ${className}`.trim();
   const regularClass = `btn link ${className}`.trim();
   const accessibilityText = `accessibility-text ${className}`.trim();
@@ -11,8 +11,8 @@ const AccessibilityButton = ({ feedbackSubject, accessibilityScore = "No score f
       <div className={accessibilityContainer}>
         <span className="material-symbols-outlined">person</span>
         <div className={accessibilityText}>
-          <p>{feedbackSubject}</p>
-          <div>
+          <p className="feedback-subject">{feedbackSubject}</p>
+          <div className="accessibility-score">
             <span className="tag-indicator" />
             <p>{accessibilityScore}</p>
           </div>

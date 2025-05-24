@@ -13,20 +13,20 @@
   text-align: center;
   text-decoration: none;
   background-color: var(--background-color);
-  border: 2px solid var(--border-color);
+  border: 3px solid var(--border-color);
+  max-height: fit-content
 }
 
-/* Login Button */
 .login-btn {
+  border: none;
   background-color: var(--primary-color);
   color: var(--background-color) !important;
 }
 
-/* Register Button */
 .register-btn {
   background-color: var(--background-color);
   color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 /* Guest Button (No Background, Black Text) */
@@ -111,9 +111,14 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  width: auto;
 }
 
 .accessibility-btn:hover {
+}
+
+.feedback-subject{
+  font-weight: bold;
 }
 
 .accessibility-text{
@@ -143,34 +148,51 @@
   border-color: var(--success-color);
 }
 
-.tag-indicator {
+.accessibility-green .tag-indicator{
   color: var(--success-color);
 }
 
 .accessibility-orange {
   border-color: var(--warning-color);
 }
-.tag-indicator {
-  color: var(--warning-color);
-}
 
 .accessibility-red {
   border-color: var(--error-color);
-}
-
- .tag-indicator {
-  color: var(--error-color);
 }
 
 .accessibility-gray {
   border-color: var(--border-color);
 }
 
- .tag-indicator {
-  color: var(--border-color);
-}
 
 .link {
   width: fit-content;
   border-color: black;
 }
+
+.accessibility-score{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.booking-btn{
+  background-color: #003580;
+  border: none;
+  justify-content: space-between;
+
+}
+
+.booking-btn img{
+  width: 130px;
+  height: auto;
+}
+
+.book-now-btn{
+  background-color: transparent;
+  border-color: white;
+  color: white;
+  width: fit-content;
+}
+
