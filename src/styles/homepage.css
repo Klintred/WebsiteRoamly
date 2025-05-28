@@ -456,6 +456,7 @@
 }
 
 .filter-button {
+  color: var(--text-color);
   background-color: transparent;
   border: 3px solid #6c63ff;
   cursor: pointer;
@@ -466,7 +467,9 @@
 }
 
 .filter-button:hover {
-  background-color: #e0dfff;
+     background-color: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
 }
 
 .filter-button.active {

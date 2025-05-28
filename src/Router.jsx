@@ -15,7 +15,8 @@ import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import HotelDetailPage from "./pages/HotelDetailPage";
 import PointsPage from "./pages/PointsPage";
-import MyTrips from "./pages/MyTripsPage";
+import MyTripsOverviewPage from "./pages/MyTripsOverviewPage";
+import MyTripsDetailPage from "./pages/MyTripsDetailPage";
 import AccessibilityFeedback from "./pages/reviews";
 import RegisterScreen from "./pages/RegisterScreen";
 import Pricing from "./pages/Pricing";
@@ -123,10 +124,18 @@ const AppLayout = () => {
           }
         />
         <Route
-          path="/my-trips"
+          path="/my-trips-overview"
           element={
             <ProtectedRoute>
-              <MyTrips />
+              <MyTripsOverviewPage />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/trip-details/:tripId"
+          element={
+            <ProtectedRoute>
+              <MyTripsDetailPage />
             </ProtectedRoute>
           }
         />

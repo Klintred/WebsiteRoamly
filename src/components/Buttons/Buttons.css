@@ -1,10 +1,8 @@
-/* Buttons */
 .btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 350px;
-  padding: 12px;
+  padding: 20px;
   font-size: 16px;
   border: none;
   border-radius: 5px;

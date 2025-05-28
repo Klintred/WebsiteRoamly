@@ -107,7 +107,7 @@ Return only this JSON.`;
       const newTripId = tripData?.data?.trip?._id;
       if (!newTripId) throw new Error("Trip save failed.");
 
-      navigate(`/my-trips?tripId=${newTripId}`);
+      navigate(`/my-trips-overview?tripId=${newTripId}`);
     } catch (error) {
       console.error("Error:", error);
       setResponse("An error occurred. Please try again.");

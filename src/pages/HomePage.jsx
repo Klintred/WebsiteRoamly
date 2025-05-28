@@ -281,7 +281,7 @@ const HomePage = () => {
             </div>
           </div>
           */}
-          <div className='vertical-line'></div>
+          <div className='vertical-line-search'></div>
           <div className='flex-row'>
 
             <label htmlFor="accessibility-input" className='search-label'>
@@ -300,7 +300,7 @@ const HomePage = () => {
             </div>
 
           </div>
-          <div className='vertical-line'></div>
+          <div className='vertical-line-search'></div>
           <label className='search-label' style={{ display: 'none' }}>Search</label>
           <button
             className="search-button"

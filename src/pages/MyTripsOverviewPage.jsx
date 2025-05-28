@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import "../styles/mytrips.css";
+import PrimaryButton from "../components/Buttons/PrimaryButton";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = "https://roamly-api.onrender.com/api";
 
@@ -21,7 +22,7 @@ const fetchPlaceDetails = async (placeName, location = "", radius = 50000) => {
     }
 };
 
-const MyTripsPage = () => {
+const MyTripsOverviewPage = () => {
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -35,6 +36,7 @@ const MyTripsPage = () => {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const preselectTripId = params.get("tripId");
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -65,14 +67,14 @@ const MyTripsPage = () => {
                     return { ...trip, parsedPlan };
                 });
 
-                setTrips(parsedTrips.reverse()); 
+                setTrips(parsedTrips.reverse());
                 if (preselectTripId) {
                     const matchedTrip = parsedTrips.find((trip) => trip._id === preselectTripId);
                     if (matchedTrip && matchedTrip.Plan) {
                         try {
                             setSelectedTripId(preselectTripId);
                             if (matchedTrip.parsedPlan.itinerary?.length > 0) {
-                                setSelectedDay(0); 
+                                setSelectedDay(0);
                             }
                         } catch (e) {
                             console.warn("Failed to parse Plan JSON");
@@ -232,7 +234,7 @@ const MyTripsPage = () => {
 
     return (
         <div className="max-w-4xl mx-auto mt-12 p-6">
-            <h1 className="text-4xl font-bold text-center mb-8">My trips</h1>
+            <h1 className="text-center">All trips</h1>
 
             {loading && <p className="text-center text-muted">Loading trips...</p>}
             {error && <p className="text-error">{error}</p>}
@@ -240,107 +242,30 @@ const MyTripsPage = () => {
                 <p className="text-center text-muted">No trips found.</p>
             )}
 
-            <div className="space-y-6">
+            <div className="all-trips-container">
                 {trips.map((trip) => {
                     const planData = trip.parsedPlan || {};
-                    const itinerary = planData.itinerary || [];
+                    console.log("Trip object:", trip);
 
                     return (
                         <div key={trip._id} className="trip-card">
-                            <h3 className="trip-title">{trip.TripName}</h3>
-
-                            {Array.isArray(itinerary) && itinerary.length > 0 && (
-                                <>
-                                    <div className="day-buttons">
-                                        {itinerary.map((day, index) => (
-                                            <button
-                                                key={index}
-                                                className={selectedDay === index && selectedTripId === trip._id ? "active" : ""}
-                                                onClick={() => {
-                                                    const isSelected = selectedDay === index && selectedTripId === trip._id;
-                                                    setSelectedTripId(trip._id);
-                                                    setSelectedDay(isSelected ? null : index);
-                                                }}
-                                                onDragOver={() => {
-                                                    setSelectedTripId(trip._id);
-                                                    setSelectedDay(index);
-                                                }}
-                                            >
-                                                {day?.day || `Day ${index + 1}`}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    {selectedTripId === trip._id && selectedDay !== null && itinerary[selectedDay] && (
-                                        <div
-                                            className="day-panel"
-                                            onDragOver={(e) => {
-                                                e.preventDefault();
-                                                setSelectedTripId(trip._id);
-                                                setSelectedDay(selectedDay);
-                                            }}
-                                            onDrop={() => handleDropOnDay(trip._id, selectedDay)}
-                                        >
-                                            <h4 className="day-title">{itinerary[selectedDay]?.day}</h4>
-                                            <ul className="activity-list">
-                                                {itinerary[selectedDay].activities?.map((activity, idx) => (
-                                                    <li
-                                                        key={idx}
-                                                        className="activity-item"
-                                                        draggable
-                                                        onDragStart={() => handleDragStart(trip._id, selectedDay, activity)}
-                                                    >
-                                                        <FaMapMarkerAlt />
-                                                        {renderPlaceCard(activity)}
-                                                        <button onClick={() => handleRemoveActivity(trip._id, selectedDay, activity)}>
-                                                            Verwijderen
-                                                        </button>
-                                                    </li>
-                                                ))}
-                                            </ul>
-
-                                            <div className="mt-6">
-                                                <label>Filter:</label>
-                                                <select
-                                                    value={filterType}
-                                                    onChange={(e) => setFilterType(e.target.value)}
-                                                    className="ml-2"
-                                                >
-                                                    <option value="all">Alles</option>
-                                                    <option value="places">Bezienswaardigheden</option>
-                                                    <option value="restaurants">Restaurants</option>
-                                                </select>
-
-                                                <h5 className="mt-4">Voorgestelde activiteiten:</h5>
-                                                <div className="suggestions grid gap-4">
-                                                    {suggestedPlaces.map((place, idx) => (
-                                                        <div key={idx} className="activity-item suggestion">
-                                                            {place.photo && (
-                                                                <img
-                                                                    src={place.photo}
-                                                                    alt={place.name}
-                                                                    className="w-24 h-24 object-cover rounded-lg"
-                                                                />
-                                                            )}
-                                                            <div>
-                                                                <h4>{place.name}</h4>
-                                                                <p>{place.address}</p>
-                                                                <p>⭐ {place.rating || "N/A"}</p>
-                                                                <button
-                                                                    className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                                                                    onClick={() => handleAddActivity(trip._id, selectedDay, place.name)}
-                                                                >
-                                                                    Toevoegen
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </>
-                            )}
+                            <img src="./assets/images/loginimage.png" alt="" />
+                            <div className="trip-details">
+                                <h2 className="trip-title">{trip.TripName}</h2>
+                                <h3 className="trip-country">
+                                    {trip.Place
+                                        ? trip.Place.charAt(0).toUpperCase() + trip.Place.slice(1)
+                                        : ""}, 
+                                </h3>
+                                <p className="trip-dates">
+                                    from  {new Date(trip.StartDate).toLocaleDateString()} until {new Date(trip.EndDate).toLocaleDateString()}
+                                </p>
+                                <PrimaryButton
+                                    text="View details"
+                                    onClick={() => navigate(`/trip-details/${trip._id}`)}
+                                    variant="primary"
+                                />
+                            </div>
                         </div>
                     );
                 })}
@@ -349,4 +274,4 @@ const MyTripsPage = () => {
     );
 };
 
-export default MyTripsPage;
+export default MyTripsOverviewPage;

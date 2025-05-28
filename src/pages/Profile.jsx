@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import {
   FaPen,
   FaLock,
@@ -59,14 +59,14 @@ const Profile = () => {
       setEditMode(true); // Enter edit mode
       return;
     }
-  
+
     try {
       const token = localStorage.getItem("token");
-  
+
       if (!token) {
         throw new Error("No auth token found. Please log in again.");
       }
-  
+
       const response = await fetch("https://roamly-api.onrender.com/api/v1/users/me", {
         method: "PUT",
         headers: {
@@ -79,26 +79,23 @@ const Profile = () => {
           email: user.email,
         }),
       });
-  
-      // Clone and log full response for debugging
+
       const debugJson = await response.clone().json();
       console.log("🔍 Update API Response:", debugJson);
-  
+
       if (!response.ok) {
-        // Show clear error message in UI
         throw new Error(debugJson.message || "Update mislukt (server gaf fout).");
       }
-  
-      // Update UI
+
       setUser(debugJson.data.user);
       setEditMode(false);
-      setError(""); // clear any previous error
+      setError("");
     } catch (err) {
       console.error("🚨 Profile update error:", err);
       setError("Profiel update mislukt: " + err.message);
     }
   };
-    
+
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -168,145 +165,215 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile-wrapper">
-      <div className="profile-top-box">
-        <div className="profile-left">
-          <div className="profile-image-wrapper">
-            <img
-              src="/assets/images/default-profile.png"
-              alt=""
-              className="profile-image"
-            />
-            <div
-              className="edit-photo-icon"
-              onClick={() => alert("Open upload modal here!")}
-            >
-              <FaPen />
-            </div>
-          </div>
+    <div className="profile-container">
+      <div className="profile-action-container">
+        <h1>Profile</h1>
+        <div className="profile-action-subcontainer">
+          <span className="material-symbols-outlined">person</span>
+          <Link className="profile-action-link" to="/profile">
+            About me
+          </Link>
         </div>
+        <div className="profile-action-subcontainer">
+          <span className="material-symbols-outlined">reviews</span>
+          <Link className="profile-action-link" to="/profile">
+            My reviews
+          </Link>
+        </div>
+        <div className="profile-action-subcontainer">
+          <span className="material-symbols-outlined">star_rate</span>
+          <Link className="profile-action-link" to="/profile">
+            My points
+          </Link>
+        </div>
+      </div>
+      <div className="vertical-line"></div>
+      <div className="profile-wrapper">
+        <h2>My profile</h2>
+        <div className="profile-top-container">
+          <div className="profile-top-box">
 
-        <div className="profile-middle">
-          <div className="info-grid">
-            {["firstName", "lastName", "email"].map((field) => (
-              <div key={field} className="info-item">
-                <label>
-                  {field === "email" ? "Email" : field.replace("Name", " Name")}
-                </label>
-                {editMode ? (
-                  <input
-                    className="info-input editable"
-                    value={user?.[field] || ""}
-                    onChange={(e) =>
-                      setUser({ ...user, [field]: e.target.value })
-                    }
-                  />
-                ) : (
-                  <div className="info-input locked">
-                    <FaLock className="lock-icon" />
-                    {user?.[field]}
-                  </div>
-                )}
-              </div>
-            ))}
-
-            <div className="info-item">
-              <label>Password</label>
-              <div className="info-input locked">
-                <FaLock className="lock-icon" />
-                ***************
-                <button
-                  className="change-password-button"
-                  onClick={() => setShowPasswordModal(true)}
+            <div className="profile-left">
+              <div className="profile-image-wrapper">
+                <img
+                  src="/assets/images/default-profile.png"
+                  alt=""
+                  className="profile-image"
+                />
+                <div
+                  className="edit-photo-icon"
+                  onClick={() => alert("Open upload modal here!")}
                 >
-                  <FaPen style={{ marginRight: "4px" }} /> Change
-                </button>
+                  <FaPen />
+                </div>
               </div>
+            </div>
+
+            <div className="info-grid">
+              {["firstName", "lastName", "email"].map((field) => (
+                <div key={field} className="info-item">
+                  <label>
+                    {field === "email" ? "Email" : field.replace("Name", " name")}
+                  </label>
+                  {editMode ? (
+                    <input
+                      className="info-input editable"
+                      value={user?.[field] || ""}
+                      onChange={(e) =>
+                        setUser({ ...user, [field]: e.target.value })
+                      }
+                    />
+                  ) : (
+                    <div className="info-input locked">
+                      {user?.[field]}
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              <div className="info-item">
+                <label>Password</label>
+                <div className="info-input locked">
+                  ***************
+                  <a
+                    className="change-password-button"
+                    onClick={() => setShowPasswordModal(true)}
+                  >
+                    <FaPen style={{ marginRight: "4px" }} /> Change
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="profile-buttons">
+              <button className="edit-profile-button" onClick={handleEditProfile}>
+                {editMode ? (
+                  <>
+                    <FaLockOpen /> Save
+                  </>
+                ) : (
+                  <>
+                    <FaLock /> Change profile
+                  </>
+                )}
+              </button>
+              <button className="logout-button" onClick={handleLogout}>
+                <FaSignOutAlt /> Log out
+              </button>
             </div>
           </div>
         </div>
-
-        <div className="profile-right">
-          <div className="info-item">
-            <label>Language</label>
-            <div className="info-value-bold">English</div>
-          </div>
-          <button className="edit-profile-button" onClick={handleEditProfile}>
-            {editMode ? (
-              <>
-                <FaLockOpen /> Save
-              </>
-            ) : (
-              <>
-                <FaLock /> Change Profile
-              </>
-            )}
-          </button>
+        <div className="line"></div>
+        <div>
+          <h2>Current subscription</h2>
+          <Link>
+            Change subscription
+          </Link>
         </div>
-      </div>
-
-      <h2 className="section-heading">Available Packages</h2>
-      <div className="packages-grid">
-        {[
-          { title: "Day Pass (7x)", price: "€14" },
-          { title: "Day Pass (14x)", price: "€20" },
-          { title: "Unlimited Plan", price: "€125" },
-        ].map((pkg) => (
-          <div key={pkg.title} className="package-card">
-            <h3>{pkg.title}</h3>
-            <p className="package-price">{pkg.price}</p>
-            <p className="package-description">
-              Activates every time you plan a trip automatically. Never expires.
-            </p>
+        <div className="line"></div>
+        <h2>Available packages</h2>
+        <div className="packages-grid">
+          <div className="package-card">
+            <div>
+              <h3>Personal</h3>
+              <p className="package-description">
+                For individual use.
+              </p>
+            </div>
             <button className="package-button">
-              <FaShoppingCart /> Buy Now
+              Choose
             </button>
           </div>
-        ))}
-      </div>
-
-      <button className="logout-button" onClick={handleLogout}>
-        <FaSignOutAlt /> Log out
-      </button>
-
-      {showPasswordModal && (
-        <div className="modal-overlay">
-          <div className="password-modal">
-            <button
-              className="close-modal"
-              onClick={() => setShowPasswordModal(false)}
-            >
-              <FaTimes />
+          <div className="package-card">
+            <div>
+              <h3>Company</h3>
+              <p className="package-description">
+                For business or team use.
+              </p>
+            </div>
+            <button className="package-button">
+              Choose
             </button>
-            <h2>Change Password</h2>
-            <form onSubmit={handlePasswordChange}>
-              <label>New Password</label>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-              />
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-              {passwordError && (
-                <div className="error-message">{passwordError}</div>
-              )}
-              {passwordSuccess && (
-                <div className="success-message">{passwordSuccess}</div>
-              )}
-              <button type="submit" className="edit-profile-button">
-                <FaLockOpen /> Update Password
-              </button>
-            </form>
           </div>
         </div>
-      )}
+
+        <div className="packages-grid">
+          {[
+            { title: "Pay-per-use", price: "€1.49 per trip", description: "Ideal for occasional users who want AI-powered trip planning without a subscription." },
+            { title: "Trip Bundle", price: "€9.99 for 10 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
+            { title: "Trip Bundle", price: "€19.99 for 25 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
+
+          ].map((pkg) => (
+            <div key={pkg.title} className="package-card">
+              <p className="package-price">{pkg.price}</p>
+              <div>
+                <h3>{pkg.title}</h3>
+                <p className="package-description">
+                  {pkg.description}
+                </p>
+              </div>
+              <button className="package-button">
+                Upgrade
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="packages-grid">
+
+          <div className="package-card">
+            <p className="package-price">€129,99 per month</p>
+            <div>
+              <h3>Subscription</h3>
+              <p className="package-description">
+                Roamly offers a B2B subscription for €149.99/month, giving businesses unlimited access to the AI trip planner. Ideal for care providers, mobility services, and travel agencies.
+              </p>
+            </div>
+            <button className="package-button">
+              Upgrade
+            </button>
+          </div>
+        </div>
+
+        {showPasswordModal && (
+          <div className="modal-overlay">
+            <div className="password-modal">
+              <a
+                className="close-modal"
+                onClick={() => setShowPasswordModal(false)}
+              >
+                <FaTimes />
+              </a>
+              <h2>Change Password</h2>
+              <form onSubmit={handlePasswordChange}>
+                <label>New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+                <label>Confirm Password</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                {passwordError && (
+                  <div className="error-message">{passwordError}</div>
+                )}
+                {passwordSuccess && (
+                  <div className="success-message">{passwordSuccess}</div>
+                )}
+                <button type="submit" className="edit-profile-button">
+                  <FaLockOpen /> Update Password
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
