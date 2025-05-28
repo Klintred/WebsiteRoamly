@@ -7,6 +7,19 @@
     overflow-x: hidden; /* Prevent horizontal scroll */
   }
 
+  .register-redirect {
+    margin-bottom: 24px;
+    text-align: left;
+    font-size: 15px;
+    color: var(--text-color);
+  }
+  
+  .register-link {
+    color: #6C63FF;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
   .subheading-text {
     font-size: 16px;
     color: var(--text-color);
@@ -91,7 +104,6 @@
     font-size: 28px;
     font-weight: 700;
     color: var(--primary-color);
-    margin-bottom: 28px;
     text-align: left;
   }
   

@@ -16,7 +16,7 @@ const LoginScreen = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/profile"); // ✅ navigate to /profile if already logged in
+      navigate("/profile");
     }
   }, [navigate]);
 
@@ -45,7 +45,6 @@ const LoginScreen = () => {
         throw new Error(data.message || "Login failed.");
       }
 
-      // ✅ Save token immediately after successful login
       const token = data?.data?.token;
       if (token) {
         localStorage.setItem("token", token);
@@ -54,8 +53,6 @@ const LoginScreen = () => {
       }
 
       setSuccessMessage("Login successful!");
-
-      // ✅ Navigate to /profile after successful login
       setTimeout(() => navigate("/profile"), 1500);
     } catch (err) {
       console.error(err);
@@ -75,8 +72,16 @@ const LoginScreen = () => {
             ←
           </button>
 
-          <h1 className="welcome-heading">Welcome back!</h1>
+          
 
+          <h1 className="welcome-heading">Welcome back!</h1>
+          <div className="register-redirect">
+              Don’t have an account?{" "}
+              <span className="register-link" onClick={() => navigate("/register")}>
+                Register
+              </span>
+            </div>
+    
           <form className="login-form" onSubmit={handleLogin}>
             <label htmlFor="email">E-mail</label>
             <input
@@ -111,6 +116,8 @@ const LoginScreen = () => {
             >
               Forgot password?
             </div>
+
+            
 
             <div className="full-width-button">
               <PrimaryButton text="Login" type="submit" />
