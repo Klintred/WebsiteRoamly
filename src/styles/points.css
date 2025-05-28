@@ -10,6 +10,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 8px;
 }
 
 .points-header-text{
@@ -21,10 +22,13 @@
 
 .points-header h1, .points-header p{
     margin: 0;
+    color: white;
+    text-align: center;
 }
 
 .link{
     color: var(--text-color);
+    font-weight: bold;
 }
 
 .points-content{
@@ -46,6 +50,12 @@
     padding: 20px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
+}
+
+.badge-card-content{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .badge-container{
