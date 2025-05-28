@@ -462,7 +462,6 @@
   cursor: pointer;
   padding: 12px;
   border-radius: 4px;
-  font-weight: normal;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 

@@ -45,7 +45,6 @@
 .badge-card{
     display: flex;
     flex-direction: column;
-    align-items: left;
     gap: 8px;
     padding: 20px;
     border-radius: 10px;
@@ -63,15 +62,4 @@
     gap: 16px;
     flex-wrap: wrap;
     justify-content: center;
-}
-
-.badge-card{
-    width: min-content;
-}
-
-/* media screen for tablet */
-@media (min-width: 768px) {
-    .badge-card{
-        
-    }
 }

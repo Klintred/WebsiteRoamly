@@ -2,27 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import PrimaryButton from '../Buttons/PrimaryButton';
-import mobileLogo from "../../../public/assets/images/logo.png"; 
+import mobileLogo from "../../../public/assets/images/logo.png";
 import fullLogo from "../../../public/assets/images/fulllogo.png";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [logo, setLogo] = useState(mobileLogo); // Default to mobile logo
+  const [logo, setLogo] = useState(mobileLogo);
 
-  // Function to update logo based on screen size
   useEffect(() => {
     const updateLogo = () => {
       if (window.innerWidth >= 1024) {
-        setLogo(fullLogo); // Use full logo on desktop
-      } else {
-        setLogo(mobileLogo); // Use mobile logo on smaller screens
+        setLogo(fullLogo);
+        setLogo(mobileLogo);
       }
     };
 
-    updateLogo(); // Run on initial render
-    window.addEventListener("resize", updateLogo); // Listen for window resizes
+    updateLogo();
+    window.addEventListener("resize", updateLogo);
 
-    return () => window.removeEventListener("resize", updateLogo); // Cleanup event listener
+    return () => window.removeEventListener("resize", updateLogo);
   }, []);
 
   const toggleMenu = () => {
@@ -32,10 +30,9 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className='nav-container'>
-        {/* Logo */}
         <Link to="/">
           <div className="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="159" height="35" viewBox="0 0 159 40" fill="none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="160" height="35" viewBox="0 0 159 40" fill="none">
               <path d="M18.1212 18.4V0H30.4212C36.3212 0 40.5212 2.9 40.5212 8.5C40.5212 12.8 38.3212 14.8 35.7212 15.8C38.8212 17 39.9212 19.5 39.9212 23.4V24.2C39.9212 27 40.1212 29.6 40.3212 31.4H34.2212C33.8212 30.1 33.6212 28 33.6212 24.1V23.2C33.6212 19.6 32.3212 18.3 28.2212 18.3H24.0212M24.0212 13.3H28.7212C31.7212 13.3 34.2212 12.5 34.2212 9C34.2212 6.1 32.1212 5 29.6212 5H24.0212V13.3Z" fill="#134097" />
               <path d="M11.9212 31.3C10.4212 31.3 8.82124 31 7.32124 30.4C2.62124 28.5 -0.27876 23.6 0.0212402 18.6C0.42124 11.7 6.52124 6.59999 13.3212 7.29999V13.1C9.92124 12.7 6.22124 15.2 5.82124 18.6C5.62124 20.3 6.12124 21.9 7.12124 23.2C8.12124 24.5 9.62124 25.3 11.3212 25.5C12.9212 25.7 14.6212 25.2 15.9212 24.2C16.9212 23.4 17.6212 22.4 17.9212 21.2C18.1212 20.6 18.1212 20.1 18.1212 19.5V17.7H23.9212V19.7C23.9212 20.6 23.8212 21.4 23.6212 22.3C23.0212 24.9 21.5212 27.1 19.5212 28.8C17.3212 30.4 14.6212 31.3 11.9212 31.3Z" fill="#134097" />
               <path d="M14.7212 16.8L13.3212 20.3L9.82123 21.7L11.3212 18.1L14.7212 16.8Z" fill="#134097" />
@@ -50,21 +47,17 @@ const Navbar = () => {
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
         <ul className="nav-links-desktop">
           <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
           <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a trip</Link></li>
-          <li><Link to="/my-trips-overview" className='nav-link' onClick={() => setMenuOpen(false)}>My trips</Link></li>
+          <li><Link to="/my-trips" className='nav-link' onClick={() => setMenuOpen(false)}>My trips</Link></li>
           <li><Link to="/points" className='nav-link' onClick={() => setMenuOpen(false)}>My points</Link></li>
-          <li><Link to="/pricing" className='nav-link' onClick={() => setMenuOpen(false)}>Pricing</Link></li>
         </ul>
 
-        {/* Hamburger Menu Icon */}
         <div className="menu-icon" onClick={toggleMenu}>
           <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
         </div>
 
-        {/* Profile Icon */}
         <div className="login">
           <Link to="/profile" className='nav-link login-icon' onClick={() => setMenuOpen(false)}>
             <span className="material-symbols-outlined">person</span>
@@ -73,12 +66,11 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation Links */}
       <div className={`nav-links-mobile-container ${menuOpen ? 'open' : ''}`}>
         <ul className="nav-links-mobile">
           <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
           <li><Link to="/points" className='nav-link' onClick={() => setMenuOpen(false)}>My Points</Link></li>
-          <li><Link to="/my-trips-overview" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
+          <li><Link to="/my-trips" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
           <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a Trip</Link></li>
           <li className="profile-link">
             <PrimaryButton

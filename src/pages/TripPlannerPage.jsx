@@ -118,7 +118,7 @@ Return only this JSON.`;
 
   return (
     <div className="planner-container">
-      <h1 className="planner-header">Create a new trip</h1>
+      <h1 className="planner-header">Plan your perfect trip with AI</h1>
       <div className="planner-subcontainer">
 
         <div className="planner-input-container">
