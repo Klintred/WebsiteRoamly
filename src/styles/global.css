@@ -17,7 +17,7 @@ body {
   margin: 0 0px;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Roboto", sans-serif;
+  font-family: "AcuminPro", sans-serif;
   color: var(--text-color);
   background-color: var(--background-color);
   overflow-x: hidden;
@@ -159,8 +159,16 @@ button {
 }
 
 .vertical-line {
-  width: 2px;
+  width: 1px;
   height: inherit;
   background-color: #ccc;
   margin: 0 15px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 16px; 
+  box-sizing: border-box;
 }

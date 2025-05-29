@@ -1,23 +1,27 @@
+h2{
+  margin-bottom: 1rem;
+}
+
 .profile-container {
   display: flex;
   justify-content: center;
+
 }
+
 .profile-wrapper {
-  min-height: 100vh;
   background-color: var(--background-color);
   padding: 40px 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  flex:2;
 }
 
-.profile-top-container {
-  display: flex;
-  justify-content: center;
+.packages-grid.options-grid{
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .profile-top-box {
-  width: 80%;
   padding: 20px 0;
   box-sizing: border-box;
   display: flex;
@@ -26,7 +30,6 @@
   gap: 40px;
 }
 
-/* === Profile Picture === */
 .profile-left {
   display: flex;
   justify-content: center;
@@ -69,7 +72,7 @@
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 20px;
   width: 100%;
 }
@@ -170,10 +173,9 @@
 
 .packages-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 32px;
   width: 100%;
-  max-width: 1200px;
   margin-bottom: 40px;
 }
 
@@ -203,6 +205,10 @@
   box-shadow: var(--card-hover-shadow, 0 8px 24px rgba(0, 0, 0, 0.1));
 }
 
+.packages-grid.business-package{
+  grid-template-columns: 1fr;
+}
+
 .package-price {
   font-size: 20px;
   font-weight: 700;
@@ -222,7 +228,6 @@
   background-color: #cc2b2b;
 }
 
-/* === Modal Overlay === */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -236,7 +241,6 @@
   z-index: 9999;
 }
 
-/* === Password Modal === */
 .password-modal {
   background: var(--background-color);
   padding: 30px 40px;
@@ -295,11 +299,12 @@
   gap: 10px;
   align-items: center;
   padding: 10px 20px;
-  border: 3px solid var(--primary-color);
   border-radius: 10px;
   transition: background-color 0.3s ease-in-out;
   cursor: pointer;
   background-color: var(--background-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
 }
 
 .profile-action-subcontainer:hover {
@@ -310,7 +315,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0 20px;
+  padding: 20px 0;
+  flex:1;
 }
 
 .profile-action-link {
@@ -318,18 +324,103 @@
   color: var(--text-color);
 }
 
-@media (max-width: 768px) {
-  .profile-top-box {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.vertical-line {
+  display: none;
+}
 
-  .profile-right {
-    width: 100%;
-    align-items: flex-start;
-  }
+.profile-action-container.desktop{
+display: none;
+}
+.packages-header{
+  display: flex;
+  justify-content: space-between;
+}
 
-  .packages-grid {
-    padding: 0;
+.points-reward{
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  gap: 10px;
+}
+
+.points-reward-header {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--accent-color);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.points-content{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.profile-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.points-header-text{
+  background-color: var(--secondary-color);
+  color: var(--background-color);
+  padding: 10px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+ 
+}
+.points-header-text-score{
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.points-header{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.points-container{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+ 
+}
+
+.profile-header-container{
+   display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+ 
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile-action-container.desktop {
+    display: flex;
+  }
+  .profile-action-container.mobile {
+    display: none;
+  }
+  .vertical-line {
+    display: block;
+  
   }
 }

@@ -50,7 +50,7 @@ const Navbar = () => {
         <ul className="nav-links-desktop">
           <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
           <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a trip</Link></li>
-          <li><Link to="/my-trips" className='nav-link' onClick={() => setMenuOpen(false)}>My trips</Link></li>
+          <li><Link to="/my-trips-overview" className='nav-link' onClick={() => setMenuOpen(false)}>My trips</Link></li>
           <li><Link to="/points" className='nav-link' onClick={() => setMenuOpen(false)}>My points</Link></li>
         </ul>
 
@@ -70,7 +70,7 @@ const Navbar = () => {
         <ul className="nav-links-mobile">
           <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
           <li><Link to="/points" className='nav-link' onClick={() => setMenuOpen(false)}>My Points</Link></li>
-          <li><Link to="/my-trips" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
+          <li><Link to="/my-trips-overview" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
           <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a Trip</Link></li>
           <li className="profile-link">
             <PrimaryButton
