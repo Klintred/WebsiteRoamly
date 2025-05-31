@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
-import CustomCalendar from '../components/Forms/callender';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -28,11 +27,9 @@ const HomePage = () => {
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
-  const [coordinates, setCoordinates] = useState('48.8566,2.3522');
+  const [coordinates, setCoordinates] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [dates, setDates] = useState([null, null]);
-  const [calendarOpen, setCalendarOpen] = useState(false);
 
   useEffect(() => {
     const dummyHotel = {
@@ -52,9 +49,7 @@ const HomePage = () => {
   }, [location]);
 
   useEffect(() => {
-    if (coordinates) {
-      fetchAllPlaces();
-    }
+    fetchAllPlaces();
   }, [filter, searchQuery, coordinates]);
 
   useEffect(() => {
@@ -85,10 +80,12 @@ const HomePage = () => {
       if (data.lat && data.lng) {
         setCoordinates(`${data.lat},${data.lng}`);
       } else {
-        throw new Error("Locatie niet gevonden.");
+        console.warn("Locatie niet gevonden, maar doorgaan met zoekopdracht.");
+        setCoordinates('');
       }
     } catch (error) {
-      setError(error.message);
+      console.warn("Fout bij locatie zoeken:", error);
+      setCoordinates('');
     } finally {
       setLoading(false);
     }
@@ -140,7 +137,8 @@ const HomePage = () => {
   const fetchPlaces = async (query, location, radius) => {
     try {
       const cleanedQuery = query.trim();
-      const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(cleanedQuery)}&location=${location}&radius=${radius}`);
+      const locationParam = location ? `&location=${location}` : '';
+      const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(cleanedQuery)}${locationParam}&radius=${radius}`);
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         throw new Error("Server gaf geen geldige JSON terug.");
@@ -180,6 +178,59 @@ const HomePage = () => {
             </button>
           ))}
         </div>
+        <div className="search-filter">
+          <div>
+            <div className='flex-row'>
+              <label htmlFor="location-input" className='search-label'>
+                Where
+              </label>
+              <div className="search-wrapper">
+                <input
+                  id="location-input"
+                  type="text"
+                  className="search-input"
+                  placeholder="Where are you going or name of place?"
+                  value={location}
+                  onChange={handleSearchInputChange}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                  onFocus={() => location && setShowSuggestions(true)}
+                  autoComplete="off"
+                />
+              </div>
+            </div>
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className="suggestions-list">
+                {suggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => {
+                      setLocation(suggestion);
+                      setSearchQuery(suggestion);
+                      setShowSuggestions(false);
+                    }}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className='vertical-line-search'></div>
+          <div className='flex-row'>
+            <label htmlFor="accessibility-input" className='search-label'>
+              Accessibility filters
+            </label>
+            <div className="search-wrapper">
+              <select
+                id="accessibility-input"
+                className="search-input"
+                onChange={(e) => setSearchQuery(e.target.value)}
+              >
+                <option value="">Select accessibility filters</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
       {error && <p className="error-message">{error}</p>}
       <ResultsSection title="Hotels" data={hotels} filter={filter} type="hotel" loading={loading} />
@@ -191,7 +242,6 @@ const HomePage = () => {
 
 const ResultsSection = ({ title, data, filter, type, loading }) => {
   if ((filter !== 'all' && filter !== type)) return null;
-
   return (
     <>
       <div className='line'></div>
