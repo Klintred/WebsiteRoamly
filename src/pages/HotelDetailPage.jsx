@@ -2,16 +2,35 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import AccessibilityButton from '../components/Buttons/AccessibilityButton';
 import BookingButton from '../components/Buttons/BookingButton';
+import PrimaryButton from '../components/Buttons/PrimaryButton';
 import "../styles/hoteldetails.css";
 
-const API_BASE_URL = "https://roamly-api.onrender.com"; // of jouw lokale API
+const API_BASE_URL = "https://roamly-api.onrender.com";
 
 const PlaceDetailPage = () => {
   const { type, id } = useParams();
   const [placeDetails, setPlaceDetails] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [expandedSection, setExpandedSection] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const dummyPlaces = {
+    'dummy-hotel-1': {
+      id: 'dummy-hotel-1',
+      name: 'Demo Hotel Example',
+      address: '123 Example Street, Amsterdam, Netherlands',
+      photo: 'https://via.placeholder.com/600x400?text=Demo+Hotel',
+      price: '€120 per night',
+      description: 'This is a demo hotel used for preview and testing purposes.',
+      accessibilityScore: 'Good',
+      location: {
+        lat: 52.3676,
+        lng: 4.9041
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchPlaceById = async () => {
@@ -19,26 +38,21 @@ const PlaceDetailPage = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/place/${id}`);
         const contentType = response.headers.get("content-type");
-
         if (!contentType || !contentType.includes("application/json")) {
           throw new Error("Server gaf geen geldige JSON terug.");
         }
 
         const data = await response.json();
-
         setPlaceDetails(data);
 
         if (data.location?.lat && data.location?.lng) {
-          const coords = `${data.location.lat},${data.location.lng}`;
-          setCoordinates(coords);
+          setCoordinates(`${data.location.lat},${data.location.lng}`);
         } else if (data.address) {
           await fetchCoordinates(data.address);
         } else {
           throw new Error("Geen locatiegegevens beschikbaar.");
         }
-
       } catch (err) {
-        console.error('Fout bij ophalen plaatsdetails:', err.message);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -57,107 +71,144 @@ const PlaceDetailPage = () => {
       }
     };
 
-    if (id) fetchPlaceById();
+    if (id in dummyPlaces) {
+      setPlaceDetails(dummyPlaces[id]);
+      setCoordinates(`${dummyPlaces[id].location.lat},${dummyPlaces[id].location.lng}`);
+      setLoading(false);
+    } else {
+      fetchPlaceById();
+    }
   }, [id]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!placeDetails?.name) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/reviews`);
+        const data = await res.json();
+        const filtered = data.filter(r => r.placeName === placeDetails.name);
+        setReviews(filtered);
+      } catch (err) {
+        console.error("Fout bij ophalen van reviews:", err);
+      }
+    };
+
+    fetchReviews();
+  }, [placeDetails?.name]);
 
   if (loading) return <p>Bezig met laden...</p>;
   if (error) return <p style={{ color: "red" }}>Fout: {error}</p>;
   if (!placeDetails) return <p>Geen gegevens gevonden.</p>;
 
+  const firstReview = reviews[0] || {};
+
   return (
     <div className="place-detail-container">
       <div className="place-detail-subcontainer">
         <div className="go-back-link">
-          <Link to={`/${type || ''}`}>Go back to {type || 'home'}</Link>        </div>
-        <div className="place-details-text">
-          <div>
-            <h1>{placeDetails.name}</h1>
+          <Link to={`/${type || ''}`}>Go back to {type || 'home'}</Link>
+        </div>
 
-          </div>
+        <div className="place-details-text">
+          <h1>{placeDetails.name}</h1>
           <div className="book-button-container-desktop">
-            {placeDetails.name && (
-              <BookingButton placeName={placeDetails.name} />
-            )}
+            <BookingButton placeName={placeDetails.name} />
           </div>
         </div>
+
         <div className="place-details-image">
           <img
             src={placeDetails.photo || "https://placehold.co/320x200?text=Geen+afbeelding"}
             alt={placeDetails.name}
             style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}
           />
-
         </div>
-        <AccessibilityButton
-          feedbackSubject="General accessibility"
-          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
-          borderColor="green"
-        />
+
+        <div className="review-button-container" style={{ marginTop: "1rem" }}>
+          <PrimaryButton
+            text="Write a review"
+            to={`/write-review?name=${encodeURIComponent(placeDetails.name)}`}
+            variant="secondary"
+          />
+        </div>
 
         <div className="line" />
-
         <h2>About this property</h2>
-        {placeDetails.description && <p>
-          {placeDetails.description}</p>}
+        <p>{placeDetails.description}</p>
 
         <div className="line" />
-
         <h2>Accessibility overview</h2>
-        <AccessibilityButton
-          feedbackSubject="General accessibility"
-          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
-          borderColor="green"
-        />
-        <AccessibilityButton
-          feedbackSubject="General accessibility"
-          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
-          borderColor="green"
-        />
-        <AccessibilityButton
-          feedbackSubject="General accessibility"
-          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
-          borderColor="green"
-        />
-        <AccessibilityButton
-          feedbackSubject="General accessibility"
-          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
-          borderColor="green"
-        />
-        <AccessibilityButton
-          feedbackSubject="General accessibility"
-          accessibilityScore={placeDetails.accessibilityScore || "Geen score gevonden"}
-          borderColor="green"
-        />
-
-      </div>
-
-      <div className="line" />
-      <h2>Location</h2>
-      <div className="flex-row">
-        <p>{placeDetails.address}</p>
-
-        {coordinates && (
-          <div>
-            <iframe
-              title="Map"
-              width="100%"
-              height="400px"
-              style={{ border: 0, borderRadius: "8px" }}
-              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
-              allowFullScreen
+        {[{
+          key: 'general', label: 'General accessibility', value: firstReview.general?.accessibility,
+        }, {
+          key: 'parking', label: 'Parking suitability', value: firstReview.parking?.designatedSpot,
+        }, {
+          key: 'entrance', label: 'Entrance accessibility', value: firstReview.entrance?.doorWidthOK,
+        }, {
+          key: 'internalNavigation', label: 'Navigation inside', value: firstReview.internalNavigation?.pathWidthOK,
+        }, {
+          key: 'sanitary', label: 'Restroom facilities', value: firstReview.sanitary?.accessibleRestroom,
+        }].map(({ key, label, value }) => (
+          <div key={key} onClick={() => setExpandedSection(expandedSection === key ? null : key)}>
+            <AccessibilityButton
+              feedbackSubject={label}
+              accessibilityScore={value || "Geen score gevonden"}
+              borderColor="green"
             />
+            {expandedSection === key && firstReview[key] && (
+              <ul className="details-list" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
+                {Object.entries(firstReview[key]).map(([k, v]) => (
+                  <li key={k}><strong>{k}:</strong> {v}</li>
+                ))}
+              </ul>
+            )}
           </div>
+        ))}
+
+        <div className="line" />
+        <h2>User Reviews</h2>
+        {reviews.length === 0 ? (
+          <p>No reviews yet.</p>
+        ) : (
+          reviews.map((r, idx) => (
+            <div key={idx} className="review-block">
+              {r.textReview && <p><strong>Comment:</strong> {r.textReview}</p>}
+              {r.photoUrls && r.photoUrls.length > 0 && (
+                <div className="review-photos">
+                  {r.photoUrls.map((url, i) => (
+                    <img
+                      key={i}
+                      src={url}
+                      alt={`Uploaded ${i}`}
+                      style={{ maxWidth: '100px', marginRight: '10px', borderRadius: '4px' }}
+                    />
+                  ))}
+                </div>
+              )}
+              <hr style={{ margin: '1rem 0' }} />
+            </div>
+          ))
+        )}
+
+        <div className="line" />
+        <h2>Location</h2>
+        <p>{placeDetails.address}</p>
+        {coordinates && (
+          <iframe
+            title="Map"
+            width="100%"
+            height="400px"
+            style={{ border: 0, borderRadius: "8px" }}
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
+            allowFullScreen
+          />
         )}
       </div>
       <div className="book-button-container-mobile">
-        {placeDetails.name && (
-          <BookingButton placeName={placeDetails.name} />
-        )}
+        <BookingButton placeName={placeDetails.name} />
       </div>
     </div>
   );
 };
-
-//test
 
 export default PlaceDetailPage;

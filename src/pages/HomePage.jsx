@@ -40,6 +40,19 @@ const HomePage = () => {
   const [calendarOpen, setCalendarOpen] = useState(false);
 
 
+useEffect(() => {
+  // VDUMMMY DATA
+  const dummyHotel = {
+    id: 'dummy-hotel-1',
+    name: 'Demo Hotel Example',
+    address: '123 Example Street, Amsterdam, Netherlands',
+    photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
+    price: '€120 per night',
+  };
+  setHotels([dummyHotel]);
+}, []);
+
+
   // Haal coordinaten op als locatie verandert
   useEffect(() => {
     if (location) {
@@ -121,8 +134,20 @@ const HomePage = () => {
         fetchRestaurantPromise,
         fetchActivityPromise
       ]);
+//Originele DATA hieronder sethotels terug opzetten wanneer dummydata weg is
+      //setHotels(hotelData);
+      //DUMMYDATA
+      // Voeg dummy hotel toe aan het begin van de lijst
+const dummyHotel = {
+  id: 'dummy-hotel-1',
+  name: 'Demo Hotel Example',
+  address: '123 Example Street, Amsterdam, Netherlands',
+  photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
+  price: '€120 per night',
+};
 
-      setHotels(hotelData);
+setHotels([dummyHotel, ...hotelData]);
+
       setRestaurants(restaurantData);
       setActivities(activityData);
     } catch (error) {

@@ -62,6 +62,7 @@ const AppLayout = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/set-new-password" element={<SetNewPassword />} />
+          <Route path="/review" element={<AccessibilityFeedback />} />
 
         <Route
           path="/"

@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../styles/reviews.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Tag from '../components/Buttons/Tag';
 import PrimaryButton from '../components/Buttons/PrimaryButton';
 
 const WriteReviewPage = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const placeName = params.get("name") || "this place";
+
   const [responses, setResponses] = useState({
     accessibility: "",
     parkingSuitable: "",
@@ -14,12 +18,64 @@ const WriteReviewPage = () => {
     staffSupport: "",
     recommend: ""
   });
+
+  const [textReview, setTextReview] = useState("");
+  const [photoFiles, setPhotoFiles] = useState([]);
   const [reviewId, setReviewId] = useState(null);
   const [showFollowUp, setShowFollowUp] = useState(false);
+  const [username, setUsername] = useState("");
+
   const navigate = useNavigate();
+
+  // 👤 Haal username automatisch op bij het laden van de pagina
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
 
   const handleTagClick = (field, value) => {
     setResponses(prev => ({ ...prev, [field]: value }));
+  };
+
+  const resizeImage = (file, maxWidth = 800) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = e => {
+        img.src = e.target.result;
+      };
+
+      img.onload = () => {
+        const scale = maxWidth / img.width;
+        const canvas = document.createElement('canvas');
+        canvas.width = maxWidth;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const resizedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        resolve(resizedDataUrl);
+      };
+
+      reader.onerror = reject;
+      img.onerror = reject;
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleImageChange = async (e) => {
+    const files = Array.from(e.target.files);
+    try {
+      const resizedImages = await Promise.all(files.map(file => resizeImage(file)));
+      setPhotoFiles(resizedImages);
+    } catch (err) {
+      console.error("Image resizing failed:", err);
+    }
   };
 
   const handleSubmit = async () => {
@@ -29,16 +85,18 @@ const WriteReviewPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           general: responses,
+          placeName: placeName,
+          username: username || "Anonymous", // voeg toe aan request
           points: 1,
-          sectionsCompleted: ["general"]
+          sectionsCompleted: ["general"],
+          textReview,
+          photoUrls: photoFiles
         })
       });
 
       if (!res.ok) throw new Error("Failed to submit");
 
       const data = await res.json();
-      console.log("Created review ID:", data._id);
-
       setReviewId(data._id);
       setShowFollowUp(true);
     } catch (err) {
@@ -59,9 +117,12 @@ const WriteReviewPage = () => {
       </div>
     );
   }
+
   return (
     <div className="write-review-container">
-      <h1>Give feedback</h1>
+      <h1>
+        Give feedback for <span className="font-bold">{placeName}</span>
+      </h1>
       <div className="write-review-form">
         <div className="write-review-form-group">
           <QuestionGroup label="How would you rate the overall accessibility?" field="accessibility">
@@ -102,12 +163,33 @@ const WriteReviewPage = () => {
             <Tag text="No" color="red" isSelected={responses.recommend === "No"} onClick={(val) => handleTagClick("recommend", val)} />
           </QuestionGroup>
 
-          <PrimaryButton text="Send" variant="primary" onClick={handleSubmit} />
+          <div className="write-review-form-group">
+            <label htmlFor="textReview">Optional comments</label>
+            <textarea
+              id="textReview"
+              className="text-area"
+              rows="4"
+              value={textReview}
+              onChange={(e) => setTextReview(e.target.value)}
+              placeholder="Write your comments here..."
+            />
+          </div>
 
+          <div className="write-review-form-group">
+            <label htmlFor="photoUpload">Upload photos (optional)</label>
+            <input
+              id="photoUpload"
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+            />
+          </div>
+
+          <PrimaryButton text="Send" variant="primary" onClick={handleSubmit} />
         </div>
       </div>
     </div>
-
   );
 };
 
