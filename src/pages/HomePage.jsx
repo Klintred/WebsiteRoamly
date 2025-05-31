@@ -6,23 +6,18 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 const API_BASE_URL = 'https://roamly-api.onrender.com';
+
 const extractCityCountry = (fullAddress) => {
   if (!fullAddress) return '';
   const parts = fullAddress.split(',').map(part => part.trim());
-
   if (parts.length >= 2) {
     let city = parts[parts.length - 2];
     const country = parts[parts.length - 1];
-
     city = city.replace(/^\d{4,5}\s*/, '');
-
     return `${city}, ${country}`;
   }
-
   return fullAddress;
 };
-
-
 
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
@@ -39,43 +34,35 @@ const HomePage = () => {
   const [dates, setDates] = useState([null, null]);
   const [calendarOpen, setCalendarOpen] = useState(false);
 
+  useEffect(() => {
+    const dummyHotel = {
+      id: 'dummy-hotel-1',
+      name: 'Demo Hotel Example',
+      address: '123 Example Street, Amsterdam, Netherlands',
+      photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
+      price: '€120 per night',
+    };
+    setHotels([dummyHotel]);
+  }, []);
 
-useEffect(() => {
-  // VDUMMMY DATA
-  const dummyHotel = {
-    id: 'dummy-hotel-1',
-    name: 'Demo Hotel Example',
-    address: '123 Example Street, Amsterdam, Netherlands',
-    photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
-    price: '€120 per night',
-  };
-  setHotels([dummyHotel]);
-}, []);
-
-
-  // Haal coordinaten op als locatie verandert
   useEffect(() => {
     if (location) {
       fetchCoordinates(location);
     }
   }, [location]);
 
-  // Fetch plaatsen als filter, searchQuery of coordinates veranderen
   useEffect(() => {
     if (coordinates) {
       fetchAllPlaces();
     }
   }, [filter, searchQuery, coordinates]);
 
-  // Debounced suggesties ophalen
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (location.length < 2) return setSuggestions([]);
-
       try {
         const response = await fetch(`${API_BASE_URL}/api/autocomplete?query=${encodeURIComponent(location)}`);
         const data = await response.json();
-        console.log('Fetched places data:', data);
         if (data.suggestions) {
           setSuggestions(data.suggestions);
           setShowSuggestions(true);
@@ -86,10 +73,7 @@ useEffect(() => {
       }
     };
 
-    const delayDebounce = setTimeout(() => {
-      fetchSuggestions();
-    }, 300);
-
+    const delayDebounce = setTimeout(fetchSuggestions, 300);
     return () => clearTimeout(delayDebounce);
   }, [location]);
 
@@ -134,20 +118,16 @@ useEffect(() => {
         fetchRestaurantPromise,
         fetchActivityPromise
       ]);
-//Originele DATA hieronder sethotels terug opzetten wanneer dummydata weg is
-      //setHotels(hotelData);
-      //DUMMYDATA
-      // Voeg dummy hotel toe aan het begin van de lijst
-const dummyHotel = {
-  id: 'dummy-hotel-1',
-  name: 'Demo Hotel Example',
-  address: '123 Example Street, Amsterdam, Netherlands',
-  photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
-  price: '€120 per night',
-};
 
-setHotels([dummyHotel, ...hotelData]);
+      const dummyHotel = {
+        id: 'dummy-hotel-1',
+        name: 'Demo Hotel Example',
+        address: '123 Example Street, Amsterdam, Netherlands',
+        photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
+        price: '€120 per night',
+      };
 
+      setHotels([dummyHotel, ...hotelData]);
       setRestaurants(restaurantData);
       setActivities(activityData);
     } catch (error) {
@@ -158,11 +138,9 @@ setHotels([dummyHotel, ...hotelData]);
   };
 
   const fetchPlaces = async (query, location, radius) => {
-
     try {
       const cleanedQuery = query.trim();
       const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(cleanedQuery)}&location=${location}&radius=${radius}`);
-
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         throw new Error("Server gaf geen geldige JSON terug.");
@@ -202,144 +180,15 @@ setHotels([dummyHotel, ...hotelData]);
             </button>
           ))}
         </div>
-        <div className="search-filter">
-          <div>
-            <div className='flex-row'>
-              <label htmlFor="location-input" className='search-label'>
-                Where
-              </label>
-              <div className="search-wrapper">
-                <input
-                  id="location-input"
-                  type="text"
-                  className="search-input"
-                  placeholder="Where are you going?"
-                  value={location}
-                  onChange={handleSearchInputChange}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                  onFocus={() => location && setShowSuggestions(true)}
-                  autoComplete="off"
-                />
-              </div>
-            </div>
-            {showSuggestions && suggestions.length > 0 && (
-              <ul className="suggestions-list" style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                right: 0,
-                backgroundColor: 'white',
-                border: '1px solid #ccc',
-                borderTop: 'none',
-                maxHeight: '200px',
-                overflowY: 'auto',
-                zIndex: 10,
-                margin: 0,
-                padding: 0,
-                listStyle: 'none',
-              }}>
-                {suggestions.map((suggestion, index) => (
-                  <li
-                    key={index}
-                    onClick={() => {
-                      setLocation(suggestion);
-                      setSearchQuery(suggestion);
-                      setShowSuggestions(false);
-                    }}
-                    style={{ padding: '10px', cursor: 'pointer' }}
-                    onMouseDown={e => e.preventDefault()} // voorkomt dat blur afbreekt click
-                  >
-                    {suggestion}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          {/* 
-          <div className='vertical-line'></div>
-          <div className='flex-row'>
-            <label className='search-label'>Dates</label>
-            <div className="search-wrapper">
-              <button
-                type="button"
-                className="search-input"
-                onClick={() => setCalendarOpen(prev => !prev)}
-              >
-                {dates[0] && dates[1]
-                  ? `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`
-                  : "Add dates"}
-              </button>
-              {calendarOpen && (
-                <div className="calendar-wrapper">
-                  <CustomCalendar
-                    selectedDates={dates}
-                    setSelectedDates={(selected) => {
-                      const newDates = typeof selected === "function" ? selected(dates) : selected;
-                      setDates(newDates);
-                      if (newDates[0] && newDates[1]) {
-                        setCalendarOpen(false);
-                      }
-                    }}
-                    variant="homepage"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-
-
-          <div className='vertical-line'></div>
-          <div className='flex-row'>
-
-            <label htmlFor="who-input" className='search-label'>
-              Who
-            </label>
-            <div className="search-wrapper">
-              <input
-                id="who-input"
-                type="text"
-                className="search-input"
-                placeholder="Who is going?"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-          */}
-          <div className='vertical-line-search'></div>
-          <div className='flex-row'>
-
-            <label htmlFor="accessibility-input" className='search-label'>
-              Accessibility filters
-            </label>
-            <div className="search-wrapper">
-              <select
-                id="accessibility-input"
-                className="search-input"
-                onChange={(e) => setSearchQuery(e.target.value)}
-              >
-                <option value="">Select accessibility filters</option>
-
-              </select>
-
-            </div>
-
-          </div>
-          <div className='vertical-line-search'></div>
-          <label className='search-label' style={{ display: 'none' }}>Search</label>
-          <span className="material-symbols-outlined">search</span>
-        </div>
-
       </div>
       {error && <p className="error-message">{error}</p>}
-
       <ResultsSection title="Hotels" data={hotels} filter={filter} type="hotel" loading={loading} />
       <ResultsSection title="Restaurants" data={restaurants} filter={filter} type="restaurant" loading={loading} />
       <ResultsSection title="Activities" data={activities} filter={filter} type="activity" loading={loading} />
-
     </div>
   );
 };
+
 const ResultsSection = ({ title, data, filter, type, loading }) => {
   if ((filter !== 'all' && filter !== type)) return null;
 
@@ -350,39 +199,48 @@ const ResultsSection = ({ title, data, filter, type, loading }) => {
       <div className="search-results">
         {loading
           ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
-          : data.map((place) => <PlaceCard key={place.id} place={place} type={type} />)
+          : data.map((place) => <PlaceCard key={place.id || place.place_id} place={place} type={type} />)
         }
       </div>
     </>
   );
 };
 
-const PlaceCard = ({ place, type }) => (
-  <div className="place-card">
-    <div className="image-container">
-      <img src={place.photo} alt={place.name} className="place-image" />
-    </div>
-    <div className="content">
-      <h3>{place.name}</h3>
-      <div className='flex-row'>
-        <div className='flex-column'>
-          <span className="material-symbols-outlined">location_on</span>
-          <p className="location-text">{extractCityCountry(place.address)}</p>
-        </div>
-        <div className='flex-column'>
-          <span className="material-symbols-outlined">paid</span>
-          <p className="price-text">{place.price || 'Price not available'}</p>
+const PlaceCard = ({ place, type }) => {
+  const placeId = place.id || place.place_id;
+  const detailType = type === 'activity' ? 'activities' : `${type}s`;
+
+  return (
+    <div className="place-card">
+      <div className="image-container">
+        <img src={place.photo || "https://via.placeholder.com/300x200?text=No+Image"} alt={place.name} className="place-image" />
+      </div>
+      <div className="content">
+        <h3>{place.name}</h3>
+        <div className='flex-row'>
+          <div className='flex-column'>
+            <span className="material-symbols-outlined">location_on</span>
+            <p className="location-text">{extractCityCountry(place.address)}</p>
+          </div>
+          <div className='flex-column'>
+            <span className="material-symbols-outlined">paid</span>
+            <p className="price-text">{place.price || 'Price not available'}</p>
+          </div>
         </div>
       </div>
+      <div className="button-container">
+        {placeId ? (
+          <Link to={`/${detailType}/${placeId}`}>
+            <button className="view-details-button">View details</button>
+          </Link>
+        ) : (
+          <button className="view-details-button" disabled>No details available</button>
+        )}
+      </div>
     </div>
-    <div className="button-container">
-      <Link to={`/${type}s/${place.id}`}>
-        <button className="view-details-button">View details</button>
-      </Link>
-    </div>
-  </div>
+  );
+};
 
-);
 const SkeletonCard = () => (
   <div className="place-card">
     <div className="image-container">
@@ -404,4 +262,5 @@ const SkeletonCard = () => (
     </div>
   </div>
 );
+
 export default HomePage;
