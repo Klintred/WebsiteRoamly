@@ -343,20 +343,7 @@ h2 {
   justify-content: space-between;
 }
 
-.booking-affiliate-link {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 20px;
-  background-color: #003580;
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 5px;
-}
 
-.booking-affiliate-link:hover {
-  background-color: #002766;
-}
 
 .place-detail-container {
   max-width: 1200px;
