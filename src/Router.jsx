@@ -14,22 +14,22 @@ import TripPlannerPage from "./pages/TripPlannerPage";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import HotelDetailPage from "./pages/HotelDetailPage";
-import PointsPage from "./pages/PointsPage";
-import MyTrips from "./pages/MyTripsPage";
+import MyPointsPage from "./pages/MyPointsPage";
+import MyTripsOverviewPage from "./pages/MyTripsOverviewPage";
+import MyTripsDetailPage from "./pages/MyTripsDetailPage";
 import AccessibilityFeedback from "./pages/reviews";
 import RegisterScreen from "./pages/RegisterScreen";
 import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import SetNewPassword from "./pages/SetNewPassword"; 
+import SetNewPassword from "./pages/SetNewPassword";
 import WriteReviewPage from "./pages/WriteReviewPage";
 import ParkingReviewPage from './pages/ParkingReviewPage';
 import EntranceReviewPage from './pages/EntranceReviewPage';
 import InternalReviewPage from './pages/InternalReviewPage';
 import SanitaryReviewPage from './pages/SanitaryReviewPage';
 
-// ✅ Middleware to protect private routes
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -38,7 +38,6 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// ✅ Layout with conditional Nav/Footer
 const AppLayout = () => {
   const location = useLocation();
 
@@ -114,20 +113,19 @@ const AppLayout = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
-          path="/points"
+          path="/my-trips-overview"
           element={
             <ProtectedRoute>
-              <PointsPage />
+              <MyTripsOverviewPage />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/my-trips"
+          path="/trip-details/:tripId"
           element={
             <ProtectedRoute>
-              <MyTrips />
+              <MyTripsDetailPage />
             </ProtectedRoute>
           }
         />
@@ -144,6 +142,22 @@ const AppLayout = () => {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-reviews"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-points"
+          element={
+            <ProtectedRoute>
+              <MyPointsPage />
             </ProtectedRoute>
           }
         />
@@ -202,7 +216,6 @@ const AppLayout = () => {
   );
 };
 
-// ✅ Main router wrapper
 const AppRouter = () => {
   return (
     <Router>
@@ -211,4 +224,4 @@ const AppRouter = () => {
   );
 };
 
-export default AppRouter;
+export default AppRouter;

@@ -1,135 +1,138 @@
-.nav-container{
-    background-color: var(--background-color);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 20px;
-    position: relative;
-    transition: transform 0.3s ease;
-    z-index: 2;
-    align-items: center;
+.nav-container {
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+  position: relative;
+  transition: transform 0.3s ease;
+  z-index: 2;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav-links-mobile-container {
-    position: absolute;
-    background-color: var(--background-color);
-    top: 84px; /* Places it right below the navbar */
-    left: 0;
-    width: 100%;
-    display: none;
-    z-index: 100;
+  position: absolute;
+  background-color: var(--background-color);
+  top: 84px;
+  left: 0;
+  width: 100%;
+  display: none;
+  z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.nav-links-mobile-container.open{
-    display: block;
+.nav-links-mobile-container.open {
+  display: block;
 }
 
 .nav-links-mobile {
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.nav-links-mobile li {
+  border-bottom: 1px solid var(--border-color);
+  padding: 20px 0;
+}
+.nav-links-mobile li:nth-last-child(1) {
+  border-bottom: none;
+}
+.nav-links-mobile a {
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.nav-links-mobile a:hover {
+  color: var(--primary-color);
+}
+
+.menu-icon {
+  font-size: 24px;
+  color: var(--secondary-color);
+}
+
+.logo {
+  height: 30px;
+  width: auto;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links-desktop {
+  display: none;
+}
+
+.login {
+  display: none;
+  width: 160px;
+  justify-content: end;
+}
+
+.profile-link {
+  display: flex;
+  justify-content: center;
+}
+
+.material-symbols-outlined {
+  font-size: 24px;
+  color: var(--background-color);
+  vertical-align: middle;
+  background-color: var(--secondary-color);
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.nav-link.login-icon p {
+  margin: 0;
+  padding: 0;
+  color: var(--secondary-color);
+}
+
+.nav-link.login-icon {
+  text-decoration: none;
+}
+
+.material-symbols-outlined:hover {
+  background-color: var(--primary-color);
+}
+
+@media (min-width: 768px) {
+  .nav-links-desktop,
+  .login {
+    display: flex; 
+  }
+
+  .nav-links-desktop {
     list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .nav-links-desktop a {
     text-decoration: none;
     color: var(--text-color);
     font-weight: 700;
     transition: color 0.3s ease;
-    
-}
+  }
 
-.nav-links-mobile li{
-    border-bottom: 1px solid var(--border-color);
-    padding: 20px 0;
-}
-.nav-links-mobile li:nth-last-child(1) {
-    border-bottom: none;
-}
-.nav-links-mobile a{
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-.nav-links-mobile a:hover {
+  .nav-links-desktop a:hover {
     color: var(--primary-color);
-}
+  }
 
-.menu-icon{
-    font-size: 24px; 
-    color: var(--secondary-color);
-}
-
-.logo img{
-    height: 40px;
-    width: auto;
-}
-
-ul{
-    margin: 0;
-    padding: 0;
-}
-
-.nav-links-desktop{
-    display: none;
-}
-
-.login{
-    display: none;
-}
-
-.profile-link{
-    display: flex;
-    justify-content: center;
-}
-
-.material-symbols-outlined {
-    font-size: 24px;
-    color: var(--background-color);
-    vertical-align: middle;
-    background-color: var(--secondary-color);
-    padding: 8px;
-    border-radius: 50%;
-}
-
-.nav-link.login-icon p{
-    margin: 0;
-    padding: 0;
-    color: var(--secondary-color);
-}
-
-.nav-link.login-icon{
-    text-decoration: none;
-}
-
-.material-symbols-outlined:hover{
-    background-color: var(--primary-color);
-}
-
-
-/* Responsive Design */
-@media (min-width: 768px) {
-    .nav-links-desktop, .login {
-        display: flex; /* Show desktop navigation on larger screens */
-    }
-
-    .nav-links-desktop{
-        list-style: none;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 28px;
-    }
-
-    .nav-links-desktop a{
-        text-decoration: none;
-        color: var(--text-color);
-        font-weight: 700;
-        transition: color 0.3s ease;
-    }
-
-    .nav-links-desktop a:hover {
-        color: var(--primary-color);
-    }
-
-    .menu-icon, .nav-links-container {
-        display: none; /* Hide mobile elements on desktop */
-    }
+  .menu-icon,
+  .nav-links-container {
+    display: none; 
+  }
 }

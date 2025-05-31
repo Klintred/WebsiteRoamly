@@ -306,7 +306,7 @@ setHotels([dummyHotel, ...hotelData]);
             </div>
           </div>
           */}
-          <div className='vertical-line'></div>
+          <div className='vertical-line-search'></div>
           <div className='flex-row'>
 
             <label htmlFor="accessibility-input" className='search-label'>
@@ -325,16 +325,9 @@ setHotels([dummyHotel, ...hotelData]);
             </div>
 
           </div>
-          <div className='vertical-line'></div>
+          <div className='vertical-line-search'></div>
           <label className='search-label' style={{ display: 'none' }}>Search</label>
-          <button
-            className="search-button"
-            onClick={fetchAllPlaces}
-            aria-label='Search for places'
-            style={{ backgroundColor: 'white', border: 'none', cursor: 'pointer' }}
-          >
-            <span className="material-symbols-outlined">search</span>
-          </button>
+          <span className="material-symbols-outlined">search</span>
         </div>
 
       </div>

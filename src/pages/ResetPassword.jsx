@@ -18,6 +18,10 @@ const ResetPassword = () => {
     } else {
       setEmail(storedEmail);
     }
+
+    // Autofocus first input
+    const firstInput = document.getElementById("code-0");
+    if (firstInput) firstInput.focus();
   }, []);
 
   const handleChange = (index, value) => {
@@ -30,6 +34,21 @@ const ResetPassword = () => {
       const nextInput = document.getElementById(`code-${index + 1}`);
       if (nextInput) nextInput.focus();
     }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("Text").trim();
+    if (!/^\d{6}$/.test(pasted)) {
+      setError("Please paste a valid 6-digit code.");
+      return;
+    }
+
+    const pastedArray = pasted.split("").slice(0, 6);
+    setCode(pastedArray);
+
+    const lastInput = document.getElementById(`code-${pastedArray.length - 1}`);
+    if (lastInput) lastInput.focus();
   };
 
   const handleSubmit = async (e) => {
@@ -100,6 +119,7 @@ const ResetPassword = () => {
                   className="code-input"
                   value={digit}
                   onChange={(e) => handleChange(index, e.target.value)}
+                  onPaste={handlePaste}
                 />
               ))}
             </div>

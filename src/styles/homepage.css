@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   margin: 0 1.5rem;
+
 }
 
 .home-page h2 {
@@ -455,17 +456,19 @@
 }
 
 .filter-button {
+  color: var(--text-color);
   background-color: transparent;
   border: 3px solid #6c63ff;
   cursor: pointer;
   padding: 12px;
   border-radius: 4px;
-  font-weight: normal;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .filter-button:hover {
-  background-color: #e0dfff;
+     background-color: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
 }
 
 .filter-button.active {
