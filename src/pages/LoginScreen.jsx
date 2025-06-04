@@ -63,7 +63,7 @@ const LoginScreen = () => {
   return (
     <div className="login-page-wrapper">
       <div className="login-image-wrapper">
-        <img src="/assets/images/loginImage.png" alt="Login background" />
+        <img src="./assets/images/loginImage.png" alt="Login background" />
       </div>
 
       <div className="login-form-wrapper">

@@ -2,7 +2,7 @@ import "../styles/login.css";
 import LoginCard from "../components/Cards/LoginCard";
 
 const LoginPage = () => {
-  const loginImage = "/assets/images/loginImage2.png"; 
+  const loginImage = "./assets/images/loginImage2.png"; 
 
   return (
     <div className="login-container">

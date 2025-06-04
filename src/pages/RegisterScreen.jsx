@@ -140,40 +140,51 @@ const RegisterScreen = () => {
   return (
     <div className="register-page-wrapper">
       <div className="register-image-wrapper">
-        <img src="/assets/images/loginImage.png" alt="Register background" />
+        <img src="./assets/images/loginImage.png" alt="Register background" />
       </div>
 
       <div className="register-form-wrapper">
         <div className="register-screen-container">
           <div className="register-screen-subcontainer">
-            <button className="back-button" onClick={() => navigate(-1)}>←</button>
+            <button className="back-button" onClick={() => navigate(-1)}>Go back</button>
+            <p className="bottom-prompt">
+              Already have an account?{" "}
+              <span className="redirect-link" onClick={() => navigate("/login-screen")}>Login now</span>
+            </p>
             <h1 className="register-heading">Create your account</h1>
+
+            <button className="google-login-button">
+              <img src="/assets/icons/googleIcon.svg" alt="Google login" />
+            </button>
+            <div className="divider">
+              <span>Or register with e-mail</span>
+            </div>
+
 
             <form className="register-form-container" onSubmit={handleRegister}>
               <div className="register-form-subcontainer">
                 <div className="flex-row">
                   <label>Email</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter your email" required className={emailError ? "input-error" : ""} />
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} required className={emailError ? "input-error" : ""} />
                 </div>
                 <div className="flex-row">
-                  <label>First Name</label>
+                  <label>First name</label>
                   <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
                 </div>
                 <div className="flex-row">
-                  <label>Last Name</label>
+                  <label>Last name</label>
                   <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
                 </div>
                 <div className="flex-row">
-                  <label>Country</label>
-                  <select name="country" value={formData.country} onChange={handleChange} required>
-                    <option value="">Select your country</option>
-                    {countryList.map((country) => (
-                      <option key={country} value={country}>{country}</option>
-                    ))}
-                  </select>
+                  <label>Street</label>
+                  <input type="text" name="street" value={formData.street} onChange={handleChange} required />
                 </div>
                 <div className="flex-row">
-                  <label>Postcode</label>
+                  <label>House number</label>
+                  <input type="text" name="houseNumber" value={formData.houseNumber} onChange={handleChange} required />
+                </div>
+                <div className="flex-row">
+                  <label>Postal code</label>
                   <input type="text" name="postcode" value={formData.postcode} onChange={handleChange} required />
                 </div>
                 <div className="flex-row">
@@ -181,12 +192,13 @@ const RegisterScreen = () => {
                   <input type="text" name="city" value={formData.city} onChange={handleChange} required />
                 </div>
                 <div className="flex-row">
-                  <label>Street</label>
-                  <input type="text" name="street" value={formData.street} onChange={handleChange} required />
-                </div>
-                <div className="flex-row">
-                  <label>House Number</label>
-                  <input type="text" name="houseNumber" value={formData.houseNumber} onChange={handleChange} required />
+                  <label>Country</label>
+                  <select name="country" value={formData.country} onChange={handleChange} required>
+                    <option value=""></option>
+                    {countryList.map((country) => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
                 </div>
                 <div className="flex-row">
                   <label>Phone Number</label>
@@ -195,7 +207,7 @@ const RegisterScreen = () => {
                 <div className="flex-row">
                   <label>Gender</label>
                   <select name="gender" value={formData.gender} onChange={handleChange} required>
-                    <option value="">Select gender</option>
+                    <option value=""></option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
@@ -204,38 +216,28 @@ const RegisterScreen = () => {
                 <div className="flex-row">
                   <label>Password</label>
                   <div className="password-wrapper">
-                    <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter your password" required className={passwordError ? "input-error" : ""} />
+                    <input type="password" name="password" value={formData.password} onChange={handleChange} required className={passwordError ? "input-error" : ""} />
                     <FontAwesomeIcon icon={faEye} className="toggle-password" />
                   </div>
                 </div>
                 <div className="flex-row">
                   <label>Confirm Password</label>
                   <div className="password-wrapper margin-bottom-lg">
-                    <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm your password" required className={passwordError ? "input-error" : ""} />
+                    <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required className={passwordError ? "input-error" : ""} />
                     <FontAwesomeIcon icon={faEye} className="toggle-password" />
                   </div>
                 </div>
                 {error && <div className="error-message">{error}</div>}
                 {successMessage && <div className="success-message">{successMessage}</div>}
               </div>
-              <div className="full-width-button">
-                <PrimaryButton text="Register" type="submit" />
-              </div>
+              <PrimaryButton text="Register" type="submit" />
 
-              <div className="divider">
-                <span>Or register with</span>
-              </div>
 
-              <button className="google-login-button">
-                <img src="/assets/icons/googleIcon.svg" alt="Google login" />
-              </button>
+
             </form>
 
-            <p className="bottom-prompt">
-              Already have an account?{" "}
-              <span className="redirect-link" onClick={() => navigate("/login-screen")}>Login now</span>
-            </p>
           </div>
+
         </div>
       </div>
     </div>

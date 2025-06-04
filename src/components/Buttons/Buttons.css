@@ -12,7 +12,7 @@
   background-color: var(--background-color);
   border: 3px solid var(--border-color);
   max-height: fit-content;
-  min-width: 200px;
+  width: 100%
 }
 
 .booking-affiliate-btn {
@@ -24,7 +24,6 @@
   color: #002766;
   text-decoration: none;
   font-weight: bold;
-  border-radius: 8px;
   font-size: 1rem;
   border: 1px solid #002766;
   transition: background-color 0.3s ease-in-out, transform 0.2s;
@@ -51,6 +50,8 @@
   background-color: var(--background-color);
   color: var(--primary-color);
   border-color: var(--primary-color);
+  max-width: 400px;
+
 }
 
 .guest-btn {
@@ -62,6 +63,7 @@
   cursor: pointer;
   border: none;
   padding: 10px;
+  
 }
 
 /* Guest Button Hover Effect */
