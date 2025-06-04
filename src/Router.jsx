@@ -29,6 +29,7 @@ import ParkingReviewPage from './pages/ParkingReviewPage';
 import EntranceReviewPage from './pages/EntranceReviewPage';
 import InternalReviewPage from './pages/InternalReviewPage';
 import SanitaryReviewPage from './pages/SanitaryReviewPage';
+import OverviewReviewsPage from './pages/OverviewReviewsPage';
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -88,7 +89,6 @@ const AppLayout = () => {
           }
         />
 
-        {/* ✅ Fixed dynamic detail routes */}
         <Route
           path="/hotels/:id"
           element={
@@ -149,7 +149,7 @@ const AppLayout = () => {
           path="/my-reviews"
           element={
             <ProtectedRoute>
-              <Profile />
+              <OverviewReviewsPage />
             </ProtectedRoute>
           }
         />

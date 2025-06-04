@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/register.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 
-// Full country list
 const countryList = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
   "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
@@ -33,6 +32,7 @@ const RegisterScreen = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -65,6 +65,7 @@ const RegisterScreen = () => {
     setPasswordError(false);
 
     const {
+      username,
       email,
       password,
       confirmPassword,
@@ -122,7 +123,6 @@ const RegisterScreen = () => {
         return;
       }
 
-      // ✅ Save token immediately after successful registration
       const token = data?.data?.token;
       if (token) {
         localStorage.setItem("token", token);
@@ -132,7 +132,6 @@ const RegisterScreen = () => {
 
       setSuccessMessage("Registration successful!");
 
-      // ✅ Navigate to profile after short delay
       setTimeout(() => navigate("/profile"), 1500);
     } catch (err) {
       console.error(err);

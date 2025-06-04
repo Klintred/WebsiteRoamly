@@ -5,7 +5,6 @@ import {
   FaLock,
   FaLockOpen,
   FaTimes,
-  FaShoppingCart,
   FaSignOutAlt,
 } from "react-icons/fa";
 import "../styles/profile.css";
@@ -57,7 +56,7 @@ const Profile = () => {
 
   const handleEditProfile = async () => {
     if (!editMode) {
-      setEditMode(true); // Enter edit mode
+      setEditMode(true);
       return;
     }
 
@@ -170,48 +169,48 @@ const Profile = () => {
       <div className="profile-container">
         <div className="profile-action-container desktop">
           <h1>Profile</h1>
-          <div className="profile-action-subcontainer">
-            <span className="material-symbols-outlined">person</span>
-            <Link className="profile-action-link" to="/profile">
+          <Link className="profile-action-link" to="/profile">
+            <div className="profile-action-subcontainer">
+              <span className="material-symbols-outlined">person</span>
               About me
-            </Link>
-          </div>
-          <div className="profile-action-subcontainer">
-            <span className="material-symbols-outlined">reviews</span>
-            <Link className="profile-action-link" to="/my-reviews">
+            </div>
+          </Link>
+          <Link className="profile-action-link" to="/my-reviews">
+            <div className="profile-action-subcontainer">
+              <span className="material-symbols-outlined">reviews</span>
               My reviews
-            </Link>
-          </div>
-          <div className="profile-action-subcontainer">
-            <span className="material-symbols-outlined">star_rate</span>
-            <Link className="profile-action-link" to="/my-points">
+            </div>
+          </Link>
+          <Link className="profile-action-link" to="/my-points">
+            <div className="profile-action-subcontainer">
+              <span className="material-symbols-outlined">star_rate</span>
               My points
-            </Link>
-          </div>
+            </div>
+          </Link>
         </div>
         <div className="vertical-line"></div>
 
         <div className="profile-wrapper">
           <div className="profile-action-container mobile">
             <h1>Profile</h1>
-            <div className="profile-action-subcontainer">
-              <span className="material-symbols-outlined">person</span>
-              <Link className="profile-action-link" to="/profile">
+            <Link className="profile-action-link" to="/profile">
+              <div className="profile-action-subcontainer">
+                <span className="material-symbols-outlined">person</span>
                 About me
-              </Link>
-            </div>
-            <div className="profile-action-subcontainer">
-              <span className="material-symbols-outlined">reviews</span>
-              <Link className="profile-action-link" to="/profile">
+              </div>
+            </Link>
+            <Link className="profile-action-link" to="/profile">
+              <div className="profile-action-subcontainer">
+                <span className="material-symbols-outlined">reviews</span>
                 My reviews
-              </Link>
-            </div>
-            <div className="profile-action-subcontainer">
-              <span className="material-symbols-outlined">star_rate</span>
-              <Link className="profile-action-link" to="/profile">
+              </div>
+            </Link>
+            <Link className="profile-action-link" to="/profile">
+              <div className="profile-action-subcontainer">
+                <span className="material-symbols-outlined">star_rate</span>
                 My points
-              </Link>
-            </div>
+              </div>
+            </Link>
           </div>
           <h2>About me</h2>
           <div className="profile-top-container">
@@ -277,7 +276,7 @@ const Profile = () => {
                     </>
                   ) : (
                     <>
-                      <FaLock /> Change profile
+                      <FaLock /> Edit profile
                     </>
                   )}
                 </button>
@@ -327,6 +326,7 @@ const Profile = () => {
 
             <div className="packages-grid ">
               {[
+                { title: "Free", description: "Free access to the accessibility reviews." },
                 { title: "Pay-per-use", price: "€1.49 per trip", description: "Ideal for occasional users who want AI-powered trip planning without a subscription." },
                 { title: "Trip Bundle", price: "€9.99 for 10 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
                 { title: "Trip Bundle", price: "€19.99 for 25 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
@@ -334,7 +334,7 @@ const Profile = () => {
               ].map((pkg) => (
                 <div key={pkg.title} className="package-card">
                   <p className="package-price">{pkg.price}</p>
-                  <div>
+                  <div className="package-info">
                     <h3>{pkg.title}</h3>
                     <p className="package-description">
                       {pkg.description}

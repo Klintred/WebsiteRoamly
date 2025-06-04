@@ -190,7 +190,7 @@ h2{
 
 .packages-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 32px;
   width: 100%;
   margin-bottom: 40px;
@@ -211,6 +211,7 @@ h2{
   align-items: center;
   text-align: center;
   gap: 16px;
+  justify-content: space-between;
 }
 
 .package-card p{
@@ -377,7 +378,8 @@ display: none;
   border-radius: 10px;
   border: 1px solid var(--border-color);
   gap: 10px;
-  
+  justify-content: space-between;
+  align-items: center;
 }
 
 .points-reward-header {
@@ -450,10 +452,38 @@ display: none;
  
 }
 
+.package-info{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .profile-header-container{
    display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.review-card h3 {
+  margin-top: 0;
+}
+
+.photo-preview img {
+  border-radius: 4px;
 }
 
 @media (min-width: 768px) {

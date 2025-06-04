@@ -206,7 +206,7 @@ Return only this JSON.`;
         )}
 
         <PrimaryButton
-          text={loading ? "Planning..." : "Generate Travel Plan"}
+          text={loading ? "Planning..." : "Generate travel plan"}
           onClick={handleSubmit}
           variant="primary"
           disabled={loading}

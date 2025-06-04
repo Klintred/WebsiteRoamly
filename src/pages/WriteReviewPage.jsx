@@ -27,7 +27,6 @@ const WriteReviewPage = () => {
 
   const navigate = useNavigate();
 
-  // 👤 Haal username automatisch op bij het laden van de pagina
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
@@ -86,7 +85,7 @@ const WriteReviewPage = () => {
         body: JSON.stringify({
           general: responses,
           placeName: placeName,
-          username: username || "Anonymous", // voeg toe aan request
+          username: username || "Anonymous", 
           points: 1,
           sectionsCompleted: ["general"],
           textReview,
