@@ -249,7 +249,7 @@ const MyTripsOverviewPage = () => {
 
                     return (
                         <div key={trip._id} className="trip-card">
-                            <img src="./assets/images/loginimage.png" alt="" />
+                            <img src="./assets/images/loginImage.png" alt="" />
                             <div className="trip-details">
                                 <h2 className="trip-title">{trip.TripName}</h2>
                                 <h3 className="trip-country">

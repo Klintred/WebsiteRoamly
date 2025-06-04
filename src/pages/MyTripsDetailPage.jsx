@@ -200,7 +200,7 @@ const MyTripsDetailPage = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mt-12 trip-card">
-        <img src="../assets/images/loginimage.png" alt="" />
+        <img src="../assets/images/loginImage.png" alt="" />
         <div className="trip-details">
           <h1>{trip.TripName}</h1>
           <h2>{trip.Place},</h2>

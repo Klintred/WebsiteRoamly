@@ -66,7 +66,7 @@ const SetNewPassword = () => {
   return (
     <div className="reset-page-wrapper">
       <div className="reset-image-wrapper">
-        <img src="/assets/images/loginimage.png" alt="Background" />
+        <img src="/assets/images/loginImage.png" alt="Background" />
       </div>
 
       <div className="reset-form-wrapper">

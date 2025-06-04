@@ -52,7 +52,6 @@ const LoginScreen = () => {
         throw new Error("No token received from server.");
       }
 
-      setSuccessMessage("Login successful!");
       setTimeout(() => navigate("/profile"), 1500);
     } catch (err) {
       console.error(err);

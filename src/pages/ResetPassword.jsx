@@ -98,7 +98,7 @@ const ResetPassword = () => {
   return (
     <div className="reset-page-wrapper">
       <div className="reset-image-wrapper">
-        <img src="/assets/images/loginimage.png" alt="Reset background" />
+        <img src="/assets/images/loginImage.png" alt="Reset background" />
       </div>
 
       <div className="reset-form-wrapper">
