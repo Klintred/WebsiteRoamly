@@ -15,6 +15,7 @@ const PlaceDetailPage = () => {
   const [expandedSection, setExpandedSection] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [averageAnswers, setAverageAnswers] = useState({});
 
   const dummyPlaces = {
     'dummy-hotel-1': {
@@ -88,6 +89,10 @@ const PlaceDetailPage = () => {
         const data = await res.json();
         const filtered = data.filter(r => r.placeName === placeDetails.name);
         setReviews(filtered);
+
+        // Bereken gemiddelde antwoorden per onderdeel:
+        const averages = calculateAverageAnswers(filtered);
+        setAverageAnswers(averages);
       } catch (err) {
         console.error("Fout bij ophalen van reviews:", err);
       }
@@ -96,11 +101,49 @@ const PlaceDetailPage = () => {
     fetchReviews();
   }, [placeDetails?.name]);
 
+  const calculateAverageAnswers = (reviews) => {
+    const categories = ['general', 'parking', 'entrance', 'internalNavigation', 'sanitary'];
+    const averages = {};
+
+    categories.forEach(category => {
+      averages[category] = {};
+      reviews.forEach(review => {
+        const section = review[category];
+        if (section) {
+          Object.keys(section).forEach(question => {
+            const answer = section[question];
+            if (answer) {
+              averages[category][question] = averages[category][question] || {};
+              averages[category][question][answer] = (averages[category][question][answer] || 0) + 1;
+            }
+          });
+        }
+      });
+    });
+
+    // Kies voor elk onderdeel de meest voorkomende antwoord:
+    const modeAnswers = {};
+    categories.forEach(category => {
+      modeAnswers[category] = {};
+      Object.entries(averages[category]).forEach(([question, counts]) => {
+        let maxCount = 0;
+        let mostCommonAnswer = "Geen antwoord gevonden";
+        Object.entries(counts).forEach(([answer, count]) => {
+          if (count > maxCount) {
+            maxCount = count;
+            mostCommonAnswer = answer;
+          }
+        });
+        modeAnswers[category][question] = mostCommonAnswer;
+      });
+    });
+
+    return modeAnswers;
+  };
+
   if (loading) return <p>Bezig met laden...</p>;
   if (error) return <p style={{ color: "red" }}>Fout: {error}</p>;
   if (!placeDetails) return <p>Geen gegevens gevonden.</p>;
-
-  const firstReview = reviews[0] || {};
 
   return (
     <div className="place-detail-container">
@@ -138,32 +181,31 @@ const PlaceDetailPage = () => {
 
         <div className="line" />
         <h2>Accessibility overview</h2>
-        {[{
-          key: 'general', label: 'General accessibility', value: firstReview.general?.accessibility,
-        }, {
-          key: 'parking', label: 'Parking suitability', value: firstReview.parking?.designatedSpot,
-        }, {
-          key: 'entrance', label: 'Entrance accessibility', value: firstReview.entrance?.doorWidthOK,
-        }, {
-          key: 'internalNavigation', label: 'Navigation inside', value: firstReview.internalNavigation?.pathWidthOK,
-        }, {
-          key: 'sanitary', label: 'Restroom facilities', value: firstReview.sanitary?.accessibleRestroom,
-        }].map(({ key, label, value }) => (
-          <div key={key} onClick={() => setExpandedSection(expandedSection === key ? null : key)}>
-            <AccessibilityButton
-              feedbackSubject={label}
-              accessibilityScore={value || "Geen score gevonden"}
-              borderColor="green"
-            />
-            {expandedSection === key && firstReview[key] && (
-              <ul className="details-list" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
-                {Object.entries(firstReview[key]).map(([k, v]) => (
-                  <li key={k}><strong>{k}:</strong> {v}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
+        {[
+          { key: 'general', label: 'General accessibility', question: 'accessibility' },
+          { key: 'parking', label: 'Parking suitability', question: 'designatedSpot' },
+          { key: 'entrance', label: 'Entrance accessibility', question: 'doorWidthOK' },
+          { key: 'internalNavigation', label: 'Navigation inside', question: 'pathWidthOK' },
+          { key: 'sanitary', label: 'Restroom facilities', question: 'accessibleRestroom' }
+        ].map(({ key, label, question }) => {
+          const value = averageAnswers[key]?.[question] || "Geen score gevonden";
+          return (
+            <div key={key} onClick={() => setExpandedSection(expandedSection === key ? null : key)}>
+              <AccessibilityButton
+                feedbackSubject={label}
+                accessibilityScore={value}
+                borderColor="green"
+              />
+              {expandedSection === key && (
+                <ul className="details-list" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
+                  {Object.entries(averageAnswers[key] || {}).map(([k, v]) => (
+                    <li key={k}><strong>{k}:</strong> {v}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        })}
 
         <div className="line" />
         <h2>User Reviews</h2>
