@@ -10,10 +10,16 @@ const OverviewReviewsPage = () => {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const res = await fetch(`https://roamly-api.onrender.com/api/v1/reviews?username=${username}`);
+                const res = await fetch(`https://roamly-api.onrender.com/api/v1/reviews`);
                 if (!res.ok) throw new Error("Failed to fetch reviews");
                 const data = await res.json();
-                setReviews(data);
+
+                // Filter de reviews client-side op username:
+                const userReviews = data.filter(
+                    (review) => (review.username || "Anonymous") === username
+                );
+
+                setReviews(userReviews);
             } catch (err) {
                 console.error(err);
             } finally {

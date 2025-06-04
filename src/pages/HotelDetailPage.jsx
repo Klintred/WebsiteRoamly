@@ -172,7 +172,11 @@ const PlaceDetailPage = () => {
         ) : (
           reviews.map((r, idx) => (
             <div key={idx} className="review-block">
-              {r.textReview && <p><strong>Comment:</strong> {r.textReview}</p>}
+              {r.textReview && (
+                <p>
+                  <strong>{r.username || "Anonymous"}:</strong> {r.textReview}
+                </p>
+              )}
               {r.photoUrls && r.photoUrls.length > 0 && (
                 <div className="review-photos">
                   {r.photoUrls.map((url, i) => (

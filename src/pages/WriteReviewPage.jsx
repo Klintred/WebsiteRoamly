@@ -31,6 +31,34 @@ const WriteReviewPage = () => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUsername(storedUsername);
+    } else {
+      // Probeer de gebruiker alsnog op te halen met de token als backup
+      const token = localStorage.getItem("token");
+      if (token) {
+        fetch("https://roamly-api.onrender.com/api/v1/users/me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error("Failed to fetch user data.");
+            return res.json();
+          })
+          .then((data) => {
+            const user = data.data.user || data.user || data;
+            const fetchedUsername = user.firstName || "Anonymous";
+            setUsername(fetchedUsername);
+            localStorage.setItem("username", fetchedUsername);
+          })
+          .catch((err) => {
+            console.error("Failed to fetch user:", err);
+            setUsername("Anonymous");
+          });
+      } else {
+        setUsername("Anonymous");
+      }
     }
   }, []);
 
@@ -85,7 +113,7 @@ const WriteReviewPage = () => {
         body: JSON.stringify({
           general: responses,
           placeName: placeName,
-          username: username || "Anonymous", 
+          username: username || "Anonymous",
           points: 1,
           sectionsCompleted: ["general"],
           textReview,
