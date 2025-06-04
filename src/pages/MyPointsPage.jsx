@@ -6,23 +6,37 @@ const MyPointsPage = () => {
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
-    const fetchReviewCount = async () => {
+    const fetchUserPoints = async () => {
       const username = localStorage.getItem("username");
       if (!username) return;
 
       try {
-        const res = await fetch(`https://roamly-api.onrender.com/api/v1/reviews/user/${username}`);
+        // Fetch alle reviews (zonder filtering op de server) en filter lokaal
+        const res = await fetch(`https://roamly-api.onrender.com/api/v1/reviews`);
         if (!res.ok) throw new Error("Failed to fetch reviews");
 
         const reviews = await res.json();
-        setPoints(reviews.length); 
+
+        // Filter de reviews voor deze gebruiker:
+        const userReviews = reviews.filter(
+          (review) => (review.username || "Anonymous") === username
+        );
+
+        // Tel alle punten bij elkaar op
+        const totalPoints = userReviews.reduce(
+          (sum, review) => sum + (review.points || 0),
+          0
+        );
+
+        setPoints(totalPoints);
       } catch (err) {
         console.error("Error fetching reviews:", err);
       }
     };
 
-    fetchReviewCount();
+    fetchUserPoints();
   }, []);
+
   return (
     <div className="container">
       <div className="profile-container">
@@ -58,13 +72,13 @@ const MyPointsPage = () => {
                 About me
               </div>
             </Link>
-            <Link className="profile-action-link" to="/profile">
+            <Link className="profile-action-link" to="/my-reviews">
               <div className="profile-action-subcontainer">
                 <span className="material-symbols-outlined">reviews</span>
                 My reviews
               </div>
             </Link>
-            <Link className="profile-action-link" to="/profile">
+            <Link className="profile-action-link" to="/my-points">
               <div className="profile-action-subcontainer">
                 <span className="material-symbols-outlined">star_rate</span>
                 My points
@@ -86,15 +100,15 @@ const MyPointsPage = () => {
                 </div>
               </div>
             </div>
-
           </div>
+
           <div className="line"></div>
           <div className="points-container">
             <h2>Rewards</h2>
             <div className="points-content">
               <div className="points-reward">
                 <p className="points-reward-header">20 points</p>
-                <p>Acces to 1 free AI-trip.</p>
+                <p>Access to 1 free AI-trip.</p>
                 <button className="points-reward-button">Redeem</button>
               </div>
 
