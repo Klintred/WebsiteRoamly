@@ -1,5 +1,7 @@
 @import "@fortawesome/fontawesome-free/css/all.min.css";
-
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 :root {
   --primary-color: #134097;
   --secondary-color: #6c63ff;
@@ -11,16 +13,20 @@
   --warning-color: #f39c12;
   --border-color: #dadada;
 }
-
+.App{
+  height: 100%;
+}
 html,
-body {
-  margin: 0 0px;
+body, #root {
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "AcuminPro", sans-serif;
   color: var(--text-color);
   background-color: var(--background-color);
   overflow-x: hidden;
+  font-size: 1rem;
+  height: 100%;
 }
 
 @font-face {
@@ -156,4 +162,8 @@ a {
   width: 100%;
   padding: 0 16px; 
   box-sizing: border-box;
+}
+
+input{
+  font-size: 16px;
 }

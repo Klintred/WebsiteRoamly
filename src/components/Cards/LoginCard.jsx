@@ -1,17 +1,16 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; // <- Add this
+import { useNavigate } from "react-router-dom";
 import "../../styles/login.css";
 import PrimaryButton from "../Buttons/PrimaryButton";
 
 const LoginCard = () => {
-  const navigate = useNavigate(); // <- Hook for navigation
+  const navigate = useNavigate();
 
   const handleLoginClick = () => {
-    navigate("/login-screen"); // <- Redirect to LoginScreen
+    navigate("/login-screen");
   };
 
   const handleRegisterClick = () => {
-    navigate("/register"); // <- Redirect to LoginScreen
+    navigate("/register");
   };
 
   return (
