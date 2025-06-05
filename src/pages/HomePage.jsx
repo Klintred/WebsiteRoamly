@@ -219,13 +219,13 @@ const HomePage = () => {
           ))}
         </div>
         <div className="search-filter">
-          <div className='flex-row'>
-            <label htmlFor="location-input" className='search-label'>Where</label>
-            <div className="search-wrapper">
+          <div className='search-filter-content'>
+            <div className='flex-row search-input-container'>
+              <label htmlFor="location-input" className='search-label'>Where</label>
               <input
                 id="location-input"
                 type="text"
-                className="search-input"
+                className="location-input"
                 placeholder="Where are you going or name of place?"
                 value={location}
                 onChange={handleSearchInputChange}
@@ -234,20 +234,20 @@ const HomePage = () => {
                 autoComplete="off"
               />
             </div>
-          </div>
-          <div className='flex-row'>
-            <label htmlFor="accessibility-filter" className='search-label'>Accessibility</label>
-            <select
-              id="accessibility-filter"
-              className="search-input"
-              value={accessibilityFilter}
-              onChange={(e) => setAccessibilityFilter(e.target.value)}
-            >
-              <option value="all">All</option>
-              <option value="Fully accessible">Fully accessible</option>
-              <option value="Adjustments needed">Adjustments needed</option>
-              <option value="Not accessible">Not accessible</option>
-            </select>
+            <div className='flex-row search-input-container'>
+              <label htmlFor="accessibility-filter" className='search-label'>Accessibility</label>
+              <select
+                id="accessibility-filter"
+                className="search-input"
+                value={accessibilityFilter}
+                onChange={(e) => setAccessibilityFilter(e.target.value)}
+              >
+                <option value="all">All</option>
+                <option value="Fully accessible">Fully accessible</option>
+                <option value="Adjustments needed">Adjustments needed</option>
+                <option value="Not accessible">Not accessible</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>

@@ -140,6 +140,10 @@ a {
   gap: 10px;
 }
 
+.full-width {
+  width: 100%;
+}
+
 .vertical-line-search {
   width: 2px;
   height: 40px;
