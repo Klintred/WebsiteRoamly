@@ -507,3 +507,17 @@ button.search-input {
 .accessibility-label.gray {
   background-color: gray;
 }
+
+
+.image-container.border-green {
+  border-color: green;
+}
+.image-container.border-orange {
+  border-color: orange;
+}
+.image-container.border-red {
+  border-color: red;
+}
+.image-container.border-gray {
+  border-color: gray;
+}

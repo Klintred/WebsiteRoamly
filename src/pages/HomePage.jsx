@@ -26,6 +26,7 @@ const HomePage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [accessibilityFilter, setAccessibilityFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
   const [coordinates, setCoordinates] = useState('');
@@ -64,39 +65,44 @@ const HomePage = () => {
         console.error("Error fetching reviews:", err);
       }
     };
-
     fetchReviews();
   }, []);
 
   const getOverallAccessibilityScore = (placeName) => {
-    const placeReviews = reviews.filter((review) => review.placeName === placeName);
+    const placeReviews = reviews.filter(review => review.placeName === placeName);
     if (placeReviews.length === 0) return "No score";
 
-    const scores = { "Fully accessible": 0, "Adjustments needed": 0, "Not accessible": 0 };
+    const scoreCounts = { "Fully accessible": 0, "Adjustments needed": 0, "Not accessible": 0 };
 
-    placeReviews.forEach((review) => {
-      // Verzamel alle relevante secties
+    placeReviews.forEach(review => {
       const sections = ['general', 'parking', 'entrance', 'internalNavigation', 'sanitary'];
       sections.forEach(sectionKey => {
         const section = review[sectionKey];
         if (section) {
           Object.values(section).forEach(answer => {
             if (!answer) return;
-            if (["Fully accessible", "Adjustments needed", "Not accessible"].includes(answer)) {
-              scores[answer] += 1;
+            let mappedAnswer;
+            if (answer.toLowerCase() === "yes") {
+              mappedAnswer = "Fully accessible";
+            } else if (["partial", "sometimes"].includes(answer.toLowerCase())) {
+              mappedAnswer = "Adjustments needed";
+            } else if (answer.toLowerCase() === "no") {
+              mappedAnswer = "Not accessible";
+            } else {
+              mappedAnswer = "Not accessible";
             }
+            scoreCounts[mappedAnswer]++;
           });
         }
       });
     });
 
-    // Bepaal de meest voorkomende score
     let highestScore = "No score";
     let maxCount = 0;
-    Object.entries(scores).forEach(([score, count]) => {
+    Object.entries(scoreCounts).forEach(([label, count]) => {
       if (count > maxCount) {
         maxCount = count;
-        highestScore = score;
+        highestScore = label;
       }
     });
 
@@ -213,41 +219,35 @@ const HomePage = () => {
           ))}
         </div>
         <div className="search-filter">
-          <div>
-            <div className='flex-row'>
-              <label htmlFor="location-input" className='search-label'>
-                Where
-              </label>
-              <div className="search-wrapper">
-                <input
-                  id="location-input"
-                  type="text"
-                  className="search-input"
-                  placeholder="Where are you going or name of place?"
-                  value={location}
-                  onChange={handleSearchInputChange}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                  onFocus={() => location && setShowSuggestions(true)}
-                  autoComplete="off"
-                />
-              </div>
+          <div className='flex-row'>
+            <label htmlFor="location-input" className='search-label'>Where</label>
+            <div className="search-wrapper">
+              <input
+                id="location-input"
+                type="text"
+                className="search-input"
+                placeholder="Where are you going or name of place?"
+                value={location}
+                onChange={handleSearchInputChange}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                onFocus={() => location && setShowSuggestions(true)}
+                autoComplete="off"
+              />
             </div>
-            {showSuggestions && suggestions.length > 0 && (
-              <ul className="suggestions-list">
-                {suggestions.map((suggestion, index) => (
-                  <li
-                    key={index}
-                    onClick={() => {
-                      setLocation(suggestion);
-                      setSearchQuery(suggestion);
-                      setShowSuggestions(false);
-                    }}
-                  >
-                    {suggestion}
-                  </li>
-                ))}
-              </ul>
-            )}
+          </div>
+          <div className='flex-row'>
+            <label htmlFor="accessibility-filter" className='search-label'>Accessibility</label>
+            <select
+              id="accessibility-filter"
+              className="search-input"
+              value={accessibilityFilter}
+              onChange={(e) => setAccessibilityFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="Fully accessible">Fully accessible</option>
+              <option value="Adjustments needed">Adjustments needed</option>
+              <option value="Not accessible">Not accessible</option>
+            </select>
           </div>
         </div>
       </div>
@@ -256,6 +256,7 @@ const HomePage = () => {
         title="Hotels"
         data={hotels}
         filter={filter}
+        accessibilityFilter={accessibilityFilter}
         type="hotel"
         loading={loading}
         getOverallAccessibilityScore={getOverallAccessibilityScore}
@@ -265,6 +266,7 @@ const HomePage = () => {
         title="Restaurants"
         data={restaurants}
         filter={filter}
+        accessibilityFilter={accessibilityFilter}
         type="restaurant"
         loading={loading}
         getOverallAccessibilityScore={getOverallAccessibilityScore}
@@ -274,6 +276,7 @@ const HomePage = () => {
         title="Activities"
         data={activities}
         filter={filter}
+        accessibilityFilter={accessibilityFilter}
         type="activity"
         loading={loading}
         getOverallAccessibilityScore={getOverallAccessibilityScore}
@@ -283,8 +286,15 @@ const HomePage = () => {
   );
 };
 
-const ResultsSection = ({ title, data, filter, type, loading, getOverallAccessibilityScore, getLabelColor }) => {
+const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loading, getOverallAccessibilityScore, getLabelColor }) => {
   if ((filter !== 'all' && filter !== type)) return null;
+
+  const filteredData = data.filter(place => {
+    const score = getOverallAccessibilityScore(place.name);
+    if (accessibilityFilter === 'all') return true;
+    return score === accessibilityFilter;
+  });
+
   return (
     <>
       <div className='line'></div>
@@ -292,15 +302,15 @@ const ResultsSection = ({ title, data, filter, type, loading, getOverallAccessib
       <div className="search-results">
         {loading
           ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
-          : data.map((place) => (
-              <PlaceCard
-                key={place.id || place.place_id}
-                place={place}
-                type={type}
-                getOverallAccessibilityScore={getOverallAccessibilityScore}
-                getLabelColor={getLabelColor}
-              />
-            ))
+          : filteredData.map((place) => (
+            <PlaceCard
+              key={place.id || place.place_id}
+              place={place}
+              type={type}
+              getOverallAccessibilityScore={getOverallAccessibilityScore}
+              getLabelColor={getLabelColor}
+            />
+          ))
         }
       </div>
     </>
@@ -315,7 +325,7 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor })
 
   return (
     <div className="place-card">
-      <div className="image-container">
+      <div className={`image-container border-${labelColor}`}>
         <div className={`accessibility-label ${labelColor}`}>
           {accessibilityScore}
         </div>

@@ -38,11 +38,6 @@ const PlaceDetailPage = () => {
       setLoading(true);
       try {
         const response = await fetch(`${API_BASE_URL}/api/place/${id}`);
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          throw new Error("Server gaf geen geldige JSON terug.");
-        }
-
         const data = await response.json();
         setPlaceDetails(data);
 
@@ -50,8 +45,6 @@ const PlaceDetailPage = () => {
           setCoordinates(`${data.location.lat},${data.location.lng}`);
         } else if (data.address) {
           await fetchCoordinates(data.address);
-        } else {
-          throw new Error("Geen locatiegegevens beschikbaar.");
         }
       } catch (err) {
         setError(err.message);
@@ -90,7 +83,6 @@ const PlaceDetailPage = () => {
         const filtered = data.filter(r => r.placeName === placeDetails.name);
         setReviews(filtered);
 
-        // Bereken gemiddelde antwoorden per onderdeel:
         const averages = calculateAverageAnswers(filtered);
         setAverageAnswers(averages);
       } catch (err) {
@@ -121,24 +113,53 @@ const PlaceDetailPage = () => {
       });
     });
 
-    // Kies voor elk onderdeel de meest voorkomende antwoord:
-    const modeAnswers = {};
-    categories.forEach(category => {
-      modeAnswers[category] = {};
-      Object.entries(averages[category]).forEach(([question, counts]) => {
-        let maxCount = 0;
-        let mostCommonAnswer = "Geen antwoord gevonden";
-        Object.entries(counts).forEach(([answer, count]) => {
-          if (count > maxCount) {
-            maxCount = count;
-            mostCommonAnswer = answer;
-          }
-        });
-        modeAnswers[category][question] = mostCommonAnswer;
+    return averages;
+  };
+
+  const getOverallScore = (sectionData) => {
+    if (!sectionData) return "Geen score gevonden";
+
+    const scoreCounts = { "Fully accessible": 0, "Adjustments needed": 0, "Not accessible": 0 };
+
+    Object.values(sectionData).forEach(questionCounts => {
+      Object.entries(questionCounts).forEach(([answer, count]) => {
+        let mappedAnswer;
+        if (answer.toLowerCase() === "yes") {
+          mappedAnswer = "Fully accessible";
+        } else if (answer.toLowerCase() === "partial" || answer.toLowerCase() === "sometimes") {
+          mappedAnswer = "Adjustments needed";
+        } else if (answer.toLowerCase() === "no") {
+          mappedAnswer = "Not accessible";
+        } else {
+          mappedAnswer = "Not accessible";
+        }
+        scoreCounts[mappedAnswer] += count;
       });
     });
 
-    return modeAnswers;
+    let highestScore = "Geen score gevonden";
+    let maxCount = 0;
+    Object.entries(scoreCounts).forEach(([label, count]) => {
+      if (count > maxCount) {
+        maxCount = count;
+        highestScore = label;
+      }
+    });
+
+    return highestScore;
+  };
+
+  const getLabelColor = (score) => {
+    switch (score) {
+      case "Fully accessible":
+        return "green";
+      case "Adjustments needed":
+        return "orange";
+      case "Not accessible":
+        return "red";
+      default:
+        return "gray";
+    }
   };
 
   if (loading) return <p>Bezig met laden...</p>;
@@ -182,24 +203,30 @@ const PlaceDetailPage = () => {
         <div className="line" />
         <h2>Accessibility overview</h2>
         {[
-          { key: 'general', label: 'General accessibility', question: 'accessibility' },
-          { key: 'parking', label: 'Parking suitability', question: 'designatedSpot' },
-          { key: 'entrance', label: 'Entrance accessibility', question: 'doorWidthOK' },
-          { key: 'internalNavigation', label: 'Navigation inside', question: 'pathWidthOK' },
-          { key: 'sanitary', label: 'Restroom facilities', question: 'accessibleRestroom' }
-        ].map(({ key, label, question }) => {
-          const value = averageAnswers[key]?.[question] || "Geen score gevonden";
+          { key: 'general', label: 'General accessibility' },
+          { key: 'parking', label: 'Parking suitability' },
+          { key: 'entrance', label: 'Entrance accessibility' },
+          { key: 'internalNavigation', label: 'Navigation inside' },
+          { key: 'sanitary', label: 'Restroom facilities' }
+        ].map(({ key, label }) => {
+          const overallScore = getOverallScore(averageAnswers[key]);
+          const borderColor = getLabelColor(overallScore);
+
           return (
             <div key={key} onClick={() => setExpandedSection(expandedSection === key ? null : key)}>
+              <span className={`tag-indicator ${borderColor}`} />
               <AccessibilityButton
                 feedbackSubject={label}
-                accessibilityScore={value}
-                borderColor="green"
+                accessibilityScore={overallScore}
+                borderColor={borderColor}
               />
               {expandedSection === key && (
                 <ul className="details-list" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
-                  {Object.entries(averageAnswers[key] || {}).map(([k, v]) => (
-                    <li key={k}><strong>{k}:</strong> {v}</li>
+                  {Object.entries(averageAnswers[key] || {}).map(([question, counts]) => (
+                    <li key={question}>
+                      <strong>{question}:</strong>{" "}
+                      {Object.entries(counts).map(([answer, count]) => `${answer} (${count})`).join(", ")}
+                    </li>
                   ))}
                 </ul>
               )}
@@ -212,28 +239,28 @@ const PlaceDetailPage = () => {
         {reviews.length === 0 ? (
           <p>No reviews yet.</p>
         ) : (
-          reviews.map((r, idx) => (
-            <div key={idx} className="review-block">
-              {r.textReview && (
+          reviews
+            .filter(r => r.textReview && r.textReview.trim() !== "")
+            .map((r, idx) => (
+              <div key={idx} className="review-block">
                 <p>
                   <strong>{r.username || "Anonymous"}:</strong> {r.textReview}
                 </p>
-              )}
-              {r.photoUrls && r.photoUrls.length > 0 && (
-                <div className="review-photos">
-                  {r.photoUrls.map((url, i) => (
-                    <img
-                      key={i}
-                      src={url}
-                      alt={`Uploaded ${i}`}
-                      style={{ maxWidth: '100px', marginRight: '10px', borderRadius: '4px' }}
-                    />
-                  ))}
-                </div>
-              )}
-              <hr style={{ margin: '1rem 0' }} />
-            </div>
-          ))
+                {r.photoUrls && r.photoUrls.length > 0 && (
+                  <div className="review-photos">
+                    {r.photoUrls.map((url, i) => (
+                      <img
+                        key={i}
+                        src={url}
+                        alt={`Uploaded ${i}`}
+                        style={{ maxWidth: '100px', marginRight: '10px', borderRadius: '4px' }}
+                      />
+                    ))}
+                  </div>
+                )}
+                <hr style={{ margin: '1rem 0' }} />
+              </div>
+            ))
         )}
 
         <div className="line" />
