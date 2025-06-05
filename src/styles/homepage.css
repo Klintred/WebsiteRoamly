@@ -492,3 +492,18 @@ button.search-input {
   margin-left: -50vw;
   margin-right: -50vw;
 }
+
+
+
+.accessibility-label.green {
+  background-color: --success-color;
+}
+.accessibility-label.orange {
+  background-color: orange;
+}
+.accessibility-label.red {
+  background-color: red;
+}
+.accessibility-label.gray {
+  background-color: gray;
+}

@@ -22,6 +22,7 @@ const HomePage = () => {
   const [hotels, setHotels] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('all');
@@ -53,24 +54,67 @@ const HomePage = () => {
   }, [filter, searchQuery, coordinates]);
 
   useEffect(() => {
-    const fetchSuggestions = async () => {
-      if (location.length < 2) return setSuggestions([]);
+    const fetchReviews = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/autocomplete?query=${encodeURIComponent(location)}`);
-        const data = await response.json();
-        if (data.suggestions) {
-          setSuggestions(data.suggestions);
-          setShowSuggestions(true);
-        }
-      } catch (error) {
-        console.error("Suggesties ophalen mislukt:", error);
-        setSuggestions([]);
+        const res = await fetch(`${API_BASE_URL}/api/v1/reviews`);
+        if (!res.ok) throw new Error("Failed to fetch reviews");
+        const data = await res.json();
+        setReviews(data);
+      } catch (err) {
+        console.error("Error fetching reviews:", err);
       }
     };
 
-    const delayDebounce = setTimeout(fetchSuggestions, 300);
-    return () => clearTimeout(delayDebounce);
-  }, [location]);
+    fetchReviews();
+  }, []);
+
+  const getOverallAccessibilityScore = (placeName) => {
+    const placeReviews = reviews.filter((review) => review.placeName === placeName);
+    if (placeReviews.length === 0) return "No score";
+
+    const scores = { "Fully accessible": 0, "Adjustments needed": 0, "Not accessible": 0 };
+
+    placeReviews.forEach((review) => {
+      // Verzamel alle relevante secties
+      const sections = ['general', 'parking', 'entrance', 'internalNavigation', 'sanitary'];
+      sections.forEach(sectionKey => {
+        const section = review[sectionKey];
+        if (section) {
+          Object.values(section).forEach(answer => {
+            if (!answer) return;
+            if (["Fully accessible", "Adjustments needed", "Not accessible"].includes(answer)) {
+              scores[answer] += 1;
+            }
+          });
+        }
+      });
+    });
+
+    // Bepaal de meest voorkomende score
+    let highestScore = "No score";
+    let maxCount = 0;
+    Object.entries(scores).forEach(([score, count]) => {
+      if (count > maxCount) {
+        maxCount = count;
+        highestScore = score;
+      }
+    });
+
+    return highestScore;
+  };
+
+  const getLabelColor = (score) => {
+    switch (score) {
+      case "Fully accessible":
+        return "green";
+      case "Adjustments needed":
+        return "orange";
+      case "Not accessible":
+        return "red";
+      default:
+        return "gray";
+    }
+  };
 
   const fetchCoordinates = async (location) => {
     setLoading(true);
@@ -80,11 +124,9 @@ const HomePage = () => {
       if (data.lat && data.lng) {
         setCoordinates(`${data.lat},${data.lng}`);
       } else {
-        console.warn("Locatie niet gevonden, maar doorgaan met zoekopdracht.");
         setCoordinates('');
       }
     } catch (error) {
-      console.warn("Fout bij locatie zoeken:", error);
       setCoordinates('');
     } finally {
       setLoading(false);
@@ -139,17 +181,9 @@ const HomePage = () => {
       const cleanedQuery = query.trim();
       const locationParam = location ? `&location=${location}` : '';
       const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(cleanedQuery)}${locationParam}&radius=${radius}`);
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Server gaf geen geldige JSON terug.");
-      }
       const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
       return data;
     } catch (error) {
-      console.error(`Fout bij ophalen van gegevens:`, error);
       return [];
     }
   };
@@ -215,32 +249,41 @@ const HomePage = () => {
               </ul>
             )}
           </div>
-          <div className='vertical-line-search'></div>
-          <div className='flex-row'>
-            <label htmlFor="accessibility-input" className='search-label'>
-              Accessibility filters
-            </label>
-            <div className="search-wrapper">
-              <select
-                id="accessibility-input"
-                className="search-input"
-                onChange={(e) => setSearchQuery(e.target.value)}
-              >
-                <option value="">Select accessibility filters</option>
-              </select>
-            </div>
-          </div>
         </div>
       </div>
       {error && <p className="error-message">{error}</p>}
-      <ResultsSection title="Hotels" data={hotels} filter={filter} type="hotel" loading={loading} />
-      <ResultsSection title="Restaurants" data={restaurants} filter={filter} type="restaurant" loading={loading} />
-      <ResultsSection title="Activities" data={activities} filter={filter} type="activity" loading={loading} />
+      <ResultsSection
+        title="Hotels"
+        data={hotels}
+        filter={filter}
+        type="hotel"
+        loading={loading}
+        getOverallAccessibilityScore={getOverallAccessibilityScore}
+        getLabelColor={getLabelColor}
+      />
+      <ResultsSection
+        title="Restaurants"
+        data={restaurants}
+        filter={filter}
+        type="restaurant"
+        loading={loading}
+        getOverallAccessibilityScore={getOverallAccessibilityScore}
+        getLabelColor={getLabelColor}
+      />
+      <ResultsSection
+        title="Activities"
+        data={activities}
+        filter={filter}
+        type="activity"
+        loading={loading}
+        getOverallAccessibilityScore={getOverallAccessibilityScore}
+        getLabelColor={getLabelColor}
+      />
     </div>
   );
 };
 
-const ResultsSection = ({ title, data, filter, type, loading }) => {
+const ResultsSection = ({ title, data, filter, type, loading, getOverallAccessibilityScore, getLabelColor }) => {
   if ((filter !== 'all' && filter !== type)) return null;
   return (
     <>
@@ -249,20 +292,33 @@ const ResultsSection = ({ title, data, filter, type, loading }) => {
       <div className="search-results">
         {loading
           ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
-          : data.map((place) => <PlaceCard key={place.id || place.place_id} place={place} type={type} />)
+          : data.map((place) => (
+              <PlaceCard
+                key={place.id || place.place_id}
+                place={place}
+                type={type}
+                getOverallAccessibilityScore={getOverallAccessibilityScore}
+                getLabelColor={getLabelColor}
+              />
+            ))
         }
       </div>
     </>
   );
 };
 
-const PlaceCard = ({ place, type }) => {
+const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor }) => {
   const placeId = place.id || place.place_id;
   const detailType = type === 'activity' ? 'activities' : `${type}s`;
+  const accessibilityScore = getOverallAccessibilityScore(place.name);
+  const labelColor = getLabelColor(accessibilityScore);
 
   return (
     <div className="place-card">
       <div className="image-container">
+        <div className={`accessibility-label ${labelColor}`}>
+          {accessibilityScore}
+        </div>
         <img src={place.photo || "https://via.placeholder.com/300x200?text=No+Image"} alt={place.name} className="place-image" />
       </div>
       <div className="content">
