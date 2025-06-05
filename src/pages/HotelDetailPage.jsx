@@ -202,38 +202,44 @@ const PlaceDetailPage = () => {
 
         <div className="line" />
         <h2>Accessibility overview</h2>
-        {[
-          { key: 'general', label: 'General accessibility' },
-          { key: 'parking', label: 'Parking suitability' },
-          { key: 'entrance', label: 'Entrance accessibility' },
-          { key: 'internalNavigation', label: 'Navigation inside' },
-          { key: 'sanitary', label: 'Restroom facilities' }
-        ].map(({ key, label }) => {
-          const overallScore = getOverallScore(averageAnswers[key]);
+        <div className="accessibility-grid">
+          {[
+            { key: 'general', label: 'General accessibility' },
+            { key: 'parking', label: 'Parking facilities' },
+            { key: 'entrance', label: 'Entrance' },
+            { key: 'internalNavigation', label: 'Internal navigation' },
+            { key: 'sanitary', label: 'Sanitary facilities' },
+            { key: 'staff', label: 'Staff support', question: 'staffAssistance' }
+          ].map(({ key, label }) => {
+            const overallScore = getOverallScore(averageAnswers[key]);
           const borderColor = getLabelColor(overallScore);
 
-          return (
-            <div key={key} onClick={() => setExpandedSection(expandedSection === key ? null : key)}>
-              <span className={`tag-indicator ${borderColor}`} />
+            return (
+              <div
+                className="accessibility-card"
+                key={key}
+                onClick={() => setExpandedSection(expandedSection === key ? null : key)}
+              >
+                <span className={`tag-indicator ${borderColor}`} />
               <AccessibilityButton
-                feedbackSubject={label}
-                accessibilityScore={overallScore}
-                borderColor={borderColor}
-              />
-              {expandedSection === key && (
-                <ul className="details-list" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
-                  {Object.entries(averageAnswers[key] || {}).map(([question, counts]) => (
-                    <li key={question}>
+                  feedbackSubject={label}
+                  accessibilityScore={overallScore}
+                  borderColor={borderColor}
+                />
+                {expandedSection === key && (
+                  <ul className="details-list">
+                    {Object.entries(averageAnswers[key] || {}).map(([question, counts]) => (
+                      <li key={question}>
                       <strong>{question}:</strong>{" "}
                       {Object.entries(counts).map(([answer, count]) => `${answer} (${count})`).join(", ")}
                     </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          );
-        })}
-
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </div>
         <div className="line" />
         <h2>User Reviews</h2>
         {reviews.length === 0 ? (

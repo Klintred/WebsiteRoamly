@@ -61,11 +61,10 @@
   margin: 20px auto 40px auto;
 }
 
-.button-group {
+.buttons-container {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  padding-bottom: 25px;
   width: 100%;
   align-items: center;
 }

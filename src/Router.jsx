@@ -12,7 +12,6 @@ import LoginPage from "./pages/LoginPage";
 import LoginScreen from "./pages/LoginScreen";
 import TripPlannerPage from "./pages/TripPlannerPage";
 import Navbar from "./components/Navbar/Navbar";
-import Footer from "./components/Footer/Footer";
 import HotelDetailPage from "./pages/HotelDetailPage";
 import MyPointsPage from "./pages/MyPointsPage";
 import MyTripsOverviewPage from "./pages/MyTripsOverviewPage";
@@ -30,6 +29,8 @@ import EntranceReviewPage from './pages/EntranceReviewPage';
 import InternalReviewPage from './pages/InternalReviewPage';
 import SanitaryReviewPage from './pages/SanitaryReviewPage';
 import OverviewReviewsPage from './pages/OverviewReviewsPage';
+import StaffReviewPage from "./pages/StaffReviewPage";
+import ThankYouPage from "./pages/ThankYouPage";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -62,7 +63,7 @@ const AppLayout = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/set-new-password" element={<SetNewPassword />} />
-          <Route path="/review" element={<AccessibilityFeedback />} />
+        <Route path="/review" element={<AccessibilityFeedback />} />
 
         <Route
           path="/"
@@ -206,6 +207,22 @@ const AppLayout = () => {
           element={
             <ProtectedRoute>
               <SanitaryReviewPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review/staff/:id"
+          element={
+            <ProtectedRoute>
+              <StaffReviewPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/thank-you"
+          element={
+            <ProtectedRoute>
+              <ThankYouPage />
             </ProtectedRoute>
           }
         />

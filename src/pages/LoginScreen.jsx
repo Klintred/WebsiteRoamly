@@ -73,10 +73,10 @@ const LoginScreen = () => {
         throw new Error("No token received from server.");
       }
 
-      saveToken(token); 
+      saveToken(token);
       setSuccessMessage("Login successful!");
 
-      setTimeout(() => navigate("/profile"), 1500);
+      setTimeout(() => navigate("/"), 1500);
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message || "Something went wrong.");
@@ -134,18 +134,10 @@ const LoginScreen = () => {
                 {successMessage && <div className="success-message">{successMessage}</div>}
               </div>
 
-              <div className="full-width-button">
-                <PrimaryButton text="Login" type="submit" />
-              </div>
+              <PrimaryButton text="Login" type="submit" />
             </form>
 
-            <div className="divider">
-              <span>Or login with</span>
-            </div>
-
-            <button className="google-login-button">
-              <img src="/assets/icons/googleIcon.svg" alt="Google login" />
-            </button>
+    
           </div>
 
           <div className="register-redirect">

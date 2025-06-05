@@ -377,6 +377,16 @@ h2 {
   display: none;
 }
 
+.accessibility-grid{
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+}
+
+.accessibility-card{
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   .book-button-container-mobile {
     display: none;
@@ -389,6 +399,9 @@ h2 {
     box-shadow: none;
     border-top: none;
   }
+  .accessibility-grid{
+  grid-template-columns: repeat(2, 1fr);
+}
 }
 
 @media (min-width: 1280px) {

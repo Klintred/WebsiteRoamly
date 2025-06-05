@@ -12,7 +12,15 @@
   background-color: var(--background-color);
   border: 3px solid var(--border-color);
   max-height: fit-content;
-  width: 100%
+  width: 100%;
+  max-width: 400px;
+}
+
+.button-container-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .booking-affiliate-btn {
@@ -20,12 +28,12 @@
   align-items: center;
   gap: 12px;
   padding: 8px 40px;
-
+  border-radius: 5px;
   color: #002766;
   text-decoration: none;
   font-weight: bold;
   font-size: 1rem;
-  border: 1px solid #002766;
+  border: 3px solid #002766;
   transition: background-color 0.3s ease-in-out, transform 0.2s;
   cursor: pointer;
 }
@@ -66,7 +74,6 @@
   
 }
 
-/* Guest Button Hover Effect */
 .guest-btn:hover {
   opacity: 0.8;
 }
@@ -80,7 +87,7 @@
   border-radius: 9999px;
   font-size: 0.9rem;
   cursor: pointer;
-  background-color: #f5f5f5;
+  background-color: var(--background-color);
   transition: background-color 0.2s;
 }
 
@@ -136,7 +143,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: auto;
+  max-width: 100%;
 }
 .accessibility-btn:hover {
   background-color: var(--hover-color);
@@ -160,6 +167,10 @@
   flex-direction: row;
   align-items: center;
   gap: 6px;
+}
+
+.accessibility-container span{
+  display: none;
 }
 
 .accessibility-icon {
@@ -216,4 +227,10 @@
   border-color: white;
   color: white;
   width: fit-content;
+}
+
+@media screen and (min-width: 768px) {
+.accessibility-container span{
+  display: flex;
+}
 }
