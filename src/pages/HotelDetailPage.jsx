@@ -220,7 +220,6 @@ const PlaceDetailPage = () => {
                 key={key}
                 onClick={() => setExpandedSection(expandedSection === key ? null : key)}
               >
-                <span className={`tag-indicator ${borderColor}`} />
                 <AccessibilityButton
                   feedbackSubject={label}
                   accessibilityScore={overallScore}
@@ -228,50 +227,13 @@ const PlaceDetailPage = () => {
                   to={`/hotels/${id}/feature/${key}?name=${encodeURIComponent(placeDetails.name)}&score=${encodeURIComponent(overallScore)}`}
 
                 />
-                {expandedSection === key && (
-                  <ul className="details-list">
-                    {Object.entries(averageAnswers[key] || {}).map(([question, counts]) => (
-                      <li key={question}>
-                        <strong>{question}:</strong>{" "}
-                        {Object.entries(counts).map(([answer, count]) => `${answer} (${count})`).join(", ")}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+               
               </div>
             );
           })}
         </div>
         <div className="line" />
-        <h2>User Reviews</h2>
-        {reviews.length === 0 ? (
-          <p>No reviews yet.</p>
-        ) : (
-          reviews
-            .filter(r => r.textReview && r.textReview.trim() !== "")
-            .map((r, idx) => (
-              <div key={idx} className="review-block">
-                <p>
-                  <strong>{r.username || "Anonymous"}:</strong> {r.textReview}
-                </p>
-                {r.photoUrls && r.photoUrls.length > 0 && (
-                  <div className="review-photos">
-                    {r.photoUrls.map((url, i) => (
-                      <img
-                        key={i}
-                        src={url}
-                        alt={`Uploaded ${i}`}
-                        style={{ maxWidth: '100px', marginRight: '10px', borderRadius: '4px' }}
-                      />
-                    ))}
-                  </div>
-                )}
-                <hr style={{ margin: '1rem 0' }} />
-              </div>
-            ))
-        )}
-
-        <div className="line" />
+      
         <h2>Location</h2>
         <p>{placeDetails.address}</p>
         {coordinates && (
