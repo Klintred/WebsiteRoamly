@@ -48,7 +48,6 @@ const LoginScreen = () => {
       const token = data?.data?.token;
       if (token) {
         localStorage.setItem("token", token);
-        localStorage.setItem("userId", user._id);
 
       } else {
         throw new Error("No token received from server.");
@@ -74,7 +73,6 @@ const LoginScreen = () => {
               Go back
             </button>
             <h1 className="welcome-heading">Welcome back!</h1>
-
 
             <form className="login-form" onSubmit={handleLogin}>
               <div className="flex-row">
