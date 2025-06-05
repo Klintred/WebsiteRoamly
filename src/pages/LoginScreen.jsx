@@ -4,6 +4,7 @@ import "../styles/LoginScreen.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
+import loginImage from "/assets/images/loginImage.png";
 
 const saveToken = (token, expiresInMs = 3600000) => {
   const expiry = Date.now() + expiresInMs;
@@ -73,7 +74,7 @@ const LoginScreen = () => {
         throw new Error("No token received from server.");
       }
 
-      saveToken(token); 
+      saveToken(token);
       setSuccessMessage("Login successful!");
 
       setTimeout(() => navigate("/profile"), 1500);
@@ -86,7 +87,7 @@ const LoginScreen = () => {
   return (
     <div className="login-page-wrapper">
       <div className="login-image-wrapper">
-        <img src="/assets/images/loginImage.png" alt="Login background" />
+        <img src={loginImage} alt="Login background" />
       </div>
 
       <div className="login-form-wrapper">
