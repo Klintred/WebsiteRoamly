@@ -21,6 +21,32 @@ const Profile = () => {
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
   const [packageType, setPackageType] = useState(null);
+  const handleUpgrade = async (amount) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("https://roamly-api.onrender.com/api/v1/users/add-trips", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount }),
+      });
+  
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to add trips.");
+      }
+  
+      // After updating tripcount, refetch user data
+      await fetchUser();
+    } catch (err) {
+      console.error("Upgrade failed:", err);
+      alert("Failed to upgrade your plan. Please try again.");
+    }
+  };
+
+  
 
   const fetchUser = async () => {
     try {
@@ -295,7 +321,9 @@ const Profile = () => {
           </div>
           <div className="line"></div>
           <div className="flex-row">
+          
             <h2>Current subscription</h2>
+            <p>You have {user?.tripcount || 0} trips remaining.</p>
             <Link>
               Change subscription
             </Link>
@@ -336,9 +364,9 @@ const Profile = () => {
               <div className="packages-grid ">
                 {[
                   { title: "Free", description: "Free access to the accessibility reviews." },
-                  { title: "Pay-per-use", price: "€1.49 per trip", description: "Ideal for occasional users who want AI-powered trip planning without a subscription." },
-                  { title: "Trip Bundle", price: "€9.99 for 10 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
-                  { title: "Trip Bundle", price: "€19.99 for 25 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
+                  { title: "Pay-per-use", price: "€1.49 per trip", description: "Ideal for occasional users who want AI-powered trip planning without a subscription.", amount: 1 },
+                  { title: "Trip Bundle", price: "€9.99 for 10 trips", description: "Great for frequent users who want affordable access to AI trip planning.", amount: 10 },
+                  { title: "Trip Bundle", price: "€19.99 for 25 trips", description: "Great for frequent users who want affordable access to AI trip planning.", amount: 25 },
 
                 ].map((pkg) => (
                   <div key={pkg.title} className="package-card">
@@ -349,9 +377,12 @@ const Profile = () => {
                         {pkg.description}
                       </p>
                     </div>
-                    <button className="package-button">
-                      Upgrade
-                    </button>
+                    <button
+  className="package-button"
+  onClick={() => handleUpgrade(pkg.amount)}
+>
+  Upgrade
+</button>
                   </div>
                 ))}
               </div>
