@@ -169,7 +169,7 @@
   gap: 6px;
 }
 
-.accessibility-container span{
+.accessibility-container span.material-symbols-outlined {
   display: none;
 }
 
@@ -230,7 +230,7 @@
 }
 
 @media screen and (min-width: 768px) {
-.accessibility-container span{
+.accessibility-container span.material-symbols-outlined {
   display: flex;
 }
 }

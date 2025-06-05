@@ -22,7 +22,7 @@ const PlaceDetailPage = () => {
       id: 'dummy-hotel-1',
       name: 'Demo Hotel Example',
       address: '123 Example Street, Amsterdam, Netherlands',
-      photo: 'https://via.placeholder.com/600x400?text=Demo+Hotel',
+      photo: './assets/images/loginImage.jpg',
       price: '€120 per night',
       description: 'This is a demo hotel used for preview and testing purposes.',
       accessibilityScore: 'Good',
@@ -182,7 +182,7 @@ const PlaceDetailPage = () => {
 
         <div className="place-details-image">
           <img
-            src={placeDetails.photo || "https://placehold.co/320x200?text=Geen+afbeelding"}
+            src={placeDetails.photo || "./assets/images/loginImage.png"}
             alt={placeDetails.name}
             style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}
           />
