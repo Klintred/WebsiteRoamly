@@ -111,7 +111,9 @@ const FeatureDetailPage = () => {
     return (
         <div className="feature-detail-page">
             <div className="container">
-                <Link to={`/hotels/${id}`}>← Back to place</Link>
+                  <div className="go-back-link">
+                          <Link  to={`/hotels/${id}`}>Go back to place</Link>
+                        </div>
                 <h1>Reviews for {placeName}</h1>
 
                 <AccessibilityButton
