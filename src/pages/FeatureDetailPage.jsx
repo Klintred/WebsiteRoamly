@@ -114,13 +114,19 @@ const FeatureDetailPage = () => {
                 <h2>User reviews</h2>
                 {reviews.filter(r => r.textReview).map((r, idx) => (
                     <div key={idx} className="review-block">
-                        <img
-                            src={r.profileImage || "/assets/images/default-avatar.png"}
-                            alt={r.username || "User"}
-                            className="profile-image-reviews"
-                        />
-                        <p><strong>{r.username || "Anonymous"}:</strong> {r.textReview}</p>
-                        <hr />
+                        <div className="flex-column">
+                            <img
+                                src={r.profileImage || "/assets/images/avatar.jpg"}
+                                alt={r.username || "User"}
+                                className="profile-image-reviews"
+                            />
+                            <p><strong>{r.username || "Anonymous"}</strong> </p>
+                            
+                        </div>
+                        <div>
+<p>{r.textReview}</p>
+                        </div>
+                        <div className="line"></div>
                     </div>
                 ))}
             </div>

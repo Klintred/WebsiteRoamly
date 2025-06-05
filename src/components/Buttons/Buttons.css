@@ -205,6 +205,7 @@
 .link {
   width: fit-content;
   border-color: black;
+  color: black;
 }
 
 .accessibility-score {
