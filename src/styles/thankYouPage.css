@@ -1,4 +1,5 @@
-.thank-you-container, .modal-container {
+.thank-you-container,
+.modal-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +8,8 @@
   background-color: #f9f9f9;
 }
 
-.thank-you-card, .modal-content {
+.thank-you-card,
+.modal-content {
   background: white;
   padding: 2.5rem 3rem;
   border-radius: 16px;
@@ -15,18 +17,20 @@
   text-align: center;
 }
 
-.thank-you-card h1, .modal-content h1 {
+.thank-you-card h1,
+.modal-content h1 {
   margin-bottom: 0.5rem;
   text-align: center;
 }
 
-.thank-you-card p, .modal-content p {
+.thank-you-card p,
+.modal-content p {
   margin-bottom: 2rem;
   text-align: center;
-
 }
 
-.thank-you-buttons, .modal-container-buttons {
+.thank-you-buttons,
+.modal-container-buttons {
   display: flex;
   gap: 1rem;
   justify-content: center;
