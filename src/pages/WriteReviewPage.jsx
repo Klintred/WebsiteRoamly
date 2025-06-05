@@ -24,6 +24,7 @@ const WriteReviewPage = () => {
   const [reviewId, setReviewId] = useState(null);
   const [showFollowUp, setShowFollowUp] = useState(false);
   const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState(null); // Nieuw toegevoegd
 
   const navigate = useNavigate();
 
@@ -31,34 +32,34 @@ const WriteReviewPage = () => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUsername(storedUsername);
-    } else {
-      // Probeer de gebruiker alsnog op te halen met de token als backup
-      const token = localStorage.getItem("token");
-      if (token) {
-        fetch("https://roamly-api.onrender.com/api/v1/users/me", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+    }
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch("https://roamly-api.onrender.com/api/v1/users/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to fetch user data.");
+          return res.json();
         })
-          .then((res) => {
-            if (!res.ok) throw new Error("Failed to fetch user data.");
-            return res.json();
-          })
-          .then((data) => {
-            const user = data.data.user || data.user || data;
-            const fetchedUsername = user.firstName || "Anonymous";
-            setUsername(fetchedUsername);
-            localStorage.setItem("username", fetchedUsername);
-          })
-          .catch((err) => {
-            console.error("Failed to fetch user:", err);
-            setUsername("Anonymous");
-          });
-      } else {
-        setUsername("Anonymous");
-      }
+        .then((data) => {
+          const user = data.data.user || data.user || data;
+          const fetchedUsername = user.firstName || "Anonymous";
+          setUsername(fetchedUsername);
+          setUserId(user._id); // Hier slaan we de userId op
+          localStorage.setItem("username", fetchedUsername);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user:", err);
+          setUsername("Anonymous");
+        });
+    } else {
+      setUsername("Anonymous");
     }
   }, []);
 
@@ -107,13 +108,18 @@ const WriteReviewPage = () => {
 
   const handleSubmit = async () => {
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch("https://roamly-api.onrender.com/api/v1/reviews", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify({
           general: responses,
           placeName: placeName,
           username: username || "Anonymous",
+          userId: userId, // Hier geven we de userId mee
           points: 1,
           sectionsCompleted: ["general"],
           textReview,
@@ -124,6 +130,7 @@ const WriteReviewPage = () => {
       if (!res.ok) throw new Error("Failed to submit");
 
       const data = await res.json();
+      console.log(data);
       setReviewId(data._id);
       setShowFollowUp(true);
     } catch (err) {
