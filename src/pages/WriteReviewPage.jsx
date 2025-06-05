@@ -24,8 +24,7 @@ const WriteReviewPage = () => {
   const [reviewId, setReviewId] = useState(null);
   const [showFollowUp, setShowFollowUp] = useState(false);
   const [username, setUsername] = useState("");
-  const [userId, setUserId] = useState(null); // Nieuw toegevoegd
-
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const WriteReviewPage = () => {
           const user = data.data.user || data.user || data;
           const fetchedUsername = user.firstName || "Anonymous";
           setUsername(fetchedUsername);
-          setUserId(user._id); // Hier slaan we de userId op
+          setUserId(user._id);
           localStorage.setItem("username", fetchedUsername);
         })
         .catch((err) => {
@@ -107,11 +106,27 @@ const WriteReviewPage = () => {
   };
 
   const handleSubmit = async () => {
+    const requiredFields = [
+      "accessibility",
+      "parkingSuitable",
+      "entranceAccessible",
+      "movement",
+      "restroomsAccessible",
+      "staffSupport",
+    ];
+    const unanswered = requiredFields.filter(field => !responses[field]);
+    console.log("responses:", responses);
+    console.log("unanswered:", unanswered);
+    if (unanswered.length > 0) {
+      alert("Please answer all required questions before submitting.");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       const res = await fetch("https://roamly-api.onrender.com/api/v1/reviews", {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         },
@@ -119,7 +134,7 @@ const WriteReviewPage = () => {
           general: responses,
           placeName: placeName,
           username: username || "Anonymous",
-          userId: userId, // Hier geven we de userId mee
+          userId: userId,
           points: 1,
           sectionsCompleted: ["general"],
           textReview,
@@ -130,7 +145,6 @@ const WriteReviewPage = () => {
       if (!res.ok) throw new Error("Failed to submit");
 
       const data = await res.json();
-      console.log(data);
       setReviewId(data._id);
       setShowFollowUp(true);
     } catch (err) {
@@ -141,12 +155,14 @@ const WriteReviewPage = () => {
 
   if (showFollowUp) {
     return (
-      <div className="write-review-container">
-        <h2>Thank you for your feedback!</h2>
-        <p>Would you like to leave a more detailed review?</p>
-        <div className="button-group">
-          <PrimaryButton text="Yes, continue" onClick={() => navigate(`/review/parking/${reviewId}`)} />
-          <PrimaryButton text="No, I'm done" variant="secondary" onClick={() => navigate('/thank-you')} />
+      <div className="modal-container">
+        <div className="modal-content">
+          <h1>Thank you for your feedback!</h1>
+          <p>Would you like to leave a more detailed review and receive 5 extra points?</p>
+          <div className="modal-container-buttons">
+            <PrimaryButton text="Yes, continue" onClick={() => navigate(`/review/parking/${reviewId}`)} />
+            <PrimaryButton text="No, I'm done" variant="secondary" onClick={() => navigate('/thank-you')} />
+          </div>
         </div>
       </div>
     );
@@ -154,87 +170,98 @@ const WriteReviewPage = () => {
 
   return (
     <div className="write-review-container">
-      <h1>
-        Give feedback for <span className="font-bold">{placeName}</span>
-      </h1>
-      <div className="write-review-form">
-        <div className="write-review-form-group">
-          <QuestionGroup label="How would you rate the overall accessibility?" field="accessibility">
-            <Tag text="Fully accessible" color="green" isSelected={responses.accessibility === "Fully accessible"} onClick={(val) => handleTagClick("accessibility", val)} />
-            <Tag text="Adjustments needed" color="orange" isSelected={responses.accessibility === "Adjustments needed"} onClick={(val) => handleTagClick("accessibility", val)} />
-            <Tag text="Not accessible" color="red" isSelected={responses.accessibility === "Not accessible"} onClick={(val) => handleTagClick("accessibility", val)} />
-          </QuestionGroup>
-
-          <QuestionGroup label="Was the parking suitable for your needs?" field="parkingSuitable">
-            <Tag text="Yes" color="green" isSelected={responses.parkingSuitable === "Yes"} onClick={(val) => handleTagClick("parkingSuitable", val)} />
-            <Tag text="No" color="red" isSelected={responses.parkingSuitable === "No"} onClick={(val) => handleTagClick("parkingSuitable", val)} />
-          </QuestionGroup>
-
-          <QuestionGroup label="Was the entrance easily accessible?" field="entranceAccessible">
-            <Tag text="Yes" color="green" isSelected={responses.entranceAccessible === "Yes"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
-            <Tag text="No" color="red" isSelected={responses.entranceAccessible === "No"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
-          </QuestionGroup>
-
-          <QuestionGroup label="Could you move around inside without difficulties?" field="movement">
-            <Tag text="Yes" color="green" isSelected={responses.movement === "Yes"} onClick={(val) => handleTagClick("movement", val)} />
-            <Tag text="No" color="red" isSelected={responses.movement === "No"} onClick={(val) => handleTagClick("movement", val)} />
-            <Tag text="Not applicable" color="gray" isSelected={responses.movement === "Not applicable"} onClick={(val) => handleTagClick("movement", val)} />
-          </QuestionGroup>
-
-          <QuestionGroup label="Were the restroom facilities accessible?" field="restroomsAccessible">
-            <Tag text="Yes" color="green" isSelected={responses.restroomsAccessible === "Yes"} onClick={(val) => handleTagClick("restroomsAccessible", val)} />
-            <Tag text="No" color="red" isSelected={responses.restroomsAccessible === "No"} onClick={(val) => handleTagClick("restroomsAccessible", val)} />
-          </QuestionGroup>
-
-          <QuestionGroup label="Was the staff helpful and accommodating?" field="staffSupport">
-            <Tag text="Yes" color="green" isSelected={responses.staffSupport === "Yes"} onClick={(val) => handleTagClick("staffSupport", val)} />
-            <Tag text="No" color="red" isSelected={responses.staffSupport === "No"} onClick={(val) => handleTagClick("staffSupport", val)} />
-            <Tag text="Not applicable" color="gray" isSelected={responses.staffSupport === "Not applicable"} onClick={(val) => handleTagClick("staffSupport", val)} />
-          </QuestionGroup>
-
-          <QuestionGroup label="Would you recommend this location to others with similar needs?" field="recommend">
-            <Tag text="Yes" color="green" isSelected={responses.recommend === "Yes"} onClick={(val) => handleTagClick("recommend", val)} />
-            <Tag text="No" color="red" isSelected={responses.recommend === "No"} onClick={(val) => handleTagClick("recommend", val)} />
-          </QuestionGroup>
-
+      <div className='container-small'>
+        <h1>
+          Give feedback for <span className="font-bold">{placeName}</span>
+        </h1>
+        <div className="write-review-form">
           <div className="write-review-form-group">
-            <label htmlFor="textReview">Optional comments</label>
-            <textarea
-              id="textReview"
-              className="text-area"
-              rows="4"
-              value={textReview}
-              onChange={(e) => setTextReview(e.target.value)}
-              placeholder="Write your comments here..."
-            />
-          </div>
+            <QuestionGroup label="How would you rate the overall accessibility?" field="accessibility" required>
+              <Tag text="Fully accessible" color="green" isSelected={responses.accessibility === "Fully accessible"} onClick={(val) => handleTagClick("accessibility", val)} />
+              <Tag text="Adjustments needed" color="orange" isSelected={responses.accessibility === "Adjustments needed"} onClick={(val) => handleTagClick("accessibility", val)} />
+              <Tag text="Not accessible" color="red" isSelected={responses.accessibility === "Not accessible"} onClick={(val) => handleTagClick("accessibility", val)} />
+            </QuestionGroup>
 
-          <div className="write-review-form-group">
-            <label htmlFor="photoUpload">Upload photos (optional)</label>
-            <input
-              id="photoUpload"
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleImageChange}
-            />
-          </div>
+            <QuestionGroup label="Was the parking suitable for your needs?" field="parkingSuitable" required>
+              <Tag text="Yes" color="green" isSelected={responses.parkingSuitable === "Yes"} onClick={(val) => handleTagClick("parkingSuitable", val)} />
+              <Tag text="No" color="red" isSelected={responses.parkingSuitable === "No"} onClick={(val) => handleTagClick("parkingSuitable", val)} />
+            </QuestionGroup>
 
-          <PrimaryButton text="Send" variant="primary" onClick={handleSubmit} />
+            <QuestionGroup label="Was the entrance easily accessible?" field="entranceAccessible" required>
+              <Tag text="Yes" color="green" isSelected={responses.entranceAccessible === "Yes"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
+              <Tag text="No" color="red" isSelected={responses.entranceAccessible === "No"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
+            </QuestionGroup>
+
+            <QuestionGroup label="Could you move around inside without difficulties?" field="movement" required>
+              <Tag text="Yes" color="green" isSelected={responses.movement === "Yes"} onClick={(val) => handleTagClick("movement", val)} />
+              <Tag text="No" color="red" isSelected={responses.movement === "No"} onClick={(val) => handleTagClick("movement", val)} />
+              <Tag text="Not applicable" color="gray" isSelected={responses.movement === "Not applicable"} onClick={(val) => handleTagClick("movement", val)} />
+            </QuestionGroup>
+
+            <QuestionGroup label="Were the restroom facilities accessible?" field="restroomsAccessible" required>
+              <Tag text="Yes" color="green" isSelected={responses.restroomsAccessible === "Yes"} onClick={(val) => handleTagClick("restroomsAccessible", val)} />
+              <Tag text="No" color="red" isSelected={responses.restroomsAccessible === "No"} onClick={(val) => handleTagClick("restroomsAccessible", val)} />
+            </QuestionGroup>
+
+            <QuestionGroup label="Was the staff helpful and accommodating?" field="staffSupport" required>
+              <Tag text="Yes" color="green" isSelected={responses.staffSupport === "Yes"} onClick={(val) => handleTagClick("staffSupport", val)} />
+              <Tag text="No" color="red" isSelected={responses.staffSupport === "No"} onClick={(val) => handleTagClick("staffSupport", val)} />
+              <Tag text="Not applicable" color="gray" isSelected={responses.staffSupport === "Not applicable"} onClick={(val) => handleTagClick("staffSupport", val)} />
+            </QuestionGroup>
+
+            <QuestionGroup label="Would you recommend this location to others with similar needs?" field="recommend" required>
+              <Tag text="Yes" color="green" isSelected={responses.recommend === "Yes"} onClick={(val) => handleTagClick("recommend", val)} />
+              <Tag text="No" color="red" isSelected={responses.recommend === "No"} onClick={(val) => handleTagClick("recommend", val)} />
+            </QuestionGroup>
+
+            <div className="write-review-form-group">
+              <div className='tag-container'>
+                <label htmlFor="textReview">Additional comments (optional)</label>
+                <textarea
+                  id="textReview"
+                  className="text-area"
+                  rows="4"
+                  value={textReview}
+                  onChange={(e) => setTextReview(e.target.value)}
+                  placeholder="Share any additional thoughts or details about your experience..."
+                />
+              </div>
+            </div>
+            <div className="line"></div>
+            <div className="write-review-form-group">
+              <div className='tag-container'>
+                <label htmlFor="photoUpload">Add photos (optional)</label>
+                <input
+                  id="photoUpload"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  className="custom-file-input"
+                />
+              </div>
+            </div>
+            <div className="line"></div>
+            <PrimaryButton text="Send" variant="primary" onClick={handleSubmit} />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const QuestionGroup = ({ label, children }) => (
+const QuestionGroup = ({ label, children, required }) => (
   <div className="write-review-form-group">
-    <p>{label}</p>
+    <p>
+      {label}
+      {required && <span className="required-asterisk"> *</span>}
+    </p>
     <div className='tag-container'>
       <div className='tag-subcontainer'>
         {children}
       </div>
     </div>
+    <div className="line"></div>
   </div>
 );
 

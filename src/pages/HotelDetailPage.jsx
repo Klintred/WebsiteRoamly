@@ -90,7 +90,6 @@ const PlaceDetailPage = () => {
         const filtered = data.filter(r => r.placeName === placeDetails.name);
         setReviews(filtered);
 
-        // Bereken gemiddelde antwoorden per onderdeel:
         const averages = calculateAverageAnswers(filtered);
         setAverageAnswers(averages);
       } catch (err) {
@@ -121,7 +120,6 @@ const PlaceDetailPage = () => {
       });
     });
 
-    // Kies voor elk onderdeel de meest voorkomende antwoord:
     const modeAnswers = {};
     categories.forEach(category => {
       modeAnswers[category] = {};
@@ -181,32 +179,37 @@ const PlaceDetailPage = () => {
 
         <div className="line" />
         <h2>Accessibility overview</h2>
-        {[
-          { key: 'general', label: 'General accessibility', question: 'accessibility' },
-          { key: 'parking', label: 'Parking suitability', question: 'designatedSpot' },
-          { key: 'entrance', label: 'Entrance accessibility', question: 'doorWidthOK' },
-          { key: 'internalNavigation', label: 'Navigation inside', question: 'pathWidthOK' },
-          { key: 'sanitary', label: 'Restroom facilities', question: 'accessibleRestroom' }
-        ].map(({ key, label, question }) => {
-          const value = averageAnswers[key]?.[question] || "Geen score gevonden";
-          return (
-            <div key={key} onClick={() => setExpandedSection(expandedSection === key ? null : key)}>
-              <AccessibilityButton
-                feedbackSubject={label}
-                accessibilityScore={value}
-                borderColor="green"
-              />
-              {expandedSection === key && (
-                <ul className="details-list" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
-                  {Object.entries(averageAnswers[key] || {}).map(([k, v]) => (
-                    <li key={k}><strong>{k}:</strong> {v}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          );
-        })}
-
+        <div className="accessibility-grid">
+          {[
+            { key: 'general', label: 'General accessibility', question: 'accessibility' },
+            { key: 'parking', label: 'Parking suitability', question: 'designatedSpot' },
+            { key: 'entrance', label: 'Entrance accessibility', question: 'doorWidthOK' },
+            { key: 'internalNavigation', label: 'Navigation inside', question: 'pathWidthOK' },
+            { key: 'sanitary', label: 'Restroom facilities', question: 'accessibleRestroom' }
+          ].map(({ key, label, question }) => {
+            const value = averageAnswers[key]?.[question] || "Geen score gevonden";
+            return (
+              <div
+                className="accessibility-card"
+                key={key}
+                onClick={() => setExpandedSection(expandedSection === key ? null : key)}
+              >
+                <AccessibilityButton
+                  feedbackSubject={label}
+                  accessibilityScore={value}
+                  borderColor="green"
+                />
+                {expandedSection === key && (
+                  <ul className="details-list">
+                    {Object.entries(averageAnswers[key] || {}).map(([k, v]) => (
+                      <li key={k}><strong>{k}:</strong> {v}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </div>
         <div className="line" />
         <h2>User Reviews</h2>
         {reviews.length === 0 ? (

@@ -3,14 +3,14 @@
     flex-direction: column;
     gap: 16px;
     margin: 0 20px;
+    justify-content: center;
 }
 
 .tag-container{
     display: flex;
     flex-direction: column;
     gap: 16px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 16px;
+    padding-bottom: 20px 0;
 }
 
 .tag-subcontainer {
@@ -18,4 +18,61 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+.required-asterisk {
+  color: var(--secondary-color);
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.write-review-form-group input[type="file"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: var(--background-color);
+  cursor: pointer;
+}
+.text-area {
+  resize: none !important;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+  background-color: var(--background-color);
+  transition: border 0.2s ease;
+}
+
+.text-area:focus {
+  border-color: #2b6cb0;
+  outline: none;
+  background-color: #fff;
+}
+
+.custom-file-input {
+  padding: 0.5rem;
+  background-color: #f9f9f9;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+  color: #444;
+  display: flex;
+}
+
+.custom-file-input::file-selector-button {
+    display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4em 0.8em;
+  border: 2px solid #ccc;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background-color: var(--background-color);
+  transition: background-color 0.2s;
+}
+
+.custom-file-input::file-selector-button:hover {
+  background-color: #e0e0e0;
 }

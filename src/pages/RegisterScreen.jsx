@@ -139,9 +139,6 @@ const RegisterScreen = () => {
 
   return (
     <div className="register-page-wrapper">
-      <div className="register-image-wrapper">
-        <img src="./assets/images/loginImage.png" alt="Register background" />
-      </div>
 
       <div className="register-form-wrapper">
         <div className="register-screen-container">
@@ -153,14 +150,7 @@ const RegisterScreen = () => {
             </p>
             <h1 className="register-heading">Create your account</h1>
 
-            <button className="google-login-button">
-              <img src="/assets/icons/googleIcon.svg" alt="Google login" />
-            </button>
-            <div className="divider">
-              <span>Or register with e-mail</span>
-            </div>
-
-
+        
             <form className="register-form-container" onSubmit={handleRegister}>
               <div className="register-form-subcontainer">
                 <div className="flex-row">
