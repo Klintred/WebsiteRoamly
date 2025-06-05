@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomCalendar from "../components/Forms/callender";
 import "../styles/TripPlannerPage.css";
@@ -14,7 +14,39 @@ function TripPlannerPage() {
   const [activities, setActivities] = useState([]);
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [tripCount, setTripCount] = useState(0);
+
   const navigate = useNavigate();
+
+  // Fetch user data from backend
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.warn("No token found. User may not be logged in.");
+          return;
+        }
+        const res = await fetch("https://roamly-api.onrender.com/api/v1/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if (!res.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const data = await res.json();
+        console.log("User data:", data);
+        setUserData(data.data.user);
+        setTripCount(data.data.user.tripcount || 0);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleAddActivity = (e) => {
     if (e.key === "Enter" && activityInput.trim()) {
@@ -31,6 +63,11 @@ function TripPlannerPage() {
   };
 
   const handleSubmit = async () => {
+    if (tripCount <= 0) {
+      alert("Je hebt geen trips meer over. Koop meer trips om verder te plannen!");
+      return;
+    }
+
     if (!tripName || !destination || !departureLocation || !dates[0] || !dates[1] || activities.length === 0) {
       alert("Please fill in all required fields including at least one activity.");
       return;
@@ -72,6 +109,7 @@ Return only this JSON.`;
     setResponse("");
 
     try {
+      // Call AI
       const aiRes = await fetch(
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDltrr08aNnNRhkZXyVTL7mVCPxC-MpSJ4",
         {
@@ -88,6 +126,8 @@ Return only this JSON.`;
       const cleanedResponse = jsonMatch[0];
 
       const token = localStorage.getItem("token");
+
+      // Save trip
       const tripRes = await fetch("https://roamly-api.onrender.com/api/v1/trips", {
         method: "POST",
         headers: {
@@ -107,6 +147,27 @@ Return only this JSON.`;
       const newTripId = tripData?.data?.trip?._id;
       if (!newTripId) throw new Error("Trip save failed.");
 
+      // ✅ Update tripcount in database
+      const decrementRes = await fetch("https://roamly-api.onrender.com/api/v1/users/decrement-tripcount", {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!decrementRes.ok) {
+        console.warn("Trip saved but tripcount could not be updated on server.");
+      }
+
+      // ✅ Update local tripCount
+      setTripCount((prevCount) => {
+        const updatedCount = Math.max(prevCount - 1, 0);
+        if (updatedCount === 0) {
+          alert("Je hebt geen trips meer over. Koop meer trips om verder te plannen!");
+        }
+        return updatedCount;
+      });
+
       navigate(`/my-trips-overview?tripId=${newTripId}`);
     } catch (error) {
       console.error("Error:", error);
@@ -116,11 +177,19 @@ Return only this JSON.`;
     }
   };
 
+  const getTripCount = () => {
+    return tripCount !== null ? tripCount : "...";
+  };
+
   return (
     <div className="planner-container">
       <div className="planner-content">
         <h1 className="planner-header">Plan your perfect trip with AI</h1>
         <div className="planner-subcontainer">
+          <div className="tripcount-container">
+            <p>Je kunt nog {getTripCount()} trip(s) plannen.</p>
+          </div>
+
           <div className="planner-input-container">
             <span className="material-symbols-outlined">edit</span>
             <input
