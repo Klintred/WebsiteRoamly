@@ -182,10 +182,11 @@ const PlaceDetailPage = () => {
         <div className="accessibility-grid">
           {[
             { key: 'general', label: 'General accessibility', question: 'accessibility' },
-            { key: 'parking', label: 'Parking suitability', question: 'designatedSpot' },
-            { key: 'entrance', label: 'Entrance accessibility', question: 'doorWidthOK' },
-            { key: 'internalNavigation', label: 'Navigation inside', question: 'pathWidthOK' },
-            { key: 'sanitary', label: 'Restroom facilities', question: 'accessibleRestroom' }
+            { key: 'parking', label: 'Parking facilities', question: 'designatedSpot' },
+            { key: 'entrance', label: 'Entrance', question: 'doorWidthOK' },
+            { key: 'internalNavigation', label: 'Internal navigation', question: 'pathWidthOK' },
+            { key: 'sanitary', label: 'Sanitary facilities', question: 'accessibleRestroom' },
+            { key: 'staff', label: 'Staff support', question: 'staffAssistance' }
           ].map(({ key, label, question }) => {
             const value = averageAnswers[key]?.[question] || "Geen score gevonden";
             return (
