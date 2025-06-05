@@ -134,7 +134,7 @@
 
   .all-trips-container{
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 20px;
   }
 
@@ -145,25 +145,8 @@
     margin-bottom: 16px;
   }
   
-  @media screen and (max-width: 768px) {
-    .max-w-4xl {
-      padding: 1.5rem;
-    }
-  
-    h1 {
-      font-size: 1.8rem;
-    }
-  
-    .trip-title {
-      font-size: 1.3rem;
-    }
-  
-    .day-buttons button {
-      padding: 8px 12px;
-      font-size: 0.9rem;
-    }
-  
-    .activity-item {
-      font-size: 0.9rem;
+  @media screen and (min-width: 768px) {
+    .all-trips-container {
+      grid-template-columns: repeat(2, 1fr);
     }
   }

@@ -56,7 +56,7 @@ const MyTripsOverviewPage = () => {
                 });
                 if (!response.ok) throw new Error("Failed to fetch trips");
                 const data = await response.json();
-
+                console.log("Fetched trips:", data);
                 const parsedTrips = (data.data.trips || []).map((trip) => {
                     let parsedPlan = {};
                     try {
@@ -192,48 +192,9 @@ const MyTripsOverviewPage = () => {
         }
     };
 
-    const handleAddActivity = (tripId, dayIndex, activity) => {
-        setTrips((prevTrips) =>
-            prevTrips.map((trip) => {
-                if (trip._id === tripId) {
-                    const itinerary = [...(trip.parsedPlan?.itinerary || [])];
-                    if (!itinerary[dayIndex].activities.includes(activity)) {
-                        itinerary[dayIndex].activities.push(activity);
-                    }
-
-                    const newPlan = { ...trip.parsedPlan, itinerary };
-                    return {
-                        ...trip,
-                        parsedPlan: newPlan,
-                        Plan: JSON.stringify(newPlan),
-                    };
-                }
-                return trip;
-            })
-        );
-    };
-
-    const handleRemoveActivity = (tripId, dayIndex, activity) => {
-        setTrips((prevTrips) =>
-            prevTrips.map((trip) => {
-                if (trip._id === tripId) {
-                    const itinerary = [...(trip.parsedPlan?.itinerary || [])];
-                    itinerary[dayIndex].activities = itinerary[dayIndex].activities.filter((a) => a !== activity);
-
-                    const newPlan = { ...trip.parsedPlan, itinerary };
-                    return {
-                        ...trip,
-                        parsedPlan: newPlan,
-                        Plan: JSON.stringify(newPlan),
-                    };
-                }
-                return trip;
-            })
-        );
-    };
 
     return (
-        <div className="max-w-4xl mx-auto mt-12 p-6">
+        <div className="container">
             <h1 className="text-center">All trips</h1>
 
             {loading && <p className="text-center text-muted">Loading trips...</p>}

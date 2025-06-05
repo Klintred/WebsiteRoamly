@@ -1,14 +1,18 @@
 .planner-container {
-  font-family: 'Roboto', sans-serif;
-  max-width: 760px;
-  border-radius: 16px;
-  box-sizing: border-box;
-  gap: 16px;
-  margin: 0 20px;
+ flex: 1; /* Grow to fill parent .App */
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  justify-content: center;
 }
+
+ .planner-content{
+    min-width: 70%;
+
+ }
 
 .planner-subcontainer{
   display: flex;

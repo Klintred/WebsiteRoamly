@@ -212,159 +212,169 @@ const Profile = () => {
               </div>
             </Link>
           </div>
-          <h2>About me</h2>
-          <div className="profile-top-container">
-            <div className="profile-top-box">
-
-              <div className="profile-left">
-                <div className="profile-image-wrapper">
-                  <img
-                    src="/assets/images/default-profile.png"
-                    alt=""
-                    className="profile-image"
-                  />
-                  <div
-                    className="edit-photo-icon"
-                    onClick={() => alert("Open upload modal here!")}
-                  >
-                    <FaPen />
-                  </div>
-                </div>
+          <div className="flex-row">
+            <div className="profile-header-container">
+              <div className="profile-header">
+                <h2>About me</h2>
+                <p className="profile-subtitle">View your personal settings</p>
               </div>
+            </div>
+            <div className="profile-top-container">
+              <div className="profile-top-box">
 
-              <div className="info-grid">
-                {["firstName", "lastName", "email"].map((field) => (
-                  <div key={field} className="info-item">
-                    <label>
-                      {field === "email" ? "Email" : field.replace("Name", " name")}
-                    </label>
-                    {editMode ? (
-                      <input
-                        className="info-input editable"
-                        value={user?.[field] || ""}
-                        onChange={(e) =>
-                          setUser({ ...user, [field]: e.target.value })
-                        }
-                      />
-                    ) : (
-                      <div className="info-input locked">
-                        {user?.[field]}
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                <div className="info-item">
-                  <label>Password</label>
-                  <div className="info-input locked">
-                    ***************
-                    <a
-                      className="change-password-button"
-                      onClick={() => setShowPasswordModal(true)}
+                <div className="profile-left">
+                  <div className="profile-image-wrapper">
+                    <img
+                      src="/assets/images/default-profile.png"
+                      alt=""
+                      className="profile-image"
+                    />
+                    <div
+                      className="edit-photo-icon"
+                      onClick={() => alert("Open upload modal here!")}
                     >
-                      <FaPen style={{ marginRight: "4px" }} /> Change
-                    </a>
+                      <FaPen />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="profile-buttons">
-                <button className="edit-profile-button" onClick={handleEditProfile}>
-                  {editMode ? (
-                    <>
-                      <FaLockOpen /> Save
-                    </>
-                  ) : (
-                    <>
-                      <FaLock /> Edit profile
-                    </>
-                  )}
-                </button>
-                <button className="logout-button" onClick={handleLogout}>
-                  <FaSignOutAlt /> Log out
-                </button>
+                <div className="info-grid">
+                  {["firstName", "lastName", "email"].map((field) => (
+                    <div key={field} className="info-item">
+                      <label>
+                        {field === "email" ? "Email" : field.replace("Name", " name")}
+                      </label>
+                      {editMode ? (
+                        <input
+                          className="info-input editable"
+                          value={user?.[field] || ""}
+                          onChange={(e) =>
+                            setUser({ ...user, [field]: e.target.value })
+                          }
+                        />
+                      ) : (
+                        <div className="info-input locked">
+                          {user?.[field]}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  <div className="info-item">
+                    <label>Password</label>
+                    <div className="info-input locked">
+                      ***************
+                      <a
+                        className="change-password-button"
+                        onClick={() => setShowPasswordModal(true)}
+                      >
+                        <FaPen style={{ marginRight: "4px" }} /> Change
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="profile-buttons">
+                  <button className="edit-profile-button" onClick={handleEditProfile}>
+                    {editMode ? (
+                      <>
+                        <FaLockOpen /> Save
+                      </>
+                    ) : (
+                      <>
+                        <FaLock /> Edit profile
+                      </>
+                    )}
+                  </button>
+                  <button className="logout-button" onClick={handleLogout}>
+                    <FaSignOutAlt /> Log out
+                  </button>
+                </div>
               </div>
             </div>
           </div>
           <div className="line"></div>
-          <div>
+          <div className="flex-row">
             <h2>Current subscription</h2>
             <Link>
               Change subscription
             </Link>
           </div>
-          <div className="line"></div>
-          <h2>Available packages</h2>
-          {!packageType && (
+          <div className="flex-row">
 
-            <div className="packages-grid options-grid">
-              <div className="package-card">
-                <div>
-                  <h3>Personal</h3>
-                  <p className="package-description">
-                    For individual use.
-                  </p>
-                </div>
-                <button className="package-button" onClick={() => setPackageType("personal")}>
-                  Choose
-                </button>
-              </div>
-              <div className="package-card">
-                <div>
-                  <h3>Company</h3>
-                  <p className="package-description">
-                    For business or team use.
-                  </p>
-                </div>
-                <button className="package-button" onClick={() => setPackageType("company")}>
-                  Choose
-                </button>
-              </div>
-            </div>
-          )}
-          {packageType === "personal" && (
+            <div className="line"></div>
+            <h2>Available packages</h2>
+            {!packageType && (
 
-            <div className="packages-grid ">
-              {[
-                { title: "Free", description: "Free access to the accessibility reviews." },
-                { title: "Pay-per-use", price: "€1.49 per trip", description: "Ideal for occasional users who want AI-powered trip planning without a subscription." },
-                { title: "Trip Bundle", price: "€9.99 for 10 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
-                { title: "Trip Bundle", price: "€19.99 for 25 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
-
-              ].map((pkg) => (
-                <div key={pkg.title} className="package-card">
-                  <p className="package-price">{pkg.price}</p>
-                  <div className="package-info">
-                    <h3>{pkg.title}</h3>
+              <div className="packages-grid options-grid">
+                <div className="package-card">
+                  <div className="flex-row">
+                    <h3>Personal</h3>
                     <p className="package-description">
-                      {pkg.description}
+                      For individual use.
+                    </p>
+                  </div>
+                  <button className="package-button" onClick={() => setPackageType("personal")}>
+                    Choose
+                  </button>
+                </div>
+                <div className="package-card">
+                  <div className="flex-row">
+                    <h3>Company</h3>
+                    <p className="package-description">
+                      For business or team use.
+                    </p>
+                  </div>
+                  <button className="package-button" onClick={() => setPackageType("company")}>
+                    Choose
+                  </button>
+                </div>
+              </div>
+            )}
+            {packageType === "personal" && (
+
+              <div className="packages-grid ">
+                {[
+                  { title: "Free", description: "Free access to the accessibility reviews." },
+                  { title: "Pay-per-use", price: "€1.49 per trip", description: "Ideal for occasional users who want AI-powered trip planning without a subscription." },
+                  { title: "Trip Bundle", price: "€9.99 for 10 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
+                  { title: "Trip Bundle", price: "€19.99 for 25 trips", description: "Great for frequent users who want affordable access to AI trip planning." },
+
+                ].map((pkg) => (
+                  <div key={pkg.title} className="package-card">
+                    <p className="package-price">{pkg.price}</p>
+                    <div className="package-info">
+                      <h3>{pkg.title}</h3>
+                      <p className="package-description">
+                        {pkg.description}
+                      </p>
+                    </div>
+                    <button className="package-button">
+                      Upgrade
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {packageType === "company" && (
+
+              <div className="packages-grid business-package">
+
+                <div className="package-card ">
+                  <p className="package-price">€129,99 per month</p>
+                  <div>
+                    <h3>Subscription</h3>
+                    <p className="package-description">
+                      Roamly offers a B2B subscription for €149.99/month, giving businesses unlimited access to the AI trip planner. Ideal for care providers, mobility services, and travel agencies.
                     </p>
                   </div>
                   <button className="package-button">
                     Upgrade
                   </button>
                 </div>
-              ))}
-            </div>
-          )}
-          {packageType === "company" && (
-
-            <div className="packages-grid business-package">
-
-              <div className="package-card ">
-                <p className="package-price">€129,99 per month</p>
-                <div>
-                  <h3>Subscription</h3>
-                  <p className="package-description">
-                    Roamly offers a B2B subscription for €149.99/month, giving businesses unlimited access to the AI trip planner. Ideal for care providers, mobility services, and travel agencies.
-                  </p>
-                </div>
-                <button className="package-button">
-                  Upgrade
-                </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {showPasswordModal && (
             <div className="modal-overlay">

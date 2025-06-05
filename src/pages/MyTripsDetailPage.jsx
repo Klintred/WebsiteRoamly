@@ -93,8 +93,8 @@ const MyTripsDetailPage = () => {
       filterType === "places"
         ? `tourist attractions in ${country}`
         : filterType === "restaurants"
-        ? `restaurants in ${country}`
-        : `things to do in ${country}`;
+          ? `restaurants in ${country}`
+          : `things to do in ${country}`;
 
     try {
       const results = await fetchPlaceDetails(query);
@@ -198,8 +198,8 @@ const MyTripsDetailPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mt-12 trip-card">
+    <div className="container">
+      <div className="trip-card">
         <img src="../assets/images/loginImage.png" alt="" />
         <div className="trip-details">
           <h1>{trip.TripName}</h1>
@@ -210,7 +210,7 @@ const MyTripsDetailPage = () => {
               {new Date(trip.EndDate).toLocaleDateString()}
             </p>
           </div>
-          <div className="day-buttons mb-6">
+          <div className="day-buttons">
             {itinerary.map((day, index) => (
               <button
                 key={index}
@@ -237,56 +237,58 @@ const MyTripsDetailPage = () => {
               ))}
             </ul>
 
-            <div className="mt-6">
-              <label>Filter:</label>
-              <select
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-                className="ml-2"
-              >
-                <option value="all">Alles</option>
-                <option value="places">Bezienswaardigheden</option>
-                <option value="restaurants">Restaurants</option>
-              </select>
 
-              <h5 className="mt-4">Voorgestelde activiteiten:</h5>
-              <div className="suggestions grid gap-4">
-                {suggestedPlaces.map((place, idx) => {
-                  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                    place.name + " " + (place.address || "")
-                  )}`;
-                  return (
-                    <div key={idx} className="activity-item suggestion">
-                      <img
-                        src={getPhotoUrl(place)}
-                        alt={place.name}
-                        className="w-24 h-24 object-cover rounded-lg"
-                        loading="lazy"
-                      />
-                      <div>
-                        <h4>{place.name}</h4>
-                        <p>{place.address}</p>
-                        <p>⭐ {place.rating || "N/A"}</p>
-                        <button
-                          className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          onClick={() => handleAddActivity(place.name)}
-                        >
-                          Toevoegen
-                        </button>
-                        <a
-                          href={mapsUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-2 inline-flex items-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                        >
-                          Bekijk op Maps
-                        </a>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          </div>
+
+          <div className="line"></div>
+
+          <label>Filter:</label>
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option value="all">Alles</option>
+            <option value="places">Bezienswaardigheden</option>
+            <option value="restaurants">Restaurants</option>
+          </select>
+
+
+          <h5>Voorgestelde activiteiten:</h5>
+          <div className="suggestions grid gap-4">
+            {suggestedPlaces.map((place, idx) => {
+              const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                place.name + " " + (place.address || "")
+              )}`;
+              return (
+                <div key={idx} className="activity-item suggestion">
+                  <img
+                    src={getPhotoUrl(place)}
+                    alt={place.name}
+                    className="w-24 h-24 object-cover rounded-lg"
+                    loading="lazy"
+                  />
+                  <div>
+                    <h4>{place.name}</h4>
+                    <p>{place.address}</p>
+                    <p>⭐ {place.rating || "N/A"}</p>
+                    <button
+                      className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      onClick={() => handleAddActivity(place.name)}
+                    >
+                      Toevoegen
+                    </button>
+                    <a
+                      href={mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                    >
+                      Bekijk op Maps
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

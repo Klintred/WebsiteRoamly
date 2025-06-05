@@ -118,106 +118,107 @@ Return only this JSON.`;
 
   return (
     <div className="planner-container">
-      <h1 className="planner-header">Plan your perfect trip with AI</h1>
-      <div className="planner-subcontainer">
-
-        <div className="planner-input-container">
-          <span className="material-symbols-outlined">edit</span>
-          <input
-            type="text"
-            placeholder="Trip name"
-            value={tripName}
-            onChange={(e) => setTripName(e.target.value)}
-            className="planner-input"
-          />
-        </div>
-
-        <div className="planner-input-container">
-          <span className="material-symbols-outlined">flight_takeoff</span>
-          <input
-            type="text"
-            placeholder="Where are you departing from?"
-            value={departureLocation}
-            onChange={(e) => setDepartureLocation(e.target.value)}
-            className="planner-input"
-          />
-        </div>
-
-        <div className="planner-input-container">
-          <span className="material-symbols-outlined">place</span>
-          <input
-            type="text"
-            placeholder="Where are you going?"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            className="planner-input"
-          />
-        </div>
-
-        <div className="planner-section">
+      <div className="planner-content">
+        <h1 className="planner-header">Plan your perfect trip with AI</h1>
+        <div className="planner-subcontainer">
           <div className="planner-input-container">
-            <span className="material-symbols-outlined">calendar_today</span>
-            <button
-              type="button"
-              className="calendar-select-button"
-              onClick={() => setCalendarOpen(!calendarOpen)}
-            >
-              {dates[0] && dates[1]
-                ? `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`
-                : "Select your dates"}
-            </button>
+            <span className="material-symbols-outlined">edit</span>
+            <input
+              type="text"
+              placeholder="Trip name"
+              value={tripName}
+              onChange={(e) => setTripName(e.target.value)}
+              className="planner-input"
+            />
           </div>
-          {calendarOpen && (
-            <div className="calendar-wrapper">
-              <CustomCalendar
-                selectedDates={dates}
-                setSelectedDates={(selected) => {
-                  const maybeDates = typeof selected === "function" ? selected(dates) : selected;
-                  setDates(maybeDates);
-                  if (maybeDates[0] && maybeDates[1]) setCalendarOpen(false);
-                }}
-                 variant="tripplanner"
-              />
+
+          <div className="planner-input-container">
+            <span className="material-symbols-outlined">flight_takeoff</span>
+            <input
+              type="text"
+              placeholder="Where are you departing from?"
+              value={departureLocation}
+              onChange={(e) => setDepartureLocation(e.target.value)}
+              className="planner-input"
+            />
+          </div>
+
+          <div className="planner-input-container">
+            <span className="material-symbols-outlined">place</span>
+            <input
+              type="text"
+              placeholder="Where are you going?"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+              className="planner-input"
+            />
+          </div>
+
+          <div className="planner-section">
+            <div className="planner-input-container">
+              <span className="material-symbols-outlined">calendar_today</span>
+              <button
+                type="button"
+                className="calendar-select-button"
+                onClick={() => setCalendarOpen(!calendarOpen)}
+              >
+                {dates[0] && dates[1]
+                  ? `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`
+                  : "Select your dates"}
+              </button>
+            </div>
+            {calendarOpen && (
+              <div className="calendar-wrapper">
+                <CustomCalendar
+                  selectedDates={dates}
+                  setSelectedDates={(selected) => {
+                    const maybeDates = typeof selected === "function" ? selected(dates) : selected;
+                    setDates(maybeDates);
+                    if (maybeDates[0] && maybeDates[1]) setCalendarOpen(false);
+                  }}
+                  variant="tripplanner"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="planner-input-container">
+            <span className="material-symbols-outlined">interests</span>
+            <input
+              type="text"
+              placeholder="Type an activity (e.g. Lebanese restaurant)"
+              value={activityInput}
+              onChange={(e) => setActivityInput(e.target.value)}
+              onKeyDown={handleAddActivity}
+              className="planner-input"
+            />
+          </div>
+
+          {activities.length > 0 && (
+            <div className="selected-tags">
+              {activities.map((activity) => (
+                <span key={activity} className="tag-chip">
+                  {activity}
+                  <button onClick={() => removeActivity(activity)}>&times;</button>
+                </span>
+              ))}
+            </div>
+          )}
+
+          <PrimaryButton
+            text={loading ? "Planning..." : "Generate travel plan"}
+            onClick={handleSubmit}
+            variant="primary"
+            disabled={loading}
+          />
+
+          {response && (
+            <div className="planner-response">
+              <h2 className="planner-response-title">Travel Plan Proposal:</h2>
+              <pre className="planner-response-text">{response}</pre>
             </div>
           )}
         </div>
-
-        <div className="planner-input-container">
-          <span className="material-symbols-outlined">interests</span>
-          <input
-            type="text"
-            placeholder="Type an activity (e.g. Lebanese restaurant)"
-            value={activityInput}
-            onChange={(e) => setActivityInput(e.target.value)}
-            onKeyDown={handleAddActivity}
-            className="planner-input"
-          />
-        </div>
-
-        {activities.length > 0 && (
-          <div className="selected-tags">
-            {activities.map((activity) => (
-              <span key={activity} className="tag-chip">
-                {activity}
-                <button onClick={() => removeActivity(activity)}>&times;</button>
-              </span>
-            ))}
-          </div>
-        )}
-
-        <PrimaryButton
-          text={loading ? "Planning..." : "Generate travel plan"}
-          onClick={handleSubmit}
-          variant="primary"
-          disabled={loading}
-        />
-
-        {response && (
-          <div className="planner-response">
-            <h2 className="planner-response-title">Travel Plan Proposal:</h2>
-            <pre className="planner-response-text">{response}</pre>
-          </div>
-        )}
       </div>
     </div>
   );

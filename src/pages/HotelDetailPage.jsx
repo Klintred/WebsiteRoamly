@@ -146,7 +146,7 @@ const PlaceDetailPage = () => {
   if (!placeDetails) return <p>Geen gegevens gevonden.</p>;
 
   return (
-    <div className="place-detail-container">
+    <div className="container">
       <div className="place-detail-subcontainer">
         <div className="go-back-link">
           <Link to={`/${type || ''}`}>Go back to {type || 'home'}</Link>

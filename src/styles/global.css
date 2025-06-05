@@ -13,7 +13,10 @@
   --warning-color: #f39c12;
   --border-color: #dadada;
 }
-.App{
+
+.App {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 html,
@@ -88,11 +91,6 @@ a {
   font-weight: 400;
   margin-bottom: 0.5rem;
 }
-
-.container {
-  margin: 0 20px;
-}
-
 .profile-button {
   padding: 10px 20px;
   background-color: var(--primary-color); /* Green */
@@ -160,7 +158,7 @@ a {
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 16px; 
+  padding: 20px;
   box-sizing: border-box;
 }
 

@@ -11,18 +11,15 @@ const MyPointsPage = () => {
       if (!username) return;
 
       try {
-        // Fetch alle reviews (zonder filtering op de server) en filter lokaal
         const res = await fetch(`https://roamly-api.onrender.com/api/v1/reviews`);
         if (!res.ok) throw new Error("Failed to fetch reviews");
 
         const reviews = await res.json();
 
-        // Filter de reviews voor deze gebruiker:
         const userReviews = reviews.filter(
           (review) => (review.username || "Anonymous") === username
         );
 
-        // Tel alle punten bij elkaar op
         const totalPoints = userReviews.reduce(
           (sum, review) => sum + (review.points || 0),
           0
@@ -36,6 +33,12 @@ const MyPointsPage = () => {
 
     fetchUserPoints();
   }, []);
+  const rewards = [
+    { requiredPoints: 20, description: "Access to 1 free AI-trip." },
+    { requiredPoints: 60, description: "50% discount on trip bundle (10 trips)." },
+    { requiredPoints: 100, description: "Goodie bag." },
+    { requiredPoints: 140, description: "Chance of winning a weekend-city trip for two people." },
+  ];
 
   return (
     <div className="container">
@@ -86,7 +89,7 @@ const MyPointsPage = () => {
             </Link>
           </div>
 
-          <div className="profile-header-container">
+          <div className="flex-row">
             <div className="profile-header">
               <h2>My points</h2>
               <p className="profile-subtitle">Manage your points and rewards</p>
@@ -103,32 +106,21 @@ const MyPointsPage = () => {
           </div>
 
           <div className="line"></div>
-          <div className="points-container">
+          <div className="flex-row">
             <h2>Rewards</h2>
             <div className="points-content">
-              <div className="points-reward">
-                <p className="points-reward-header">20 points</p>
-                <p>Access to 1 free AI-trip.</p>
-                <button className="points-reward-button">Redeem</button>
-              </div>
-
-              <div className="points-reward">
-                <p className="points-reward-header">60 points</p>
-                <p>50% discount on trip bundle (10 trips).</p>
-                <button className="points-reward-button">Redeem</button>
-              </div>
-
-              <div className="points-reward">
-                <p className="points-reward-header">100 points</p>
-                <p>Goodie bag.</p>
-                <button className="points-reward-button">Redeem</button>
-              </div>
-
-              <div className="points-reward">
-                <p className="points-reward-header">140 points</p>
-                <p>Chance of winning a weekend-city trip for two people.</p>
-                <button className="points-reward-button">Redeem</button>
-              </div>
+              {rewards.map((reward, index) => (
+                <div className="points-reward" key={index}>
+                  <p className="points-reward-header">{reward.requiredPoints} points</p>
+                  <p>{reward.description}</p>
+                  <button
+                    className="points-reward-button"
+                    disabled={points < reward.requiredPoints}
+                  >
+                    {points < reward.requiredPoints ? "Not enough points" : "Redeem"}
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>

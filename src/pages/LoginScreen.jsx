@@ -16,7 +16,7 @@ const LoginScreen = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/profile");
+      navigate("/home");
     }
   }, [navigate]);
 
@@ -48,6 +48,8 @@ const LoginScreen = () => {
       const token = data?.data?.token;
       if (token) {
         localStorage.setItem("token", token);
+        localStorage.setItem("userId", user._id);
+
       } else {
         throw new Error("No token received from server.");
       }

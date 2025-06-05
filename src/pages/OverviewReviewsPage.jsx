@@ -5,30 +5,29 @@ import "../styles/profile.css";
 const OverviewReviewsPage = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
-    const username = localStorage.getItem("username") || "Anonymous";
+    const userId = localStorage.getItem("userId");
 
     useEffect(() => {
         const fetchReviews = async () => {
+            if (!userId) return;
+
             try {
-                const res = await fetch(`https://roamly-api.onrender.com/api/v1/reviews`);
-                if (!res.ok) throw new Error("Failed to fetch reviews");
+                const res = await fetch(`https://roamly-api.onrender.com/api/v1/reviews/user/${userId}`);
+                if (!res.ok) throw new Error("Failed to fetch user reviews");
                 const data = await res.json();
+                console.log("All fetched reviews:", data); 
 
-                // Filter de reviews client-side op username:
-                const userReviews = data.filter(
-                    (review) => (review.username || "Anonymous") === username
-                );
-
-                setReviews(userReviews);
+                setReviews(data);
             } catch (err) {
-                console.error(err);
+                console.error("Error fetching user reviews:", err);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchReviews();
-    }, [username]);
+    }, [userId]);
+
 
     return (
         <div className="container">
@@ -78,34 +77,36 @@ const OverviewReviewsPage = () => {
                             </div>
                         </Link>
                     </div>
-                    <div className="profile-header-container">
-                        <div className="profile-header">
-                            <h2>My reviews</h2>
-                            <p className="profile-subtitle">View your written reviews</p>
+                    <div className="flex-row">
+                        <div className="profile-header-container">
+                            <div className="profile-header">
+                                <h2>My reviews</h2>
+                                <p className="profile-subtitle">View your written reviews</p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="reviews-container">
-                        {loading ? (
-                            <p>Loading reviews...</p>
-                        ) : reviews.length === 0 ? (
-                            <p>No reviews yet.</p>
-                        ) : (
-                            reviews.map((review) => (
-                                <div key={review._id} className="review-card">
-                                    <h3>{review.placeName}</h3>
-                                    <p>{review.textReview || "No written comment."}</p>
-                                    <p><strong>Accessibility:</strong> {review.general?.accessibility}</p>
-                                    <p><strong>Recommendation:</strong> {review.general?.recommend}</p>
-                                    {review.photoUrls && review.photoUrls.length > 0 && (
-                                        <div className="photo-preview">
-                                            {review.photoUrls.map((url, idx) => (
-                                                <img key={idx} src={url} alt={`review ${idx}`} style={{ width: "100px", marginRight: "8px" }} />
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ))
-                        )}
+                        <div className="reviews-container">
+                            {loading ? (
+                                <p>Loading reviews...</p>
+                            ) : reviews.length === 0 ? (
+                                <p>No reviews yet.</p>
+                            ) : (
+                                reviews.map((review) => (
+                                    <div key={review._id} className="review-card">
+                                        <h3>{review.placeName}</h3>
+                                        <p>{review.textReview || "No written comment."}</p>
+                                        <p><strong>Accessibility:</strong> {review.general?.accessibility}</p>
+                                        <p><strong>Recommendation:</strong> {review.general?.recommend}</p>
+                                        {review.photoUrls && review.photoUrls.length > 0 && (
+                                            <div className="photo-preview">
+                                                {review.photoUrls.map((url, idx) => (
+                                                    <img key={idx} src={url} alt={`review ${idx}`} style={{ width: "100px", marginRight: "8px" }} />
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
