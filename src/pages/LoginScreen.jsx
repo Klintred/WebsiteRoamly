@@ -5,6 +5,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 
+const saveToken = (token, expiresInMs = 3600000) => {
+  const expiry = Date.now() + expiresInMs;
+  localStorage.setItem("token", token);
+  localStorage.setItem("token_expiry", expiry.toString());
+};
+
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  const expiry = parseInt(localStorage.getItem("token_expiry"), 10);
+
+  if (!token || !expiry || Date.now() > expiry) {
+    clearToken();
+    return null;
+  }
+
+  return token;
+};
+
+const clearToken = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("token_expiry");
+};
+
 const LoginScreen = () => {
   const navigate = useNavigate();
 
@@ -14,7 +37,7 @@ const LoginScreen = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (token) {
       navigate("/home");
     }
@@ -25,7 +48,7 @@ const LoginScreen = () => {
     setError("");
     setSuccessMessage("");
 
-    if (!email || !password) {
+    if (!email.trim() || !password.trim()) {
       setError("Please enter both email and password.");
       return;
     }
@@ -36,7 +59,7 @@ const LoginScreen = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
       const data = await res.json();
@@ -46,16 +69,16 @@ const LoginScreen = () => {
       }
 
       const token = data?.data?.token;
-      if (token) {
-        localStorage.setItem("token", token);
-
-      } else {
+      if (!token) {
         throw new Error("No token received from server.");
       }
 
+      saveToken(token); 
+      setSuccessMessage("Login successful!");
+
       setTimeout(() => navigate("/profile"), 1500);
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
       setError(err.message || "Something went wrong.");
     }
   };
@@ -63,7 +86,7 @@ const LoginScreen = () => {
   return (
     <div className="login-page-wrapper">
       <div className="login-image-wrapper">
-        <img src="./assets/images/loginImage.png" alt="Login background" />
+        <img src="/assets/images/loginImage.png" alt="Login background" />
       </div>
 
       <div className="login-form-wrapper">
@@ -109,9 +132,7 @@ const LoginScreen = () => {
                 </div>
                 {error && <div className="error-message">{error}</div>}
                 {successMessage && <div className="success-message">{successMessage}</div>}
-
               </div>
-
 
               <div className="full-width-button">
                 <PrimaryButton text="Login" type="submit" />
@@ -125,8 +146,8 @@ const LoginScreen = () => {
             <button className="google-login-button">
               <img src="/assets/icons/googleIcon.svg" alt="Google login" />
             </button>
-
           </div>
+
           <div className="register-redirect">
             Don’t have an account?{" "}
             <span className="register-link" onClick={() => navigate("/register")}>

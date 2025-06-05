@@ -27,7 +27,6 @@ const MyTripsDetailPage = () => {
   const [filterType, setFilterType] = useState("all");
   const [apiKey, setApiKey] = useState("");
 
-  // 1️⃣ Haal API key op bij mount
   useEffect(() => {
     const fetchApiKey = async () => {
       try {
@@ -163,7 +162,7 @@ const MyTripsDetailPage = () => {
         <img
           src={getPhotoUrl(place)}
           alt={place.name}
-          className="w-24 h-24 object-cover rounded-lg"
+          className="svg-icon"
           loading="lazy"
         />
         <div>
@@ -228,7 +227,7 @@ const MyTripsDetailPage = () => {
             <ul className="activity-list">
               {itinerary[selectedDay]?.activities?.map((activity, idx) => (
                 <li key={idx} className="activity-item">
-                  <FaMapMarkerAlt />
+                  <span className="material-symbols-outlined">location_on</span>
                   {renderPlaceCard(activity)}
                   <button onClick={() => handleRemoveActivity(activity)}>
                     Verwijderen
