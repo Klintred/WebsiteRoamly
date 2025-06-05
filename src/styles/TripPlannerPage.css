@@ -60,7 +60,6 @@
 
 .planner-input, .calendar-select-button {
   border:none;
-  font-family: 'Roboto', sans-serif;
   width: 100%;
   font-size: 0.95rem;
   transition: all 0.2s ease-in-out;
@@ -75,7 +74,6 @@
 }
 
 ::placeholder {
-  font-family: 'Roboto', sans-serif;
   color: var(--text-color);
   font-size: 0.95rem;
 }
@@ -122,7 +120,6 @@
 .people-count {
   font-size: 1rem;
   font-weight: 500;
-  font-family: 'Roboto', sans-serif;
   min-width: 20px;
 }
 
@@ -131,7 +128,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Roboto', sans-serif;
   font-size: 0.95rem;
   margin-bottom: 10px;
   cursor: pointer;
@@ -153,9 +149,7 @@
   background-color: #f1f3f5;
 }
 
-/* Submit button */
 .planner-button {
-  font-family: 'Roboto', sans-serif;
   width: 100%;
   padding: 14px;
   margin-top: 24px;

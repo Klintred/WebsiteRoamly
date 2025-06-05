@@ -1,9 +1,7 @@
 .home-page {
-  font-family: Arial, sans-serif;
   margin: 0 auto;
   text-align: left;
   overflow-x: hidden;
-  font-family: Arial, sans-serif;
   text-align: left;
   overflow-x: visible;
   display: flex;
@@ -275,7 +273,6 @@
 
   .view-details-button {
     background-color: var(--primary-color);
-    font-family: "Roboto", sans-serif;
     font-size: 1rem;
     font-weight: 700;
     width: 100%;
@@ -496,28 +493,28 @@ button.search-input {
 
 
 .accessibility-label.green {
-  background-color: --success-color;
+  background-color: var(--success-color);
 }
 .accessibility-label.orange {
-  background-color: orange;
+  background-color: var(--warning-color);
 }
 .accessibility-label.red {
-  background-color: red;
+  background-color: var(--error-color);
 }
 .accessibility-label.gray {
-  background-color: gray;
+  background-color: var(--border-color);
 }
 
 
 .image-container.border-green {
-  border-color: green;
+  border-color: var(--success-color);
 }
 .image-container.border-orange {
-  border-color: orange;
+  border-color: var(--warning-color);
 }
 .image-container.border-red {
-  border-color: red;
+  border-color: var(--error-color);
 }
 .image-container.border-gray {
-  border-color: gray;
+  border-color: var(--background-color);
 }

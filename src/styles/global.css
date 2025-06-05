@@ -119,7 +119,6 @@ a {
 }
 
 .go-back-link a {
-  font-family: "Roboto", sans-serif;
   text-decoration: none;
   margin-bottom: 1rem;
   border: 2px solid var(--border-color);

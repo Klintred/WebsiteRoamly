@@ -94,7 +94,7 @@ const PlaceDetailPage = () => {
   }, [placeDetails?.name]);
 
   const calculateAverageAnswers = (reviews) => {
-    const categories = ['general', 'parking', 'entrance', 'internalNavigation', 'sanitary'];
+    const categories = ['general', 'parking', 'entrance', 'internalNavigation', 'sanitary', 'staff'];
     const averages = {};
 
     categories.forEach(category => {
@@ -212,7 +212,7 @@ const PlaceDetailPage = () => {
             { key: 'staff', label: 'Staff support', question: 'staffAssistance' }
           ].map(({ key, label }) => {
             const overallScore = getOverallScore(averageAnswers[key]);
-          const borderColor = getLabelColor(overallScore);
+            const borderColor = getLabelColor(overallScore);
 
             return (
               <div
@@ -221,7 +221,7 @@ const PlaceDetailPage = () => {
                 onClick={() => setExpandedSection(expandedSection === key ? null : key)}
               >
                 <span className={`tag-indicator ${borderColor}`} />
-              <AccessibilityButton
+                <AccessibilityButton
                   feedbackSubject={label}
                   accessibilityScore={overallScore}
                   borderColor={borderColor}
@@ -230,9 +230,9 @@ const PlaceDetailPage = () => {
                   <ul className="details-list">
                     {Object.entries(averageAnswers[key] || {}).map(([question, counts]) => (
                       <li key={question}>
-                      <strong>{question}:</strong>{" "}
-                      {Object.entries(counts).map(([answer, count]) => `${answer} (${count})`).join(", ")}
-                    </li>
+                        <strong>{question}:</strong>{" "}
+                        {Object.entries(counts).map(([answer, count]) => `${answer} (${count})`).join(", ")}
+                      </li>
                     ))}
                   </ul>
                 )}

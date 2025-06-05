@@ -94,7 +94,25 @@
 .tag-btn:hover {
   background-color: #e0e0e0;
 }
+.accessibility-green .tag-indicator,
+.tag-green .tag-indicator {
+  background-color: var(--success-color);
+}
 
+.accessibility-orange .tag-indicator,
+.tag-orange .tag-indicator {
+  background-color: var(--warning-color);
+}
+
+.accessibility-red .tag-indicator,
+.tag-red .tag-indicator {
+  background-color: var(--error-color);
+}
+
+.accessibility-gray .tag-indicator,
+.tag-gray .tag-indicator {
+  background-color: var(--border-color);
+}
 .tag-indicator {
   width: 0.7em;
   height: 0.7em;
@@ -106,33 +124,18 @@
   border-color: var(--success-color);
 }
 
-.tag-green .tag-indicator {
-  color: var(--success-color);
-}
-
 .tag-orange {
   border-color: var(--warning-color);
-}
-
-.tag-orange .tag-indicator {
-  color: var(--warning-color);
 }
 
 .tag-red {
   border-color: var(--error-color);
 }
 
-.tag-red .tag-indicator {
-  color: var(--error-color);
-}
-
 .tag-gray {
   border-color: var(--border-color);
 }
 
-.tag-gray .tag-indicator {
-  color: var(--border-color);
-}
 
 .tag-selected {
   background-color: #e0e0e0;

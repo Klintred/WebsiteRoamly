@@ -160,7 +160,6 @@ h2 {
 }
 
 .info-value-bold {
-  font-family: "Roboto", sans-serif;
   font-size: 20px;
   font-weight: bold;
   color: var(--text-color);
@@ -172,7 +171,6 @@ h2 {
 }
 
 .section-heading {
-  font-family: "San Francisco", "AcuminPro", sans-serif;
   font-size: 26px;
   font-weight: 700;
   color: var(--primary-color);
@@ -196,7 +194,6 @@ h2 {
   border-radius: 20px;
   padding: 32px 24px;
   text-align: left;
-  font-family: "San Francisco", "Roboto", sans-serif;
   color: var(--text-color);
   box-shadow: var(--card-shadow, 0 4px 14px rgba(0, 0, 0, 0.05));
   transition: transform 0.2s ease, box-shadow 0.3s ease;
