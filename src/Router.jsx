@@ -31,6 +31,7 @@ import SanitaryReviewPage from './pages/SanitaryReviewPage';
 import OverviewReviewsPage from './pages/OverviewReviewsPage';
 import StaffReviewPage from "./pages/StaffReviewPage";
 import ThankYouPage from "./pages/ThankYouPage";
+import FeatureDetailPage from "./pages/FeatureDetailPage";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -64,6 +65,7 @@ const AppLayout = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/set-new-password" element={<SetNewPassword />} />
         <Route path="/review" element={<AccessibilityFeedback />} />
+        <Route path="/hotels/:id/feature/:feature" element={<FeatureDetailPage />} />
 
         <Route
           path="/"

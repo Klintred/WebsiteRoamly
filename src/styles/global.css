@@ -27,7 +27,7 @@ body,
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "AcuminPro", sans-serif;
+  font-family: "AcuminPro";
   color: var(--text-color);
   background-color: var(--background-color);
   overflow-x: hidden;
@@ -37,20 +37,20 @@ body,
 
 @font-face {
   font-family: "AcuminPro";
-  src: url("../assets/fonts/AcuminPro/Acumin-Regular.otf");
+  src: url("/assets/fonts/AcuminPro/Acumin-Regular.otf");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: "AcuminPro";
-  src: url("../assets/fonts/AcuminPro/Acumin-Bold.otf");
+  src: url("/assets/fonts/AcuminPro/Acumin-Bold.otf");
   font-weight: 700;
   font-style: normal;
 }
 
 h1 {
-  font-family: "AcuminPro", sans-serif;
+  font-family: "AcuminPro";
   font-size: 1.75rem;
   font-weight: 700;
   line-height: 1.2;
@@ -60,14 +60,14 @@ h1 {
 }
 
 h2 {
-  font-family: "AcuminPro", sans-serif;
+  font-family: "AcuminPro";
   font-size: 1.25rem;
   font-weight: 400;
   margin-bottom: 0.5rem;
 }
 
 p {
-  font-family: "AcuminPro", sans-serif;
+  font-family: "AcuminPro";
   font-size: 1rem;
   font-weight: 400;
   margin: 0;

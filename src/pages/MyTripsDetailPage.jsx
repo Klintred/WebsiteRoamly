@@ -141,7 +141,7 @@ const MyTripsDetailPage = () => {
   const getPhotoUrl = (place) => {
     if (place.photo) return place.photo;
     if (place.photo_reference && apiKey) {
-      return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${place.photo_reference}&key=${apiKey}`;
+      return `https://maps.googleapis.com/maps/api/hotels/photo?maxwidth=400&photo_reference=${place.photo_reference}&key=${apiKey}`;
     }
     return "https://via.placeholder.com/100x100?text=No+Image";
   };

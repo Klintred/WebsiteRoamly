@@ -1,6 +1,7 @@
 import "./Buttons.css";
+import { Link } from "react-router-dom";
 
-const AccessibilityButton = ({ feedbackSubject, accessibilityScore = "No score found", borderColor, className = "" }) => {
+const AccessibilityButton = ({ feedbackSubject, accessibilityScore = "No score found", borderColor, className = "", to }) => {
   const buttonClass = `btn accessibility-btn accessibility-${borderColor} ${className}`.trim();
   const regularClass = `btn link ${className}`.trim();
   const accessibilityText = `accessibility-text ${className}`.trim();
@@ -18,9 +19,11 @@ const AccessibilityButton = ({ feedbackSubject, accessibilityScore = "No score f
           </div>
         </div>
       </div>
-      <button className={regularClass}>
-        See details
-      </button>
+      {to && (
+        <Link to={to} className="btn link">
+          See details
+        </Link>
+      )}
     </div>
 
 

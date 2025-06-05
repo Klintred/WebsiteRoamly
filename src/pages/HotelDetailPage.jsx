@@ -37,7 +37,7 @@ const PlaceDetailPage = () => {
     const fetchPlaceById = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${API_BASE_URL}/api/place/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/hotels/${id}`);
         const data = await response.json();
         setPlaceDetails(data);
 
@@ -225,6 +225,8 @@ const PlaceDetailPage = () => {
                   feedbackSubject={label}
                   accessibilityScore={overallScore}
                   borderColor={borderColor}
+                  to={`/hotels/${id}/feature/${key}?name=${encodeURIComponent(placeDetails.name)}&score=${encodeURIComponent(overallScore)}`}
+
                 />
                 {expandedSection === key && (
                   <ul className="details-list">
