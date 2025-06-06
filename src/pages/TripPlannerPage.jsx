@@ -261,15 +261,13 @@ placeholder="Add an activity (e.g. hiking, museum), then press enter, comma, or 
               onKeyDown={handleAddActivity}
               className="planner-input"
             />
-            <p className="input-helper-text">
-  Press <strong>Enter</strong> or click <strong>Add</strong> to confirm an activity.
-</p>
+    
           </div>
 
           {activities.length > 0 && (
             <div className="selected-tags">
               {activities.map((activity) => (
-                <span key={activity} className="tag-chip">
+                <span key={activity} className="filter-button ">
                   {activity}
                   <button onClick={() => removeActivity(activity)}>&times;</button>
                 </span>
