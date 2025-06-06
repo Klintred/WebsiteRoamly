@@ -111,9 +111,9 @@ const FeatureDetailPage = () => {
     return (
         <div className="feature-detail-page">
             <div className="container">
-                  <div className="go-back-link">
-                          <Link  to={`/hotels/${id}`}>Go back to place</Link>
-                        </div>
+                <div className="go-back-link">
+                    <Link to={`/hotels/${id}`}>Go back to place</Link>
+                </div>
                 <h1>Reviews for {placeName}</h1>
 
                 <AccessibilityButton
@@ -140,45 +140,53 @@ const FeatureDetailPage = () => {
                     ))}
                 </div>
                 <div className="line"></div>
-                <div className="flex-row">
-                    <div className="container-small">
-                    <h2>User reviews</h2>
-                    {reviews.filter(r => r.textReview).length === 0 ? (
-                        <p>No reviews yet.</p>
-                    ) : (
-                        reviews
-                            .filter(r => r.textReview)
-                            .map((r, idx) => {
-                                const section = r[feature];
-                                const score = getOverallScore(section);
-                                return (
-                                    <div key={idx} className="review-block">
-                                        <div className="flex-row">
-                                            <div className="flex-column">
-                                                <img
-                                                    src={r.profileImage || "/assets/images/avatar.jpg"}
-                                                    alt={r.username || "User"}
-                                                    className="profile-image-reviews"
-                                                />
-                                                <div className="flex-row">
-                                                    <p><strong>{r.username || "Anonymous"}</strong> <span> {new Date(r.createdAt).toLocaleDateString()}</span></p>
-                                                    <p className="user-score">
-                                                        <span className={`tag-indicator ${getLabelColor(score)}`} style={{ marginRight: "8px" }}></span>
-                                                        {score}
-                                                    </p>
+                <div className="container-small">
+                    <div className="flex-row">
+                        <h2
+                            style={
+                                reviews.filter(r => r.textReview).length === 0
+                                    ? { textAlign: "center", width: "100%" }
+                                    : undefined
+                            }
+                        >
+                            User reviews
+                        </h2>
+                        {reviews.filter(r => r.textReview).length === 0 ? (
+                            <p style={{ textAlign: "center", width: "100%" }}>No reviews yet.</p>
+                        ) : (
+                            reviews
+                                .filter(r => r.textReview)
+                                .map((r, idx) => {
+                                    const section = r[feature];
+                                    const score = getOverallScore(section);
+                                    return (
+                                        <div key={idx} className="review-block">
+                                            <div className="flex-row">
+                                                <div className="flex-column">
+                                                    <img
+                                                        src={r.profileImage || "/assets/images/avatar.jpg"}
+                                                        alt={r.username || "User"}
+                                                        className="profile-image-reviews"
+                                                    />
+                                                    <div className="flex-row">
+                                                        <p><strong>{r.username || "Anonymous"}</strong> <span> {new Date(r.createdAt).toLocaleDateString()}</span></p>
+                                                        <p className="user-score">
+                                                            <span className={`tag-indicator ${getLabelColor(score)}`} style={{ marginRight: "8px" }}></span>
+                                                            {score}
+                                                        </p>
+                                                    </div>
                                                 </div>
+                                                <div>
+                                                    <p>{r.textReview}</p>
+                                                </div>
+                                                <div className="line"></div>
                                             </div>
-                                            <div>
-                                                <p>{r.textReview}</p>
-                                            </div>
-                                            <div className="line"></div>
                                         </div>
-                                    </div>
-                                );
-                            })
-                    )}
+                                    );
+                                })
+                        )}
+                    </div>
                 </div>
-</div>
             </div>
         </div>
     );

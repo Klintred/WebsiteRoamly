@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Tag from '../components/Buttons/Tag';
 import PrimaryButton from '../components/Buttons/PrimaryButton';
 import "../styles/reviews.css";
+import { questionLabelMap } from "../config/questionLabels";
 
 const ParkingReviewPage = () => {
   const { id } = useParams();
@@ -10,7 +11,7 @@ const ParkingReviewPage = () => {
   const [responses, setResponses] = useState({
     designatedSpot: "",
     sizeRating: "",
-    entranceAccessible: "",
+    entranceAccessibleParking: "",
     closeToEntrance: "",
   });
 
@@ -23,7 +24,7 @@ const ParkingReviewPage = () => {
     const requiredFields = [
       "designatedSpot",
       "sizeRating",
-      "entranceAccessible",
+      "entranceAccessibleParking",
       "closeToEntrance",
     ];
     const unanswered = requiredFields.filter(field => !responses[field]);
@@ -60,30 +61,23 @@ const ParkingReviewPage = () => {
         <h1>Parking facilities</h1>
 
         <div className="write-review-form-group">
-          <QuestionGroup label="Was there a designated parking spot for people with disabilities?" field="designatedSpot" required>
+          <QuestionGroup label={questionLabelMap.designatedSpot} field="designatedSpot" required>
             <Tag text="Yes" color="green" isSelected={responses.designatedSpot === "Yes"} onClick={(val) => handleTagClick("designatedSpot", val)} />
             <Tag text="No" color="red" isSelected={responses.designatedSpot === "No"} onClick={(val) => handleTagClick("designatedSpot", val)} />
           </QuestionGroup>
-
-          <QuestionGroup label="How would you rate the size of the parking space?" field="sizeRating" required>
+          <QuestionGroup label={questionLabelMap.sizeRating} field="sizeRating" required>
             <Tag text="Small" color="red" isSelected={responses.sizeRating === "Small"} onClick={(val) => handleTagClick("sizeRating", val)} />
             <Tag text="Medium" color="orange" isSelected={responses.sizeRating === "Medium"} onClick={(val) => handleTagClick("sizeRating", val)} />
             <Tag text="Large" color="green" isSelected={responses.sizeRating === "Large"} onClick={(val) => handleTagClick("sizeRating", val)} />
           </QuestionGroup>
-
-          <QuestionGroup label="Was the entrance easily accessible?" field="entranceAccessible" required>
-            <Tag text="Yes" color="green" isSelected={responses.entranceAccessible === "Yes"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
-            <Tag text="No" color="red" isSelected={responses.entranceAccessible === "No"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
+          <QuestionGroup label={questionLabelMap.entranceAccessibleParking} field="entranceAccessibleParking" required>
+            <Tag text="Yes" color="green" isSelected={responses.entranceAccessibleParking === "Yes"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
+            <Tag text="No" color="red" isSelected={responses.entranceAccessibleParking === "No"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
           </QuestionGroup>
-
-          <QuestionGroup label="Was the parking area close to the entrance?" field="closeToEntrance" required>
+          <QuestionGroup label={questionLabelMap.closeToEntrance} field="closeToEntrance" required>
             <Tag text="Yes" color="green" isSelected={responses.closeToEntrance === "Yes"} onClick={(val) => handleTagClick("closeToEntrance", val)} />
             <Tag text="No" color="red" isSelected={responses.closeToEntrance === "No"} onClick={(val) => handleTagClick("closeToEntrance", val)} />
           </QuestionGroup>
-
-
-
-
         </div>
 
         <PrimaryButton text="Submit" onClick={handleSubmit} />

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Tag from '../components/Buttons/Tag';
 import PrimaryButton from '../components/Buttons/PrimaryButton';
 import "../styles/reviews.css";
+import { questionLabelMap } from "../config/questionLabels";
 
 const EntranceReviewPage = () => {
     const { id } = useParams();
@@ -60,23 +61,20 @@ const EntranceReviewPage = () => {
                 <h1>Entrance</h1>
 
                 <div className="write-review-form-group">
-                    <QuestionGroup label="Was the entrance door wide enough for a weelchair? min. 85 cm?" field="doorWidthOK" required>
+                    <QuestionGroup label={questionLabelMap.doorWidthOK} field="doorWidthOK" required>
                         <Tag text="Yes" color="green" isSelected={responses.doorWidthOK === "Yes"} onClick={(val) => handleTagClick("doorWidthOK", val)} />
                         <Tag text="No" color="red" isSelected={responses.doorWidthOK === "No"} onClick={(val) => handleTagClick("doorWidthOK", val)} />
                     </QuestionGroup>
-
-                    <QuestionGroup label="Were there any steps or tresholds at the entrance?" field="stepsOrThresholds" required>
+                    <QuestionGroup label={questionLabelMap.stepsOrThresholds} field="stepsOrThresholds" required>
                         <Tag text="No steps/tresholds" color="red" isSelected={responses.stepsOrThresholds === "No steps/tresholds"} onClick={(val) => handleTagClick("stepsOrThresholds", val)} />
                         <Tag text="Small treshold (less than 2 cm)" color="orange" isSelected={responses.stepsOrThresholds === "Small treshold (less than 2 cm)"} onClick={(val) => handleTagClick("stepsOrThresholds", val)} />
                         <Tag text="Steps present" color="green" isSelected={responses.stepsOrThresholds === "Steps present"} onClick={(val) => handleTagClick("stepsOrThresholds", val)} />
                     </QuestionGroup>
-
-                    <QuestionGroup label="If steps, was a ramp available?" field="rampAvailable" required>
+                    <QuestionGroup label={questionLabelMap.rampAvailable} field="rampAvailable" required>
                         <Tag text="Yes" color="green" isSelected={responses.rampAvailable === "Yes"} onClick={(val) => handleTagClick("rampAvailable", val)} />
                         <Tag text="No" color="red" isSelected={responses.rampAvailable === "No"} onClick={(val) => handleTagClick("rampAvailable", val)} />
                     </QuestionGroup>
-
-                    <QuestionGroup label="Was there an automatic or easy-to-open door?" field="doorType" required>
+                    <QuestionGroup label={questionLabelMap.doorType} field="doorType" required>
                         <Tag text="Automatic door" color="green" isSelected={responses.doorType === "Automatic door"} onClick={(val) => handleTagClick("doorType", val)} />
                         <Tag text="Manual door but easy to open" color="orange" isSelected={responses.doorType === "Manual door but easy to open"} onClick={(val) => handleTagClick("doorType", val)} />
                         <Tag text="Manual door difficult to open" color="red" isSelected={responses.doorType === "Manual door difficult to open"} onClick={(val) => handleTagClick("doorType", val)} />
