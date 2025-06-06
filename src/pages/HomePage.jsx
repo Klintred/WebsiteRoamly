@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import '../styles/AddPopup.css';g
+import '../styles/AddPopup.css';
 
 const API_BASE_URL = 'https://roamly-api.onrender.com';
 
