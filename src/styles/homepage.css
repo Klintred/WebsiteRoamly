@@ -60,22 +60,26 @@
   cursor: not-allowed;
 }
 
-/* Add To Trip button on PlaceCard */
 .add-to-trip-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 0.8rem;
-  border-radius: 4px;
-  margin-top: 0.5rem;
+  background-color: white;
+  font-weight: 800;
+  width: 100%;
+  color: var(--primary-color);
+  border: 3px solid var(--primary-color);
+  padding: 15px 100px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.9rem;
-  width: 90%;
+  transition: background-color 0.3s, box-shadow 0.3s ease-in-out;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 .add-to-trip-button:hover {
   background-color: #0056b3;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  color: white;
 }
+
 
 .home-page h2 {
   font-weight: bold;
@@ -172,9 +176,10 @@
 
 .button-container {
   width: 100%;
-  padding: 10px 0px;
+  padding: 10px 10px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;  /* Change from row to column */
+  gap: 10px;               /* Add gap between buttons */
 }
 
 .view-details-button {
@@ -182,7 +187,7 @@
   font-weight: 700;
   width: 100%;
   color: white;
-  border: none;
+  border: 3px solid var(--primary-color);
   padding: 15px 100px;
   border-radius: 8px;
   cursor: pointer;
@@ -194,6 +199,7 @@
 .view-details-button:hover {
   background-color: #0056b3;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  border: 3px solid #0056b3;
 }
 
 .place-card:hover {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import '../styles/AddPopup.css';g
 
 const API_BASE_URL = 'https://roamly-api.onrender.com';
 
@@ -314,7 +315,7 @@ const HomePage = () => {
         setShowModal={setShowModal}
       />
 
-      {/* Add to Trip Modal */}
+      
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -448,23 +449,23 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
         </div>
       </div>
       <div className="button-container">
-        {placeId ? (
-          <Link to={`/${detailType}/${placeId}`}>
-            <button className="view-details-button">View details</button>
-          </Link>
-        ) : (
-          <button className="view-details-button" disabled>No details available</button>
-        )}
-        <button 
-          className="add-to-trip-button"
-          onClick={() => {
-            setSelectedPlace(place);
-            setShowModal(true);
-          }}
-        >
-          Add to Trip
-        </button>
-      </div>
+  {placeId ? (
+    <Link to={`/${detailType}/${placeId}`}>
+      <button className="view-details-button">View details</button>
+    </Link>
+  ) : (
+    <button className="view-details-button" disabled>No details available</button>
+  )}
+  <button 
+    className="add-to-trip-button"
+    onClick={() => {
+      setSelectedPlace(place);
+      setShowModal(true);
+    }}
+  >
+    Add to Trip
+  </button>
+</div>
     </div>
   );
 };
