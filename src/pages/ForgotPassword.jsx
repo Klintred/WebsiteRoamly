@@ -51,7 +51,7 @@ const ForgotPassword = () => {
   return (
     <div className="login-page-wrapper">
       <div className="login-image-wrapper">
-        <img src="/assets/images/loginImage.png" alt="Forgot password background" />
+        <img src="./assets/images/loginImage.png" alt="Forgot password background" />
       </div>
 
       <div className="login-form-wrapper">

@@ -118,6 +118,7 @@
   height: 0.7em;
   border-radius: 9999px;
   background-color: currentColor;
+  display: inline-flex;
 }
 
 .tag-green {
@@ -135,7 +136,21 @@
 .tag-gray {
   border-color: var(--border-color);
 }
+.tag-indicator.green {
+  background-color: var(--success-color);
+}
 
+.tag-indicator.orange {
+  background-color: var(--warning-color);
+}
+
+.tag-indicator.red {
+  background-color: var(--error-color);
+}
+
+.tag-indicator.gray {
+  background-color: var(--border-color);
+}
 
 .tag-selected {
   background-color: #e0e0e0;
@@ -205,6 +220,7 @@
 .link {
   width: fit-content;
   border-color: black;
+  color: black;
 }
 
 .accessibility-score {

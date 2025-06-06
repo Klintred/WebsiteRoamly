@@ -37,7 +37,34 @@ const FeatureDetailPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const placeNameFromQuery = queryParams.get("name");
     const scoreFromQuery = queryParams.get("score");
+    const getOverallScore = (sectionData) => {
+        if (!sectionData) return "Geen score gevonden";
 
+        const scoreCounts = { "Fully accessible": 0, "Adjustments needed": 0, "Not accessible": 0 };
+
+        Object.values(sectionData).forEach(answer => {
+            let mappedAnswer;
+            if (answer.toLowerCase() === "yes") {
+                mappedAnswer = "Fully accessible";
+            } else if (answer.toLowerCase() === "partial" || answer.toLowerCase() === "sometimes") {
+                mappedAnswer = "Adjustments needed";
+            } else {
+                mappedAnswer = "Not accessible";
+            }
+            scoreCounts[mappedAnswer]++;
+        });
+
+        let highestScore = "Geen score gevonden";
+        let maxCount = 0;
+        Object.entries(scoreCounts).forEach(([label, count]) => {
+            if (count > maxCount) {
+                maxCount = count;
+                highestScore = label;
+            }
+        });
+
+        return highestScore;
+    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -84,7 +111,9 @@ const FeatureDetailPage = () => {
     return (
         <div className="feature-detail-page">
             <div className="container">
-                <Link to={`/hotels/${id}`}>← Back to place</Link>
+                  <div className="go-back-link">
+                          <Link  to={`/hotels/${id}`}>Go back to place</Link>
+                        </div>
                 <h1>Reviews for {placeName}</h1>
 
                 <AccessibilityButton
@@ -111,18 +140,45 @@ const FeatureDetailPage = () => {
                     ))}
                 </div>
                 <div className="line"></div>
-                <h2>User reviews</h2>
-                {reviews.filter(r => r.textReview).map((r, idx) => (
-                    <div key={idx} className="review-block">
-                        <img
-                            src={r.profileImage || "/assets/images/default-avatar.png"}
-                            alt={r.username || "User"}
-                            className="profile-image-reviews"
-                        />
-                        <p><strong>{r.username || "Anonymous"}:</strong> {r.textReview}</p>
-                        <hr />
-                    </div>
-                ))}
+                <div className="flex-row">
+                    <div className="container-small">
+                    <h2>User reviews</h2>
+                    {reviews.filter(r => r.textReview).length === 0 ? (
+                        <p>No reviews yet.</p>
+                    ) : (
+                        reviews
+                            .filter(r => r.textReview)
+                            .map((r, idx) => {
+                                const section = r[feature];
+                                const score = getOverallScore(section);
+                                return (
+                                    <div key={idx} className="review-block">
+                                        <div className="flex-row">
+                                            <div className="flex-column">
+                                                <img
+                                                    src={r.profileImage || "/assets/images/avatar.jpg"}
+                                                    alt={r.username || "User"}
+                                                    className="profile-image-reviews"
+                                                />
+                                                <div className="flex-row">
+                                                    <p><strong>{r.username || "Anonymous"}</strong> <span> {new Date(r.createdAt).toLocaleDateString()}</span></p>
+                                                    <p className="user-score">
+                                                        <span className={`tag-indicator ${getLabelColor(score)}`} style={{ marginRight: "8px" }}></span>
+                                                        {score}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p>{r.textReview}</p>
+                                            </div>
+                                            <div className="line"></div>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                    )}
+                </div>
+</div>
             </div>
         </div>
     );
