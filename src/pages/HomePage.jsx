@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import '../styles/AddPopup.css';
+import Popup from '../components/cards/Popup'; // ✅ NEW
 
 const API_BASE_URL = 'https://roamly-api.onrender.com';
 
@@ -315,75 +315,38 @@ const HomePage = () => {
         setShowModal={setShowModal}
       />
 
-      
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <button className="close-button" onClick={() => setShowModal(false)}>X</button>
-            <h2>Add "{selectedPlace?.name}" to a Trip</h2>
-            <div>
-              <label>Select Trip:</label>
-              <select 
-                value={selectedTripId}
-                onChange={(e) => setSelectedTripId(e.target.value)}
-              >
-                <option value="">Select a trip</option>
-                {userTrips.map(trip => (
-                  <option key={trip._id} value={trip._id}>
-                    {trip.TripName}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {selectedTripId && (
-              <>
-                <label>Select Day:</label>
-                <select
-                  value={selectedDayIndex}
-                  onChange={(e) => setSelectedDayIndex(Number(e.target.value))}
-                >
-                  {(() => {
-                    const trip = userTrips.find(t => t._id === selectedTripId);
-                    const itineraryLength = trip ? (typeof trip.Plan === "string" ? JSON.parse(trip.Plan).itinerary.length : trip.Plan.itinerary.length) : 0;
-                    return [...Array(itineraryLength)].map((_, index) => (
-                      <option key={index} value={index}>
-                        Day {index + 1}
-                      </option>
-                    ));
-                  })()}
-                </select>
-              </>
-            )}
-            <button 
-              className="confirm-button"
-              onClick={async () => {
-                try {
-                  const token = localStorage.getItem("token");
-                  await fetch(`${API_BASE_URL}/api/v1/trips/add-activity`, {
-                    method: "PATCH",
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization: `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                      tripId: selectedTripId,
-                      dayIndex: selectedDayIndex,
-                      activity: selectedPlace.name
-                    })
-                  });
-                  alert(`Added "${selectedPlace.name}" to the trip!`);
-                  setShowModal(false);
-                } catch (error) {
-                  alert("Failed to add activity. Please try again.");
-                }
-              }}
-              disabled={!selectedTripId}
-            >
-              Add Activity
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Popup Component */}
+      <Popup
+        showModal={showModal}
+        selectedPlace={selectedPlace}
+        userTrips={userTrips}
+        selectedTripId={selectedTripId}
+        setSelectedTripId={setSelectedTripId}
+        selectedDayIndex={selectedDayIndex}
+        setSelectedDayIndex={setSelectedDayIndex}
+        handleAddActivityToTrip={async () => {
+          try {
+            const token = localStorage.getItem("token");
+            await fetch(`${API_BASE_URL}/api/v1/trips/add-activity`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+              },
+              body: JSON.stringify({
+                tripId: selectedTripId,
+                dayIndex: selectedDayIndex,
+                activity: selectedPlace.name
+              })
+            });
+            alert(`Added "${selectedPlace.name}" to the trip!`);
+            setShowModal(false);
+          } catch (error) {
+            alert("Failed to add activity. Please try again.");
+          }
+        }}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };
@@ -449,23 +412,23 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
         </div>
       </div>
       <div className="button-container">
-  {placeId ? (
-    <Link to={`/${detailType}/${placeId}`}>
-      <button className="view-details-button">View details</button>
-    </Link>
-  ) : (
-    <button className="view-details-button" disabled>No details available</button>
-  )}
-  <button 
-    className="add-to-trip-button"
-    onClick={() => {
-      setSelectedPlace(place);
-      setShowModal(true);
-    }}
-  >
-    Add to Trip
-  </button>
-</div>
+        {placeId ? (
+          <Link to={`/${detailType}/${placeId}`}>
+            <button className="view-details-button">View details</button>
+          </Link>
+        ) : (
+          <button className="view-details-button" disabled>No details available</button>
+        )}
+        <button
+          className="add-to-trip-button"
+          onClick={() => {
+            setSelectedPlace(place);
+            setShowModal(true);
+          }}
+        >
+          Add to Trip
+        </button>
+      </div>
     </div>
   );
 };
