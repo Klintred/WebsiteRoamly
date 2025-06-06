@@ -70,13 +70,15 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, box-shadow 0.3s ease-in-out;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+  
   text-align: center;
 }
 
 .add-to-trip-button:hover {
   background-color: #0056b3;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  border: 3px solid #0056b3;
+
   color: white;
 }
 
@@ -192,7 +194,6 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, box-shadow 0.3s ease-in-out;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
