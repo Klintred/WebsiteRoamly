@@ -16,6 +16,10 @@
   max-width: 400px;
 }
 
+.btn:hover {
+  opacity: 0.8;
+}
+
 .button-container-wrapper{
   display: flex;
   justify-content: center;

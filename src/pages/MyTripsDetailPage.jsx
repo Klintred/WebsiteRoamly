@@ -176,16 +176,81 @@ const MyTripsDetailPage = () => {
     }
   };
 
-  const confirmDelete = (activity) => {
-    setActivityToDelete(activity);
+  const confirmDelete = (activity, type = "activity") => {
+    setActivityToDelete({ name: activity, type });
     setShowModal(true);
   };
 
-  const handleDeleteConfirmed = () => {
-    handleRemoveActivity(activityToDelete);
-    setShowModal(false);
-    setActivityToDelete(null);
+  const handleDeleteConfirmed = async () => {
+    const { name, type } = activityToDelete;
+    try {
+      const token = localStorage.getItem("token");
+
+      if (type === "activity") {
+        const response = await fetch(`${API_BASE_URL}/v1/trips/remove-activity`, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            tripId: trip._id,
+            dayIndex: selectedDay,
+            activity: name,
+          }),
+        });
+
+        if (!response.ok) throw new Error("Failed to remove activity");
+
+        const updatedItinerary = [...trip.parsedPlan.itinerary];
+        updatedItinerary[selectedDay].activities = updatedItinerary[selectedDay].activities.filter(
+          (a) => a !== name
+        );
+
+        setTrip((prev) => ({
+          ...prev,
+          parsedPlan: {
+            ...prev.parsedPlan,
+            itinerary: updatedItinerary,
+          },
+        }));
+      }
+
+      if (type === "restaurant") {
+        const updatedItinerary = [...trip.parsedPlan.itinerary];
+        updatedItinerary[selectedDay].restaurants = updatedItinerary[selectedDay].restaurants.filter(
+          (r) => r !== name
+        );
+
+        setTrip((prev) => ({
+          ...prev,
+          parsedPlan: {
+            ...prev.parsedPlan,
+            itinerary: updatedItinerary,
+          },
+        }));
+      }
+
+      if (type === "hotel") {
+        const updatedPlan = {
+          ...trip.parsedPlan,
+          hotel: null,
+        };
+
+        setTrip((prev) => ({
+          ...prev,
+          parsedPlan: updatedPlan,
+        }));
+      }
+
+      setShowModal(false);
+      setActivityToDelete(null);
+    } catch (err) {
+      console.error("Failed to remove item:", err.message);
+      alert("Failed to remove item. Please try again.");
+    }
   };
+
 
   const getPlaceDetails = async (placeName) => {
     if (!places[placeName]) {
@@ -274,9 +339,9 @@ const MyTripsDetailPage = () => {
 
   return (
     <div className="container">
-      <div className="trip-card">
+      <div className="trip-card-detailpage">
         <div className="trip-card-header">
-          <div className="trip-details">
+          <div className="trip-details-detailpage">
             <h1>{trip.TripName}</h1>
             <h2>{trip.Place}</h2>
             <p>
@@ -307,7 +372,7 @@ const MyTripsDetailPage = () => {
               <div className="activity-item">
                 {renderPlaceCard(trip.parsedPlan.hotel)}
                 <button
-                  onClick={() => confirmDelete(trip.parsedPlan.hotel)}
+                  onClick={() => confirmDelete(trip.parsedPlan.hotel, "hotel")}
                   className="delete-button"
                 >
                   Delete
@@ -324,11 +389,12 @@ const MyTripsDetailPage = () => {
                   <li key={idx} className="activity-item">
                     {renderPlaceCard(activity)}
                     <button
-                      onClick={() => confirmDelete(activity)}
+                      onClick={() => confirmDelete(activity, "activity")}
                       className="delete-button"
                     >
                       Delete
                     </button>
+
                   </li>
                 ))}
               </ul>
@@ -344,11 +410,12 @@ const MyTripsDetailPage = () => {
                     <li key={i} className="activity-item">
                       {renderPlaceCard(r)}
                       <button
-                        onClick={() => confirmDelete(r)}
+                        onClick={() => confirmDelete(r, "restaurant")}
                         className="delete-button"
                       >
                         Delete
                       </button>
+
                     </li>
                   ))}
                 </ul>
@@ -394,7 +461,7 @@ const MyTripsDetailPage = () => {
         {showModal && (
           <div className="modal-container">
             <div className="modal-content">
-              <h3>Are you sure you want to delete this activity?</h3>
+              <h1>Are you sure you want to delete this activity?</h1>
               <div className="modal-container-buttons">
                 <PrimaryButton text="Yes, continue" onClick={handleDeleteConfirmed} />
                 <PrimaryButton

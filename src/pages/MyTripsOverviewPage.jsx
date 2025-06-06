@@ -128,7 +128,7 @@ const MyTripsOverviewPage = () => {
             {showModal && (
                 <div className="modal-container">
                     <div className="modal-content">
-                        <h3>Are you sure you want to delete this trip?</h3>
+                        <h1>Are you sure you want to delete this trip?</h1>
                         <div className="modal-container-buttons">
                             <PrimaryButton
                                 text="Yes, delete"

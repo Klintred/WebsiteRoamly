@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Tag from '../components/Buttons/Tag';
 import PrimaryButton from '../components/Buttons/PrimaryButton';
 import "../styles/reviews.css";
+import { questionLabelMap } from "../config/questionLabels";
 
 const SanitaryReviewPage = () => {
     const { id } = useParams();
@@ -71,8 +72,8 @@ const SanitaryReviewPage = () => {
                         <Tag text="Not applicable" color="gray" isSelected={responses.accessibleRestroom === "Not applicable"} onClick={(val) => handleTagClick("accessibleRestroom", val)} />
                     </QuestionGroup>
                     <QuestionGroup label={questionLabelMap.doorWidthOKRestroom} field="doorWidthOKRestroom" required>
-                        <Tag text="Yes" color="green" isSelected={responses.doorWidthOKRestroom === "Yes"} onClick={(val) => handleTagClick("doorWidthOK", val)} />
-                        <Tag text="No" color="red" isSelected={responses.doorWidthOKRestroom === "No"} onClick={(val) => handleTagClick("doorWidthOK", val)} />
+                        <Tag text="Yes" color="green" isSelected={responses.doorWidthOKRestroom === "Yes"} onClick={(val) => handleTagClick("doorWidthOKRestroom", val)} />
+                        <Tag text="No" color="red" isSelected={responses.doorWidthOKRestroom === "No"} onClick={(val) => handleTagClick("doorWidthOKRestroom", val)} />
                     </QuestionGroup>
                     <QuestionGroup label={questionLabelMap.spaceToManeuver} field="spaceToManeuver" required>
                         <Tag text="Yes" color="green" isSelected={responses.spaceToManeuver === "Yes"} onClick={(val) => handleTagClick("spaceToManeuver", val)} />

@@ -71,8 +71,8 @@ const ParkingReviewPage = () => {
             <Tag text="Large" color="green" isSelected={responses.sizeRating === "Large"} onClick={(val) => handleTagClick("sizeRating", val)} />
           </QuestionGroup>
           <QuestionGroup label={questionLabelMap.entranceAccessibleParking} field="entranceAccessibleParking" required>
-            <Tag text="Yes" color="green" isSelected={responses.entranceAccessibleParking === "Yes"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
-            <Tag text="No" color="red" isSelected={responses.entranceAccessibleParking === "No"} onClick={(val) => handleTagClick("entranceAccessible", val)} />
+            <Tag text="Yes" color="green" isSelected={responses.entranceAccessibleParking === "Yes"} onClick={(val) => handleTagClick("entranceAccessibleParking", val)} />
+            <Tag text="No" color="red" isSelected={responses.entranceAccessibleParking === "No"} onClick={(val) => handleTagClick("entranceAccessibleParking", val)} />
           </QuestionGroup>
           <QuestionGroup label={questionLabelMap.closeToEntrance} field="closeToEntrance" required>
             <Tag text="Yes" color="green" isSelected={responses.closeToEntrance === "Yes"} onClick={(val) => handleTagClick("closeToEntrance", val)} />
