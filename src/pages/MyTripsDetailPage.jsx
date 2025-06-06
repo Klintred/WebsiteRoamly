@@ -28,15 +28,25 @@ const MyTripsDetailPage = () => {
   const [apiKey, setApiKey] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [activityToDelete, setActivityToDelete] = useState(null);
-
-  const confirmDelete = (activity) => {
-    setActivityToDelete(activity);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemType, setItemType] = useState("activity");
+  const confirmDelete = (item, type = "activity") => {
+    setItemToDelete(item);
+    setItemType(type);
     setShowModal(true);
   };
 
   const handleDeleteConfirmed = () => {
-    handleRemoveActivity(activityToDelete);
+    if (itemType === "activity") {
+      handleRemoveActivity(itemToDelete);
+    } else if (itemType === "restaurant") {
+      handleRemoveRestaurant(itemToDelete);
+    } else if (itemType === "hotel") {
+      handleRemoveHotel();
+    }
     setShowModal(false);
+    setItemToDelete(null);
+    setItemType("activity");
     setActivityToDelete(null);
   };
   useEffect(() => {
@@ -192,7 +202,65 @@ const MyTripsDetailPage = () => {
       alert("Failed to remove activity. Please try again.");
     }
   };
+  const handleRemoveRestaurant = async (restaurant) => {
+    try {
+      const token = localStorage.getItem("token");
 
+      const response = await fetch(`${API_BASE_URL}/v1/trips/remove-restaurant`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tripId: trip._id,
+          dayIndex: selectedDay,
+          restaurant,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to remove restaurant");
+
+      const updatedItinerary = [...trip.parsedPlan.itinerary];
+      updatedItinerary[selectedDay].restaurants = updatedItinerary[selectedDay].restaurants.filter(
+        (r) => r !== restaurant
+      );
+
+      setTrip((prev) => ({
+        ...prev,
+        parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
+      }));
+    } catch (err) {
+      console.error("Failed to remove restaurant:", err.message);
+      alert("Failed to remove restaurant.");
+    }
+  };
+
+  const handleRemoveHotel = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`${API_BASE_URL}/v1/trips/remove-hotel`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ tripId: trip._id }),
+      });
+
+      if (!response.ok) throw new Error("Failed to remove hotel");
+
+      const updatedPlan = { ...trip.parsedPlan, hotel: null };
+      setTrip((prev) => ({
+        ...prev,
+        parsedPlan: updatedPlan,
+      }));
+    } catch (err) {
+      console.error("Failed to remove hotel:", err.message);
+      alert("Failed to remove hotel.");
+    }
+  };
   const getPlaceDetails = async (placeName) => {
     if (!places[placeName]) {
       try {
@@ -299,7 +367,7 @@ const MyTripsDetailPage = () => {
                   <div className="activity-content">
                     <p>{trip.parsedPlan.hotel}</p>
                   </div>
-                  <button onClick={() => confirmDelete(trip.parsedPlan.hotel)} className="delete-button">
+                  <button onClick={() => confirmDelete(trip.parsedPlan.hotel, "hotel")} className="delete-button">
                     Delete
                   </button>
                 </div>
@@ -330,7 +398,7 @@ const MyTripsDetailPage = () => {
                           )}
                         </div>
                         <button
-                          onClick={() => confirmDelete(activity)}
+                          onClick={() => confirmDelete(activity, "activity")}
                           className="delete-button"
                         >
                           Delete
@@ -351,7 +419,7 @@ const MyTripsDetailPage = () => {
                   {itinerary[selectedDay].restaurants.map((r, i) => (
                     <li key={i} className="activity-item">
                       <div className="activity-content">{r}</div>
-                      <button onClick={() => confirmDelete(r)} className="delete-button">
+                      <button onClick={() => confirmDelete(r, "restaurant")} className="delete-button">
                         Delete
                       </button>
                     </li>
