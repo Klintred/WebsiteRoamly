@@ -7,7 +7,6 @@ const OverviewReviewsPage = () => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
 
-  // Haal userId op bij de gebruiker via de API
   useEffect(() => {
     const token = localStorage.getItem("token");
 

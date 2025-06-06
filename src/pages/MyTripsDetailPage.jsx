@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../styles/mytrips.css";
+import PrimaryButton from "../components/Buttons/PrimaryButton";
 
 const API_BASE_URL = "https://roamly-api.onrender.com/api";
 
@@ -25,7 +26,19 @@ const MyTripsDetailPage = () => {
   const [suggestedPlaces, setSuggestedPlaces] = useState([]);
   const [filterType, setFilterType] = useState("all");
   const [apiKey, setApiKey] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [activityToDelete, setActivityToDelete] = useState(null);
 
+  const confirmDelete = (activity) => {
+    setActivityToDelete(activity);
+    setShowModal(true);
+  };
+
+  const handleDeleteConfirmed = () => {
+    handleRemoveActivity(activityToDelete);
+    setShowModal(false);
+    setActivityToDelete(null);
+  };
   useEffect(() => {
     const fetchApiKey = async () => {
       try {
@@ -143,15 +156,41 @@ const MyTripsDetailPage = () => {
       alert("Failed to add activity. Please try again.");
     }
   };
-  const handleRemoveActivity = (activity) => {
-    const updatedItinerary = [...trip.parsedPlan.itinerary];
-    updatedItinerary[selectedDay].activities = updatedItinerary[selectedDay].activities.filter(
-      (a) => a !== activity
-    );
-    setTrip((prev) => ({
-      ...prev,
-      parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
-    }));
+  const handleRemoveActivity = async (activity) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`${API_BASE_URL}/v1/trips/remove-activity`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tripId: trip._id,
+          dayIndex: selectedDay,
+          activity,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to remove activity");
+      }
+
+      const updatedItinerary = [...trip.parsedPlan.itinerary];
+      updatedItinerary[selectedDay].activities = updatedItinerary[selectedDay].activities.filter(
+        (a) => a !== activity
+      );
+
+      setTrip((prev) => ({
+        ...prev,
+        parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
+      }));
+    } catch (err) {
+      console.error("Failed to remove activity:", err.message);
+      alert("Failed to remove activity. Please try again.");
+    }
   };
 
   const getPlaceDetails = async (placeName) => {
@@ -260,7 +299,7 @@ const MyTripsDetailPage = () => {
                   <div className="activity-content">
                     <p>{trip.parsedPlan.hotel}</p>
                   </div>
-                  <button onClick={() => handleRemoveActivity(trip.parsedPlan.hotel)} className="delete-button">
+                  <button onClick={() => confirmDelete(trip.parsedPlan.hotel)} className="delete-button">
                     Delete
                   </button>
                 </div>
@@ -291,7 +330,7 @@ const MyTripsDetailPage = () => {
                           )}
                         </div>
                         <button
-                          onClick={() => handleRemoveActivity(activity)}
+                          onClick={() => confirmDelete(activity)}
                           className="delete-button"
                         >
                           Delete
@@ -312,7 +351,7 @@ const MyTripsDetailPage = () => {
                   {itinerary[selectedDay].restaurants.map((r, i) => (
                     <li key={i} className="activity-item">
                       <div className="activity-content">{r}</div>
-                      <button onClick={() => handleRemoveActivity(r)} className="delete-button">
+                      <button onClick={() => confirmDelete(r)} className="delete-button">
                         Delete
                       </button>
                     </li>
@@ -377,12 +416,35 @@ const MyTripsDetailPage = () => {
                     </a>
                   </div>
                 </div>
+
               );
             })}
+
           </div>
+
         </div>
+        {showModal && (
+          <div className="modal-container">
+            <div className="modal-content">
+              <h3>Are you sure you want to delete this activity?</h3>
+              <div className="modal-container-buttons">
+                <PrimaryButton
+                  text="Yes, continue"
+                  onClick={() => handleDeleteConfirmed()}
+                />
+                <PrimaryButton
+                  text="No, I'm done"
+                  variant="secondary"
+                  onClick={() => setShowModal(false)}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
     </div>
+
   );
 };
 

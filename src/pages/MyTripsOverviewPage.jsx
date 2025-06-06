@@ -12,6 +12,9 @@ const MyTripsOverviewPage = () => {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [tripToDelete, setTripToDelete] = useState(null);
+
 
     useEffect(() => {
         const fetchTrips = async () => {
@@ -46,12 +49,17 @@ const MyTripsOverviewPage = () => {
         fetchTrips();
     }, []);
 
-    const handleDeleteTrip = async (tripId) => {
-        if (!window.confirm("Weet je zeker dat je deze trip wilt verwijderen?")) return;
+    const confirmDeleteTrip = (tripId) => {
+        setTripToDelete(tripId);
+        setShowModal(true);
+    };
+
+    const handleDeleteConfirmed = async () => {
+        if (!tripToDelete) return;
 
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`${API_BASE_URL}/v1/trips/${tripId}`, {
+            const response = await fetch(`${API_BASE_URL}/v1/trips/${tripToDelete}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -62,12 +70,16 @@ const MyTripsOverviewPage = () => {
                 throw new Error("Failed to delete trip");
             }
 
-            setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripId));
+            setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
         } catch (error) {
             console.error("Error deleting trip:", error.message);
             alert("Er is een fout opgetreden bij het verwijderen van de trip.");
+        } finally {
+            setShowModal(false);
+            setTripToDelete(null);
         }
     };
+
 
     return (
         <div className="container">
@@ -104,7 +116,7 @@ const MyTripsOverviewPage = () => {
                                     />
                                     <PrimaryButton
                                         text="Delete trip"
-                                        onClick={() => handleDeleteTrip(trip._id)}
+                                        onClick={() => confirmDeleteTrip(trip._id)}
                                         variant="secondary"
                                     />
                                 </div>
@@ -113,6 +125,25 @@ const MyTripsOverviewPage = () => {
                     );
                 })}
             </div>
+            {showModal && (
+                <div className="modal-container">
+                    <div className="modal-content">
+                        <h3>Are you sure you want to delete this trip?</h3>
+                        <div className="modal-container-buttons">
+                            <PrimaryButton
+                                text="Yes, delete"
+                                onClick={handleDeleteConfirmed}
+                            />
+                            <PrimaryButton
+                                text="Cancel"
+                                variant="secondary"
+                                onClick={() => setShowModal(false)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
