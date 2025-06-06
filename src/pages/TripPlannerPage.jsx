@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CustomCalendar from "../components/Forms/callender";
 import "../styles/TripPlannerPage.css";
 import PrimaryButton from '../components/Buttons/PrimaryButton';
-import LocationAutocomplete from "../components/Forms/LocationAutocomplete"; 
+import LocationAutocomplete from "../components/Forms/LocationAutocomplete";
 
 function TripPlannerPage() {
   const [tripName, setTripName] = useState("");
@@ -17,6 +17,7 @@ function TripPlannerPage() {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [tripCount, setTripCount] = useState(0);
+  const [showNoTripsModal, setShowNoTripsModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -49,17 +50,17 @@ function TripPlannerPage() {
     fetchUserData();
   }, []);
 
-const handleAddActivity = (e) => {
-  const keyPressed = e.key;
-  if ((keyPressed === "Enter" || keyPressed === "," || keyPressed === " ") && activityInput.trim()) {
-    e.preventDefault();
-    const newActivity = activityInput.trim().replace(/,$/, "");
-    if (!activities.includes(newActivity)) {
-      setActivities([...activities, newActivity]);
+  const handleAddActivity = (e) => {
+    const keyPressed = e.key;
+    if ((keyPressed === "Enter" || keyPressed === "," || keyPressed === " ") && activityInput.trim()) {
+      e.preventDefault();
+      const newActivity = activityInput.trim().replace(/,$/, "");
+      if (!activities.includes(newActivity)) {
+        setActivities([...activities, newActivity]);
+      }
+      setActivityInput("");
     }
-    setActivityInput("");
-  }
-};
+  };
 
   const removeActivity = (activity) => {
     setActivities(activities.filter((a) => a !== activity));
@@ -67,7 +68,7 @@ const handleAddActivity = (e) => {
 
   const handleSubmit = async () => {
     if (tripCount <= 0) {
-      alert("Je hebt geen trips meer over. Koop meer trips om verder te plannen!");
+      setShowNoTripsModal(true);
       return;
     }
 
@@ -162,11 +163,10 @@ Return only this JSON.`;
         console.warn("Trip saved but tripcount could not be updated on server.");
       }
 
-      // ✅ Update local tripCount
       setTripCount((prevCount) => {
         const updatedCount = Math.max(prevCount - 1, 0);
         if (updatedCount === 0) {
-          alert("Je hebt geen trips meer over. Koop meer trips om verder te plannen!");
+          setShowNoTripsModal(true);
         }
         return updatedCount;
       });
@@ -206,21 +206,21 @@ Return only this JSON.`;
 
           <div className="planner-input-container">
             <span className="material-symbols-outlined">flight_takeoff</span>
-           <LocationAutocomplete
-  placeholder="Where are you departing from?"
-  value={departureLocation}
-  onChange={setDepartureLocation}
-/>
+            <LocationAutocomplete
+              placeholder="Where are you departing from?"
+              value={departureLocation}
+              onChange={setDepartureLocation}
+            />
 
           </div>
 
           <div className="planner-input-container">
             <span className="material-symbols-outlined">place</span>
-           <LocationAutocomplete
-  placeholder="Where are you going?"
-  value={destination}
-  onChange={setDestination}
-/>
+            <LocationAutocomplete
+              placeholder="Where are you going?"
+              value={destination}
+              onChange={setDestination}
+            />
           </div>
 
           <div className="planner-section">
@@ -255,13 +255,13 @@ Return only this JSON.`;
             <span className="material-symbols-outlined">interests</span>
             <input
               type="text"
-placeholder="Add an activity (e.g. hiking, museum), then press enter, comma, or space"
+              placeholder="Add an activity (e.g. hiking, museum), then press enter, comma, or space"
               value={activityInput}
               onChange={(e) => setActivityInput(e.target.value)}
               onKeyDown={handleAddActivity}
               className="planner-input"
             />
-    
+
           </div>
 
           {activities.length > 0 && (
@@ -290,7 +290,30 @@ placeholder="Add an activity (e.g. hiking, museum), then press enter, comma, or 
           )}
         </div>
       </div>
+      {showNoTripsModal && (
+        <div className="modal-container">
+          <div className="modal-content">
+            <h3>Je hebt geen trips meer over</h3>
+            <p>Koop meer trips om verder te plannen!</p>
+            <div className="modal-container-buttons">
+              <PrimaryButton
+                text="OK"
+                onClick={() => setShowNoTripsModal(false)}
+              />
+              <PrimaryButton
+                text="Ga naar abonnement"
+                variant="secondary"
+                onClick={() => {
+                  setShowNoTripsModal(false);
+                  navigate("/subscription"); // Replace with your actual route
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+
   );
 }
 

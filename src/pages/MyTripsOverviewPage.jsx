@@ -5,34 +5,16 @@ import PrimaryButton from "../components/Buttons/PrimaryButton";
 
 const API_BASE_URL = "https://roamly-api.onrender.com/api";
 
-const fetchPlaceDetails = async (placeName, location = "", radius = 50000) => {
-    const params = new URLSearchParams({ query: placeName, radius });
-    if (location) params.append("location", location);
-
-    const url = `${API_BASE_URL}/places?${params.toString()}`;
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Failed to fetch place details");
-        const data = await response.json();
-        return data || [];
-    } catch (err) {
-        console.error("Roamly API failed:", err.message);
-        throw err;
-    }
-};
-
 const MyTripsOverviewPage = () => {
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [places, setPlaces] = useState({});
-    const [suggestedPlacesCache, setSuggestedPlacesCache] = useState({});
-    const [suggestedPlaces, setSuggestedPlaces] = useState([]);
-    const [filterType, setFilterType] = useState("all");
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const preselectTripId = params.get("tripId");
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [tripToDelete, setTripToDelete] = useState(null);
+
 
     useEffect(() => {
         const fetchTrips = async () => {
@@ -67,12 +49,17 @@ const MyTripsOverviewPage = () => {
         fetchTrips();
     }, []);
 
-    const handleDeleteTrip = async (tripId) => {
-        if (!window.confirm("Weet je zeker dat je deze trip wilt verwijderen?")) return;
+    const confirmDeleteTrip = (tripId) => {
+        setTripToDelete(tripId);
+        setShowModal(true);
+    };
+
+    const handleDeleteConfirmed = async () => {
+        if (!tripToDelete) return;
 
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`${API_BASE_URL}/v1/trips/${tripId}`, {
+            const response = await fetch(`${API_BASE_URL}/v1/trips/${tripToDelete}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -83,12 +70,16 @@ const MyTripsOverviewPage = () => {
                 throw new Error("Failed to delete trip");
             }
 
-            setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripId));
+            setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
         } catch (error) {
             console.error("Error deleting trip:", error.message);
             alert("Er is een fout opgetreden bij het verwijderen van de trip.");
+        } finally {
+            setShowModal(false);
+            setTripToDelete(null);
         }
     };
+
 
     return (
         <div className="container">
@@ -125,8 +116,8 @@ const MyTripsOverviewPage = () => {
                                     />
                                     <PrimaryButton
                                         text="Delete trip"
-                                        onClick={() => handleDeleteTrip(trip._id)}
-                                        variant="danger"
+                                        onClick={() => confirmDeleteTrip(trip._id)}
+                                        variant="secondary"
                                     />
                                 </div>
                             </div>
@@ -134,6 +125,25 @@ const MyTripsOverviewPage = () => {
                     );
                 })}
             </div>
+            {showModal && (
+                <div className="modal-container">
+                    <div className="modal-content">
+                        <h3>Are you sure you want to delete this trip?</h3>
+                        <div className="modal-container-buttons">
+                            <PrimaryButton
+                                text="Yes, delete"
+                                onClick={handleDeleteConfirmed}
+                            />
+                            <PrimaryButton
+                                text="Cancel"
+                                variant="secondary"
+                                onClick={() => setShowModal(false)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

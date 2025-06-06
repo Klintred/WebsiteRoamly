@@ -32,12 +32,12 @@ const Profile = () => {
         },
         body: JSON.stringify({ amount }),
       });
-  
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message || "Failed to add trips.");
       }
-  
+
       // After updating tripcount, refetch user data
       await fetchUser();
     } catch (err) {
@@ -46,7 +46,7 @@ const Profile = () => {
     }
   };
 
-  
+
 
   const fetchUser = async () => {
     try {
@@ -321,12 +321,9 @@ const Profile = () => {
           </div>
           <div className="line"></div>
           <div className="flex-row">
-          
+
             <h2>Current subscription</h2>
             <p>You have {user?.tripcount || 0} trips remaining.</p>
-            <Link>
-              Change subscription
-            </Link>
           </div>
           <div className="flex-row">
 
@@ -378,11 +375,11 @@ const Profile = () => {
                       </p>
                     </div>
                     <button
-  className="package-button"
-  onClick={() => handleUpgrade(pkg.amount)}
->
-  Upgrade
-</button>
+                      className="package-button"
+                      onClick={() => handleUpgrade(pkg.amount)}
+                    >
+                      Upgrade
+                    </button>
                   </div>
                 ))}
               </div>
