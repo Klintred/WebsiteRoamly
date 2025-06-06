@@ -102,20 +102,46 @@ const MyTripsDetailPage = () => {
       console.error("Suggestion fetch failed", e);
     }
   };
-
-  const handleAddActivity = (activity) => {
-    const updatedItinerary = [...trip.parsedPlan.itinerary];
-    const activities = updatedItinerary[selectedDay].activities || [];
-    if (!activities.includes(activity)) {
-      activities.push(activity);
-      updatedItinerary[selectedDay].activities = activities;
-      setTrip((prev) => ({
-        ...prev,
-        parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
-      }));
+  
+  const handleAddActivity = async (activity) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/v1/trips/add-activity`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tripId: trip._id,
+          dayIndex: selectedDay,
+          activity,
+        }),
+      });
+  
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to add activity");
+      }
+  
+      // Update local state (just in case)
+      const updatedItinerary = [...trip.parsedPlan.itinerary];
+      const activities = updatedItinerary[selectedDay].activities || [];
+      if (!activities.includes(activity)) {
+        activities.push(activity);
+        updatedItinerary[selectedDay].activities = activities;
+        setTrip((prev) => ({
+          ...prev,
+          parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
+        }));
+      }
+  
+      alert("Activity added successfully!");
+    } catch (err) {
+      console.error("Failed to add activity:", err.message);
+      alert("Failed to add activity. Please try again.");
     }
   };
-
   const handleRemoveActivity = (activity) => {
     const updatedItinerary = [...trip.parsedPlan.itinerary];
     updatedItinerary[selectedDay].activities = updatedItinerary[selectedDay].activities.filter(
