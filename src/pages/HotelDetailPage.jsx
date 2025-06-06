@@ -37,7 +37,9 @@ const PlaceDetailPage = () => {
     const fetchPlaceById = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${API_BASE_URL}/api/hotels/${id}`);
+        // ✅ Corrected endpoint here!
+        const response = await fetch(`${API_BASE_URL}/api/place/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch place details");
         const data = await response.json();
         setPlaceDetails(data);
 
@@ -225,15 +227,13 @@ const PlaceDetailPage = () => {
                   accessibilityScore={overallScore}
                   borderColor={borderColor}
                   to={`/hotels/${id}/feature/${key}?name=${encodeURIComponent(placeDetails.name)}&score=${encodeURIComponent(overallScore)}`}
-
                 />
-               
               </div>
             );
           })}
         </div>
         <div className="line" />
-      
+
         <h2>Location</h2>
         <p>{placeDetails.address}</p>
         {coordinates && (
