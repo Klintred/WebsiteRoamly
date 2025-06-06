@@ -9,8 +9,13 @@
   justify-content: center;
 }
 
+.autocomplete-dropdown li {
+  text-align: left;
+}
+
 .planner-content {
   min-width: 70%;
+  text-align: center;
 }
 
 .planner-subcontainer {

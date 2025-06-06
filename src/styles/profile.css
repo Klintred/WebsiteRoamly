@@ -193,7 +193,6 @@ h2 {
   border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 32px 24px;
-  text-align: left;
   color: var(--text-color);
   box-shadow: var(--card-shadow, 0 4px 14px rgba(0, 0, 0, 0.05));
   transition: transform 0.2s ease, box-shadow 0.3s ease;
@@ -203,6 +202,10 @@ h2 {
   text-align: center;
   gap: 16px;
   justify-content: space-between;
+}
+
+.package-card h3, .package-card p{
+  text-align: center;
 }
 
 .package-card p {

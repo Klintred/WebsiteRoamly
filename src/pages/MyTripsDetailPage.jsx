@@ -1,72 +1,52 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import "../styles/mytrips.css";
-import PrimaryButton from "../components/Buttons/PrimaryButton";
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import AccessibilityButton from '../components/Buttons/AccessibilityButton';
+import BookingButton from '../components/Buttons/BookingButton';
+import PrimaryButton from '../components/Buttons/PrimaryButton';
+import "../styles/hoteldetails.css";
 
-const API_BASE_URL = "https://roamly-api.onrender.com/api";
+const API_BASE_URL = "https://roamly-api.onrender.com";
 
-const fetchPlaceDetails = async (placeName, location = "", radius = 50000) => {
-  const params = new URLSearchParams({ query: placeName, radius });
-  if (location) params.append("location", location);
-  const url = `${API_BASE_URL}/places?${params.toString()}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Failed to fetch place details");
-  const data = await response.json();
-  return data || [];
-};
-
-const MyTripsDetailPage = () => {
-  const { tripId } = useParams();
-  const [trip, setTrip] = useState(null);
+const PlaceDetailPage = () => {
+  const { type, id } = useParams();
+  const [placeDetails, setPlaceDetails] = useState(null);
+  const [coordinates, setCoordinates] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [expandedSection, setExpandedSection] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [selectedDay, setSelectedDay] = useState(0);
-  const [places, setPlaces] = useState({});
-  const [suggestedPlaces, setSuggestedPlaces] = useState([]);
-  const [filterType, setFilterType] = useState("all");
-  const [apiKey, setApiKey] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [activityToDelete, setActivityToDelete] = useState(null);
+  const [error, setError] = useState(null);
+  const [averageAnswers, setAverageAnswers] = useState({});
 
-  useEffect(() => {
-    const fetchApiKey = async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/google-api-key`);
-        const data = await res.json();
-        if (data && data.apiKey) {
-          setApiKey(data.apiKey);
-        } else {
-          throw new Error("API key niet gevonden");
-        }
-      } catch (err) {
-        console.error("API key ophalen mislukt:", err);
+  const dummyPlaces = {
+    'dummy-hotel-1': {
+      id: 'dummy-hotel-1',
+      name: 'Demo Hotel Example',
+      address: '123 Example Street, Amsterdam, Netherlands',
+      photo: './assets/images/loginImage.jpg',
+      price: '€120 per night',
+      description: 'This is a demo hotel used for preview and testing purposes.',
+      accessibilityScore: 'Good',
+      location: {
+        lat: 52.3676,
+        lng: 4.9041
       }
-    };
-    fetchApiKey();
-  }, []);
+    }
+  };
 
   useEffect(() => {
-    const fetchTrip = async () => {
+    const fetchPlaceById = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
-        const res = await fetch(`${API_BASE_URL}/v1/trips`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        if (!res.ok) throw new Error("Failed to fetch trip");
-        const data = await res.json();
-        const matchedTrip = data.data.trips.find((t) => t._id === tripId);
-        if (matchedTrip) {
-          matchedTrip.parsedPlan =
-            typeof matchedTrip.Plan === "string"
-              ? JSON.parse(matchedTrip.Plan)
-              : matchedTrip.Plan;
-          setTrip(matchedTrip);
-        } else {
-          setError("Trip not found");
+        // ✅ Corrected endpoint here!
+        const response = await fetch(`${API_BASE_URL}/api/place/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch place details");
+        const data = await response.json();
+        setPlaceDetails(data);
+
+        if (data.location?.lat && data.location?.lng) {
+          setCoordinates(`${data.location.lat},${data.location.lng}`);
+        } else if (data.address) {
+          await fetchCoordinates(data.address);
         }
       } catch (err) {
         setError(err.message);
@@ -74,322 +54,204 @@ const MyTripsDetailPage = () => {
         setLoading(false);
       }
     };
-    fetchTrip();
-  }, [tripId]);
+
+    const fetchCoordinates = async (location) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/coordinates?location=${encodeURIComponent(location)}`);
+        const data = await response.json();
+        if (data.lat && data.lng) {
+          setCoordinates(`${data.lat},${data.lng}`);
+        }
+      } catch (err) {
+        console.error("Fout bij ophalen coördinaten:", err.message);
+      }
+    };
+
+    if (id in dummyPlaces) {
+      setPlaceDetails(dummyPlaces[id]);
+      setCoordinates(`${dummyPlaces[id].location.lat},${dummyPlaces[id].location.lng}`);
+      setLoading(false);
+    } else {
+      fetchPlaceById();
+    }
+  }, [id]);
 
   useEffect(() => {
-    if (trip?.parsedPlan?.itinerary?.length > 0) {
-      const country = trip.Country || trip.TripName.split(" ").pop();
-      fetchSuggestedActivities(country);
-    }
-  }, [filterType, trip]);
-
-  const fetchSuggestedActivities = async (country) => {
-    let query =
-      filterType === "places"
-        ? `tourist attractions in ${country}`
-        : filterType === "restaurants"
-        ? `restaurants in ${country}`
-        : `things to do in ${country}`;
-    try {
-      const results = await fetchPlaceDetails(query);
-      setSuggestedPlaces(results.slice(0, 3));
-    } catch (e) {
-      console.error("Suggestion fetch failed", e);
-    }
-  };
-
-  const handleAddActivity = async (activity) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/v1/trips/add-activity`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          tripId: trip._id,
-          dayIndex: selectedDay,
-          activity,
-        }),
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Failed to add activity");
-      }
-      const updatedItinerary = [...trip.parsedPlan.itinerary];
-      const activities = updatedItinerary[selectedDay].activities || [];
-      if (!activities.includes(activity)) {
-        activities.push(activity);
-        updatedItinerary[selectedDay].activities = activities;
-        setTrip((prev) => ({
-          ...prev,
-          parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
-        }));
-      }
-      alert("Activity added successfully!");
-    } catch (err) {
-      console.error("Failed to add activity:", err.message);
-      alert("Failed to add activity. Please try again.");
-    }
-  };
-
-  const handleRemoveActivity = async (activity) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/v1/trips/remove-activity`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          tripId: trip._id,
-          dayIndex: selectedDay,
-          activity,
-        }),
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Failed to remove activity");
-      }
-      const updatedItinerary = [...trip.parsedPlan.itinerary];
-      updatedItinerary[selectedDay].activities = updatedItinerary[
-        selectedDay
-      ].activities.filter((a) => a !== activity);
-      setTrip((prev) => ({
-        ...prev,
-        parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
-      }));
-    } catch (err) {
-      console.error("Failed to remove activity:", err.message);
-      alert("Failed to remove activity. Please try again.");
-    }
-  };
-
-  const confirmDelete = (activity) => {
-    setActivityToDelete(activity);
-    setShowModal(true);
-  };
-
-  const handleDeleteConfirmed = () => {
-    handleRemoveActivity(activityToDelete);
-    setShowModal(false);
-    setActivityToDelete(null);
-  };
-
-  const getPlaceDetails = async (placeName) => {
-    if (!places[placeName]) {
+    const fetchReviews = async () => {
+      if (!placeDetails?.name) return;
       try {
-        const details = await fetchPlaceDetails(placeName);
-        setPlaces((prev) => ({ ...prev, [placeName]: details[0] }));
-      } catch (e) {
-        console.error("Place fetch failed", e);
+        const res = await fetch(`${API_BASE_URL}/api/v1/reviews`);
+        const data = await res.json();
+        const filtered = data.filter(r => r.placeName === placeDetails.name);
+        setReviews(filtered);
+
+        const averages = calculateAverageAnswers(filtered);
+        setAverageAnswers(averages);
+      } catch (err) {
+        console.error("Fout bij ophalen van reviews:", err);
       }
+    };
+
+    fetchReviews();
+  }, [placeDetails?.name]);
+
+  const calculateAverageAnswers = (reviews) => {
+    const categories = ['general', 'parking', 'entrance', 'internalNavigation', 'sanitary', 'staff'];
+    const averages = {};
+
+    categories.forEach(category => {
+      averages[category] = {};
+      reviews.forEach(review => {
+        const section = review[category];
+        if (section) {
+          Object.keys(section).forEach(question => {
+            const answer = section[question];
+            if (answer) {
+              averages[category][question] = averages[category][question] || {};
+              averages[category][question][answer] = (averages[category][question][answer] || 0) + 1;
+            }
+          });
+        }
+      });
+    });
+
+    return averages;
+  };
+
+  const getOverallScore = (sectionData) => {
+    if (!sectionData) return "Geen score gevonden";
+
+    const scoreCounts = { "Fully accessible": 0, "Adjustments needed": 0, "Not accessible": 0 };
+
+    Object.values(sectionData).forEach(questionCounts => {
+      Object.entries(questionCounts).forEach(([answer, count]) => {
+        let mappedAnswer;
+        if (answer.toLowerCase() === "yes") {
+          mappedAnswer = "Fully accessible";
+        } else if (answer.toLowerCase() === "partial" || answer.toLowerCase() === "sometimes") {
+          mappedAnswer = "Adjustments needed";
+        } else if (answer.toLowerCase() === "no") {
+          mappedAnswer = "Not accessible";
+        } else {
+          mappedAnswer = "Not accessible";
+        }
+        scoreCounts[mappedAnswer] += count;
+      });
+    });
+
+    let highestScore = "Geen score gevonden";
+    let maxCount = 0;
+    Object.entries(scoreCounts).forEach(([label, count]) => {
+      if (count > maxCount) {
+        maxCount = count;
+        highestScore = label;
+      }
+    });
+
+    return highestScore;
+  };
+
+  const getLabelColor = (score) => {
+    switch (score) {
+      case "Fully accessible":
+        return "green";
+      case "Adjustments needed":
+        return "orange";
+      case "Not accessible":
+        return "red";
+      default:
+        return "gray";
     }
   };
 
-  const getPhotoUrl = (place) => {
-    if (place?.photo) return place.photo;
-    if (place?.photos?.length > 0 && apiKey) {
-      return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${apiKey}`;
-    }
-    return "https://via.placeholder.com/300x200?text=No+Image";
-  };
-
-  const getMapsUrl = (place) => {
-    const query = encodeURIComponent(`${place.name} ${place.address || ""}`);
-    return `https://www.google.com/maps/search/?api=1&query=${query}`;
-  };
-
-  const renderPlaceCard = (name) => {
-    const place = places[name];
-    if (!place) {
-      getPlaceDetails(name);
-      return <p className="text-sm text-gray-500">Loading {name}...</p>;
-    }
-    return (
-      <div className="activity-item">
-        <img src={getPhotoUrl(place)} alt={place.name} />
-        <div>
-          <h4>{place.name}</h4>
-          <p>{place.address}</p>
-          <p>⭐ {place.rating || "N/A"}</p>
-          <a
-            href={getMapsUrl(place)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 inline-flex items-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            View on Maps
-          </a>
-        </div>
-      </div>
-    );
-  };
-
-  if (loading) return <p className="text-center mt-12">Loading...</p>;
-  if (error) return <p className="text-center mt-12 text-red-500">{error}</p>;
-  if (!trip) return null;
-
-  const itinerary = trip.parsedPlan?.itinerary || [];
-  const startDate = trip.StartDate ? new Date(trip.StartDate) : null;
-
-  const getDateForDay = (index) => {
-    if (!startDate) return null;
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + index);
-    return date.toLocaleDateString();
-  };
+  if (loading) return <p>Bezig met laden...</p>;
+  if (error) return <p style={{ color: "red" }}>Fout: {error}</p>;
+  if (!placeDetails) return <p>Geen gegevens gevonden.</p>;
 
   return (
     <div className="container">
-      <div className="trip-card">
-        <div className="trip-details">
-          <h1>{trip.TripName}</h1>
-          <h2>{trip.Place}</h2>
-          <p>
-            From {new Date(trip.StartDate).toLocaleDateString()} until{" "}
-            {new Date(trip.EndDate).toLocaleDateString()}
-          </p>
+      <div className="place-detail-subcontainer">
+        <div className="go-back-link">
+          <Link to={`/${type || ''}`}>Go back to {type || 'home'}</Link>
         </div>
 
-        <div className="day-buttons">
-          {itinerary.map((day, index) => (
-            <button
-              key={index}
-              className={selectedDay === index ? "active" : ""}
-              onClick={() => setSelectedDay(index)}
-            >
-              Day {index + 1} - {getDateForDay(index) || "No date"}
-            </button>
-          ))}
-        </div>
-
-        <div className="line"></div>
-        <h2>Your travel plan</h2>
-
-        <div className="day-panel">
-          {selectedDay === 0 && trip.parsedPlan?.hotel && (
-            <div className="section-block">
-              <h3 className="section-title">🏨 Hotel</h3>
-              {renderPlaceCard(trip.parsedPlan.hotel)}
-              <button
-                onClick={() => confirmDelete(trip.parsedPlan.hotel)}
-                className="delete-button"
-              >
-                Delete
-              </button>
-            </div>
-          )}
-
-          <div className="section-block">
-            <h3 className="section-title">🎯 Activities</h3>
-            {itinerary[selectedDay]?.activities?.length > 0 ? (
-              <ul className="activity-list">
-                {itinerary[selectedDay].activities.map((activity, idx) => (
-                  <li key={idx} className="activity-item">
-                    {renderPlaceCard(activity)}
-                    <button
-                      onClick={() => confirmDelete(activity)}
-                      className="delete-button"
-                    >
-                      Delete
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No activities planned for this day.</p>
-            )}
+        <div className="place-details-text">
+          <h1>{placeDetails.name}</h1>
+          <div className="book-button-container-desktop">
+            <BookingButton placeName={placeDetails.name} />
           </div>
-
-          {itinerary[selectedDay]?.restaurants?.length > 0 && (
-            <div className="section-block">
-              <h3 className="section-title">🍽 Restaurants</h3>
-              <ul className="activity-list">
-                {itinerary[selectedDay].restaurants.map((r, i) => (
-                  <li key={i} className="activity-item">
-                    {renderPlaceCard(r)}
-                    <button
-                      onClick={() => confirmDelete(r)}
-                      className="delete-button"
-                    >
-                      Delete
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
 
-        <div className="line"></div>
-        <h2>Add suggested activities</h2>
-
-        <div className="filter-buttons">
-          {["all", "places", "restaurants"].map((type) => (
-            <button
-              key={type}
-              className={filterType === type ? "active" : ""}
-              onClick={() => setFilterType(type)}
-            >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </button>
-          ))}
+        <div className="place-details-image">
+          <img
+            src={placeDetails.photo || "./assets/images/loginImage.png"}
+            alt={placeDetails.name}
+            style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}
+          />
         </div>
 
-        <div className="suggestions grid gap-4">
-          {suggestedPlaces.map((place, idx) => (
-            <div key={idx} className="activity-item suggestion">
-              <img
-                src={getPhotoUrl(place)}
-                alt={place.name}
-                className="w-24 h-24 object-cover rounded-lg"
-                loading="lazy"
-              />
-              <div>
-                <h4>{place.name}</h4>
-                <p>{place.address}</p>
-                <p>⭐ {place.rating || "N/A"}</p>
-                <button
-                  className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  onClick={() => handleAddActivity(place.name)}
-                >
-                  Add to Trip
-                </button>
-                <a
-                  href={getMapsUrl(place)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 inline-flex items-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                  View on Maps
-                </a>
-              </div>
-            </div>
-          ))}
+        <div className="review-button-container" style={{ marginTop: "1rem" }}>
+          <PrimaryButton
+            text="Write a review"
+            to={`/write-review?name=${encodeURIComponent(placeDetails.name)}`}
+            variant="secondary"
+          />
         </div>
 
-        {showModal && (
-          <div className="modal-container">
-            <div className="modal-content">
-              <h3>Are you sure you want to delete this activity?</h3>
-              <div className="modal-container-buttons">
-                <PrimaryButton text="Yes, continue" onClick={handleDeleteConfirmed} />
-                <PrimaryButton
-                  text="No, I'm done"
-                  variant="secondary"
-                  onClick={() => setShowModal(false)}
+        <div className="line" />
+        <h2>About this property</h2>
+        <p>{placeDetails.description}</p>
+
+        <div className="line" />
+        <h2>Accessibility overview</h2>
+        <div className="accessibility-grid">
+          {[
+            { key: 'general', label: 'General accessibility' },
+            { key: 'parking', label: 'Parking facilities' },
+            { key: 'entrance', label: 'Entrance' },
+            { key: 'internalNavigation', label: 'Internal navigation' },
+            { key: 'sanitary', label: 'Sanitary facilities' },
+            { key: 'staff', label: 'Staff support', question: 'staffAssistance' }
+          ].map(({ key, label }) => {
+            const overallScore = getOverallScore(averageAnswers[key]);
+            const borderColor = getLabelColor(overallScore);
+
+            return (
+              <div
+                className="accessibility-card"
+                key={key}
+                onClick={() => setExpandedSection(expandedSection === key ? null : key)}
+              >
+                <AccessibilityButton
+                  feedbackSubject={label}
+                  accessibilityScore={overallScore}
+                  borderColor={borderColor}
+                  to={`/hotels/${id}/feature/${key}?name=${encodeURIComponent(placeDetails.name)}&score=${encodeURIComponent(overallScore)}`}
                 />
               </div>
-            </div>
-          </div>
+            );
+          })}
+        </div>
+        <div className="line" />
+
+        <h2>Location</h2>
+        <p>{placeDetails.address}</p>
+        {coordinates && (
+          <iframe
+            title="Map"
+            width="100%"
+            height="400px"
+            style={{ border: 0, borderRadius: "8px" }}
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
+            allowFullScreen
+          />
         )}
+      </div>
+      <div className="book-button-container-mobile">
+        <BookingButton placeName={placeDetails.name} />
       </div>
     </div>
   );
 };
 
-export default MyTripsDetailPage;
+export default PlaceDetailPage;

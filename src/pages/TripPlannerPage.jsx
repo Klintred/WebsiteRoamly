@@ -305,7 +305,7 @@ Return only this JSON.`;
                 variant="secondary"
                 onClick={() => {
                   setShowNoTripsModal(false);
-                  navigate("/subscription"); // Replace with your actual route
+                  navigate("/profile"); 
                 }}
               />
             </div>
