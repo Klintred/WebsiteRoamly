@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../styles/mytrips.css";
 
@@ -70,6 +69,8 @@ const MyTripsDetailPage = () => {
         } else {
           setError("Trip not found");
         }
+        console.log("Parsed travel plan:", matchedTrip.parsedPlan);
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -102,7 +103,7 @@ const MyTripsDetailPage = () => {
       console.error("Suggestion fetch failed", e);
     }
   };
-  
+
   const handleAddActivity = async (activity) => {
     try {
       const token = localStorage.getItem("token");
@@ -118,12 +119,12 @@ const MyTripsDetailPage = () => {
           activity,
         }),
       });
-  
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message || "Failed to add activity");
       }
-  
+
       // Update local state (just in case)
       const updatedItinerary = [...trip.parsedPlan.itinerary];
       const activities = updatedItinerary[selectedDay].activities || [];
@@ -135,7 +136,7 @@ const MyTripsDetailPage = () => {
           parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
         }));
       }
-  
+
       alert("Activity added successfully!");
     } catch (err) {
       console.error("Failed to add activity:", err.message);
@@ -227,6 +228,7 @@ const MyTripsDetailPage = () => {
       <div className="trip-card">
         <img src="../assets/images/loginImage.png" alt="" />
         <div className="trip-details">
+
           <h1>{trip.TripName}</h1>
           <h2>{trip.Place},</h2>
           <div className="dates-container">
@@ -248,37 +250,100 @@ const MyTripsDetailPage = () => {
           </div>
 
           <div className="line"></div>
+          <h2>Your travel plan</h2>
 
           <div className="day-panel">
-            <ul className="activity-list">
-              {itinerary[selectedDay]?.activities?.map((activity, idx) => (
-                <li key={idx} className="activity-item">
-                  <span className="material-symbols-outlined">location_on</span>
-                  {renderPlaceCard(activity)}
-                  <button onClick={() => handleRemoveActivity(activity)}>
-                    Verwijderen
+            {selectedDay === 0 && trip.parsedPlan?.hotel && (
+              <div className="section-block">
+                <h3 className="section-title">🏨 Hotel</h3>
+                <div className="activity-item">
+                  <div className="activity-content">
+                    <p>{trip.parsedPlan.hotel}</p>
+                  </div>
+                  <button onClick={() => handleRemoveActivity(trip.parsedPlan.hotel)} className="delete-button">
+                    Delete
                   </button>
-                </li>
-              ))}
-            </ul>
+                </div>
+              </div>
+            )}
 
+            <div className="section-block">
+              <h3 className="section-title">🎯 Activities</h3>
+              {itinerary[selectedDay]?.activities?.length > 0 ? (
+                <ul className="activity-list">
+                  {itinerary[selectedDay].activities.map((activity, idx) => {
+                    const isDescriptive =
+                      /^[A-Z][^.?!]+[.?!]$/.test(activity) || activity.length > 40;
 
+                    return (
+                      <li key={idx} className="activity-item">
+                        <div className="activity-content">
+                          {isDescriptive ? (
+                            <div className="text-activity-block">
+                              {activity.split('.').map((sentence, i) =>
+                                sentence.trim() ? (
+                                  <p key={i} className="mb-2">{sentence.trim()}.</p>
+                                ) : null
+                              )}
+                            </div>
+                          ) : (
+                            renderPlaceCard(activity)
+                          )}
+                        </div>
+                        <button
+                          onClick={() => handleRemoveActivity(activity)}
+                          className="delete-button"
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p>No activities planned for this day.</p>
+              )}
+            </div>
+
+            {itinerary[selectedDay]?.restaurants?.length > 0 && (
+              <div className="section-block">
+                <h3 className="section-title">🍽 Restaurants</h3>
+                <ul className="activity-list">
+                  {itinerary[selectedDay].restaurants.map((r, i) => (
+                    <li key={i} className="activity-item">
+                      <div className="activity-content">{r}</div>
+                      <button onClick={() => handleRemoveActivity(r)} className="delete-button">
+                        Delete
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
+
           <div className="line"></div>
+          <h2>Add suggested activities</h2>
 
-          <label>Filter:</label>
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-          >
-            <option value="all">Alles</option>
-            <option value="places">Bezienswaardigheden</option>
-            <option value="restaurants">Restaurants</option>
-          </select>
+          <div className="filter-buttons">
+            <div className="day-buttons">
+              {[
+                { label: "All", value: "all" },
+                { label: "Places", value: "places" },
+                { label: "Restaurants", value: "restaurants" },
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  className={filterType === option.value ? "active" : ""}
+                  onClick={() => setFilterType(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-
-          <h5>Voorgestelde activiteiten:</h5>
           <div className="suggestions grid gap-4">
             {suggestedPlaces.map((place, idx) => {
               const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(

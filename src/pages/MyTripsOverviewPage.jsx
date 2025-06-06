@@ -5,33 +5,12 @@ import PrimaryButton from "../components/Buttons/PrimaryButton";
 
 const API_BASE_URL = "https://roamly-api.onrender.com/api";
 
-const fetchPlaceDetails = async (placeName, location = "", radius = 50000) => {
-    const params = new URLSearchParams({ query: placeName, radius });
-    if (location) params.append("location", location);
-
-    const url = `${API_BASE_URL}/places?${params.toString()}`;
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Failed to fetch place details");
-        const data = await response.json();
-        return data || [];
-    } catch (err) {
-        console.error("Roamly API failed:", err.message);
-        throw err;
-    }
-};
-
 const MyTripsOverviewPage = () => {
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [places, setPlaces] = useState({});
-    const [suggestedPlacesCache, setSuggestedPlacesCache] = useState({});
-    const [suggestedPlaces, setSuggestedPlaces] = useState([]);
-    const [filterType, setFilterType] = useState("all");
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const preselectTripId = params.get("tripId");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -126,7 +105,7 @@ const MyTripsOverviewPage = () => {
                                     <PrimaryButton
                                         text="Delete trip"
                                         onClick={() => handleDeleteTrip(trip._id)}
-                                        variant="danger"
+                                        variant="secondary"
                                     />
                                 </div>
                             </div>
