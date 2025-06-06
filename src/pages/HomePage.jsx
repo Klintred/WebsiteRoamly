@@ -33,6 +33,13 @@ const HomePage = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+  // Modal state management
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [userTrips, setUserTrips] = useState([]);
+  const [selectedTripId, setSelectedTripId] = useState("");
+  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+
   useEffect(() => {
     const dummyHotel = {
       id: 'dummy-hotel-1',
@@ -66,6 +73,24 @@ const HomePage = () => {
       }
     };
     fetchReviews();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserTrips = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await fetch(`${API_BASE_URL}/api/v1/trips`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        setUserTrips(data.data.trips || []);
+      } catch (error) {
+        console.error("Error fetching user trips:", error);
+      }
+    };
+
+    fetchUserTrips();
   }, []);
 
   const getOverallAccessibilityScore = (placeName) => {
@@ -261,6 +286,8 @@ const HomePage = () => {
         loading={loading}
         getOverallAccessibilityScore={getOverallAccessibilityScore}
         getLabelColor={getLabelColor}
+        setSelectedPlace={setSelectedPlace}
+        setShowModal={setShowModal}
       />
       <ResultsSection
         title="Restaurants"
@@ -271,6 +298,8 @@ const HomePage = () => {
         loading={loading}
         getOverallAccessibilityScore={getOverallAccessibilityScore}
         getLabelColor={getLabelColor}
+        setSelectedPlace={setSelectedPlace}
+        setShowModal={setShowModal}
       />
       <ResultsSection
         title="Activities"
@@ -281,12 +310,84 @@ const HomePage = () => {
         loading={loading}
         getOverallAccessibilityScore={getOverallAccessibilityScore}
         getLabelColor={getLabelColor}
+        setSelectedPlace={setSelectedPlace}
+        setShowModal={setShowModal}
       />
+
+      {/* Add to Trip Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <button className="close-button" onClick={() => setShowModal(false)}>X</button>
+            <h2>Add "{selectedPlace?.name}" to a Trip</h2>
+            <div>
+              <label>Select Trip:</label>
+              <select 
+                value={selectedTripId}
+                onChange={(e) => setSelectedTripId(e.target.value)}
+              >
+                <option value="">Select a trip</option>
+                {userTrips.map(trip => (
+                  <option key={trip._id} value={trip._id}>
+                    {trip.TripName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {selectedTripId && (
+              <>
+                <label>Select Day:</label>
+                <select
+                  value={selectedDayIndex}
+                  onChange={(e) => setSelectedDayIndex(Number(e.target.value))}
+                >
+                  {(() => {
+                    const trip = userTrips.find(t => t._id === selectedTripId);
+                    const itineraryLength = trip ? (typeof trip.Plan === "string" ? JSON.parse(trip.Plan).itinerary.length : trip.Plan.itinerary.length) : 0;
+                    return [...Array(itineraryLength)].map((_, index) => (
+                      <option key={index} value={index}>
+                        Day {index + 1}
+                      </option>
+                    ));
+                  })()}
+                </select>
+              </>
+            )}
+            <button 
+              className="confirm-button"
+              onClick={async () => {
+                try {
+                  const token = localStorage.getItem("token");
+                  await fetch(`${API_BASE_URL}/api/v1/trips/add-activity`, {
+                    method: "PATCH",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                      tripId: selectedTripId,
+                      dayIndex: selectedDayIndex,
+                      activity: selectedPlace.name
+                    })
+                  });
+                  alert(`Added "${selectedPlace.name}" to the trip!`);
+                  setShowModal(false);
+                } catch (error) {
+                  alert("Failed to add activity. Please try again.");
+                }
+              }}
+              disabled={!selectedTripId}
+            >
+              Add Activity
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loading, getOverallAccessibilityScore, getLabelColor }) => {
+const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loading, getOverallAccessibilityScore, getLabelColor, setSelectedPlace, setShowModal }) => {
   if ((filter !== 'all' && filter !== type)) return null;
 
   const filteredData = data.filter(place => {
@@ -309,6 +410,8 @@ const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loadin
               type={type}
               getOverallAccessibilityScore={getOverallAccessibilityScore}
               getLabelColor={getLabelColor}
+              setSelectedPlace={setSelectedPlace}
+              setShowModal={setShowModal}
             />
           ))
         }
@@ -317,7 +420,7 @@ const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loadin
   );
 };
 
-const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor }) => {
+const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, setSelectedPlace, setShowModal }) => {
   const placeId = place.id || place.place_id;
   const detailType = type === 'activity' ? 'activities' : `${type}s`;
   const accessibilityScore = getOverallAccessibilityScore(place.name);
@@ -352,6 +455,15 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor })
         ) : (
           <button className="view-details-button" disabled>No details available</button>
         )}
+        <button 
+          className="add-to-trip-button"
+          onClick={() => {
+            setSelectedPlace(place);
+            setShowModal(true);
+          }}
+        >
+          Add to Trip
+        </button>
       </div>
     </div>
   );
