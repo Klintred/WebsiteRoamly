@@ -364,7 +364,10 @@ const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loadin
     <>
       <div className='line'></div>
       <h2>{title}</h2>
-      <div className="search-results">
+     <div className={`search-results-wrapper ${filter === 'all' ? 'wide' : ''}`}>
+
+      <div className={`search-results ${filter !== 'all' ? 'wrapped' : 'scrollable'}`}>
+
         {loading
           ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
           : filteredData.map((place) => (
@@ -379,6 +382,7 @@ const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loadin
             />
           ))
         }
+      </div>
       </div>
     </>
   );
