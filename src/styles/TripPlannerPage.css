@@ -8,7 +8,9 @@
   width: 100%;
   justify-content: center;
 }
-
+.planner-header{
+  text-align: center;
+}
 .autocomplete-dropdown li {
   text-align: left;
 }
