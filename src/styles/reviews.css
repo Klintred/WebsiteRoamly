@@ -27,7 +27,7 @@
 
 .write-review-form-group input[type="file"] {
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   background-color: var(--background-color);
   cursor: pointer;

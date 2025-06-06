@@ -89,8 +89,8 @@ const MyTripsDetailPage = () => {
       filterType === "places"
         ? `tourist attractions in ${country}`
         : filterType === "restaurants"
-        ? `restaurants in ${country}`
-        : `things to do in ${country}`;
+          ? `restaurants in ${country}`
+          : `things to do in ${country}`;
     try {
       const results = await fetchPlaceDetails(query);
       setSuggestedPlaces(results.slice(0, 3));
@@ -114,10 +114,13 @@ const MyTripsDetailPage = () => {
           activity,
         }),
       });
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message || "Failed to add activity");
       }
+
+      // Update itinerary
       const updatedItinerary = [...trip.parsedPlan.itinerary];
       const activities = updatedItinerary[selectedDay].activities || [];
       if (!activities.includes(activity)) {
@@ -128,7 +131,12 @@ const MyTripsDetailPage = () => {
           parsedPlan: { ...prev.parsedPlan, itinerary: updatedItinerary },
         }));
       }
-      alert("Activity added successfully!");
+
+      // Remove the added suggestion from suggestedPlaces
+      setSuggestedPlaces((prev) =>
+        prev.filter((place) => place.name !== activity)
+      );
+
     } catch (err) {
       console.error("Failed to add activity:", err.message);
       alert("Failed to add activity. Please try again.");
@@ -207,12 +215,12 @@ const MyTripsDetailPage = () => {
     const place = places[name];
     if (!place) {
       getPlaceDetails(name);
-      return <p className="text-sm text-gray-500">Loading {name}...</p>;
+      return <p >Loading {name}...</p>;
     }
     return (
-      <div className="activity-item">
+      <div className="activity-item-content">
         <img src={getPhotoUrl(place)} alt={place.name} />
-        <div>
+        <div className="flex-row">
           <h4>{place.name}</h4>
           <p>{place.address}</p>
           <p>⭐ {place.rating || "N/A"}</p>
@@ -220,17 +228,38 @@ const MyTripsDetailPage = () => {
             href={getMapsUrl(place)}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-flex items-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+            className="view-maps-link"
           >
-            View on Maps
+            View on maps
+          </a>
+        </div>
+      </div>
+    );
+  };
+  const renderPlaceCardFromObject = (place) => {
+    return (
+      <div className="activity-item-content">
+        <img src={getPhotoUrl(place)} alt={place.name} />
+        <div className="flex-row">
+          <h4>{place.name}</h4>
+          <p>{place.address}</p>
+          <p>⭐ {place.rating || "N/A"}</p>
+          <a
+            href={getMapsUrl(place)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="view-maps-link"
+          >
+            View on maps
           </a>
         </div>
       </div>
     );
   };
 
-  if (loading) return <p className="text-center mt-12">Loading...</p>;
-  if (error) return <p className="text-center mt-12 text-red-500">{error}</p>;
+
+  if (loading) return <p >Loading...</p>;
+  if (error) return <p >{error}</p>;
   if (!trip) return null;
 
   const itinerary = trip.parsedPlan?.itinerary || [];
@@ -246,25 +275,26 @@ const MyTripsDetailPage = () => {
   return (
     <div className="container">
       <div className="trip-card">
-        <div className="trip-details">
-          <h1>{trip.TripName}</h1>
-          <h2>{trip.Place}</h2>
-          <p>
-            From {new Date(trip.StartDate).toLocaleDateString()} until{" "}
-            {new Date(trip.EndDate).toLocaleDateString()}
-          </p>
-        </div>
-
-        <div className="day-buttons">
-          {itinerary.map((day, index) => (
-            <button
-              key={index}
-              className={selectedDay === index ? "active" : ""}
-              onClick={() => setSelectedDay(index)}
-            >
-              Day {index + 1} - {getDateForDay(index) || "No date"}
-            </button>
-          ))}
+        <div className="trip-card-header">
+          <div className="trip-details">
+            <h1>{trip.TripName}</h1>
+            <h2>{trip.Place}</h2>
+            <p>
+              From {new Date(trip.StartDate).toLocaleDateString()} until{" "}
+              {new Date(trip.EndDate).toLocaleDateString()}
+            </p>
+          </div>
+          <div className="day-buttons">
+            {itinerary.map((day, index) => (
+              <button
+                key={index}
+                className={selectedDay === index ? "active" : ""}
+                onClick={() => setSelectedDay(index)}
+              >
+                Day {index + 1} - {getDateForDay(index) || "No date"}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="line"></div>
@@ -273,19 +303,21 @@ const MyTripsDetailPage = () => {
         <div className="day-panel">
           {selectedDay === 0 && trip.parsedPlan?.hotel && (
             <div className="section-block">
-              <h3 className="section-title">🏨 Hotel</h3>
-              {renderPlaceCard(trip.parsedPlan.hotel)}
-              <button
-                onClick={() => confirmDelete(trip.parsedPlan.hotel)}
-                className="delete-button"
-              >
-                Delete
-              </button>
+              <h3 className="section-title">Hotel</h3>
+              <div className="activity-item">
+                {renderPlaceCard(trip.parsedPlan.hotel)}
+                <button
+                  onClick={() => confirmDelete(trip.parsedPlan.hotel)}
+                  className="delete-button"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           )}
 
           <div className="section-block">
-            <h3 className="section-title">🎯 Activities</h3>
+            <h3 className="section-title">Activities</h3>
             {itinerary[selectedDay]?.activities?.length > 0 ? (
               <ul className="activity-list">
                 {itinerary[selectedDay].activities.map((activity, idx) => (
@@ -303,73 +335,60 @@ const MyTripsDetailPage = () => {
             ) : (
               <p>No activities planned for this day.</p>
             )}
-          </div>
 
-          {itinerary[selectedDay]?.restaurants?.length > 0 && (
-            <div className="section-block">
-              <h3 className="section-title">🍽 Restaurants</h3>
-              <ul className="activity-list">
-                {itinerary[selectedDay].restaurants.map((r, i) => (
-                  <li key={i} className="activity-item">
-                    {renderPlaceCard(r)}
-                    <button
-                      onClick={() => confirmDelete(r)}
-                      className="delete-button"
-                    >
-                      Delete
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+            {itinerary[selectedDay]?.restaurants?.length > 0 && (
+              <div className="section-block">
+                <h3 className="section-title">Restaurants</h3>
+                <ul className="activity-list">
+                  {itinerary[selectedDay].restaurants.map((r, i) => (
+                    <li key={i} className="activity-item">
+                      {renderPlaceCard(r)}
+                      <button
+                        onClick={() => confirmDelete(r)}
+                        className="delete-button"
+                      >
+                        Delete
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>          </div>
+
 
         <div className="line"></div>
-        <h2>Add suggested activities</h2>
+        <div className="flex-row">
+          <h2>Add suggested activities</h2>
 
-        <div className="filter-buttons">
-          {["all", "places", "restaurants"].map((type) => (
-            <button
-              key={type}
-              className={filterType === type ? "active" : ""}
-              onClick={() => setFilterType(type)}
-            >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </button>
-          ))}
+          <div className="day-buttons">
+            {["all", "places", "restaurants"].map((type) => (
+              <button
+                key={type}
+                className={filterType === type ? "active" : ""}
+                onClick={() => setFilterType(type)}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </button>
+            ))}
+          </div>
         </div>
-
-        <div className="suggestions grid gap-4">
-          {suggestedPlaces.map((place, idx) => (
-            <div key={idx} className="activity-item suggestion">
-              <img
-                src={getPhotoUrl(place)}
-                alt={place.name}
-                className="w-24 h-24 object-cover rounded-lg"
-                loading="lazy"
-              />
-              <div>
-                <h4>{place.name}</h4>
-                <p>{place.address}</p>
-                <p>⭐ {place.rating || "N/A"}</p>
+        <div className="suggestions ">
+          {suggestedPlaces.length === 0 ? (
+            <p className="no-suggestions">No suggestions available.</p>
+          ) : (
+            suggestedPlaces.map((place, idx) => (
+              <div key={idx} className="activity-item suggestion">
+                {renderPlaceCardFromObject(place)}
                 <button
-                  className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                   onClick={() => handleAddActivity(place.name)}
+                  className="add-button"
                 >
                   Add to Trip
                 </button>
-                <a
-                  href={getMapsUrl(place)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 inline-flex items-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                  View on Maps
-                </a>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         {showModal && (

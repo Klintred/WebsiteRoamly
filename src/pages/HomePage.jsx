@@ -409,10 +409,6 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
             <span className="material-symbols-outlined">location_on</span>
             <p className="location-text">{extractCityCountry(place.address)}</p>
           </div>
-          <div className='flex-column'>
-            <span className="material-symbols-outlined">paid</span>
-            <p className="price-text">{place.price || 'Price not available'}</p>
-          </div>
         </div>
       </div>
       <div className="button-container">
