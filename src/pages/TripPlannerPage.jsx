@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CustomCalendar from "../components/Forms/callender";
 import "../styles/TripPlannerPage.css";
 import PrimaryButton from '../components/Buttons/PrimaryButton';
+import LocationAutocomplete from "../components/Forms/LocationAutocomplete"; 
 
 function TripPlannerPage() {
   const [tripName, setTripName] = useState("");
@@ -48,15 +49,17 @@ function TripPlannerPage() {
     fetchUserData();
   }, []);
 
-  const handleAddActivity = (e) => {
-    if (e.key === "Enter" && activityInput.trim()) {
-      e.preventDefault();
-      if (!activities.includes(activityInput.trim())) {
-        setActivities([...activities, activityInput.trim()]);
-        setActivityInput("");
-      }
+const handleAddActivity = (e) => {
+  const keyPressed = e.key;
+  if ((keyPressed === "Enter" || keyPressed === "," || keyPressed === " ") && activityInput.trim()) {
+    e.preventDefault();
+    const newActivity = activityInput.trim().replace(/,$/, "");
+    if (!activities.includes(newActivity)) {
+      setActivities([...activities, newActivity]);
     }
-  };
+    setActivityInput("");
+  }
+};
 
   const removeActivity = (activity) => {
     setActivities(activities.filter((a) => a !== activity));
@@ -203,24 +206,21 @@ Return only this JSON.`;
 
           <div className="planner-input-container">
             <span className="material-symbols-outlined">flight_takeoff</span>
-            <input
-              type="text"
-              placeholder="Where are you departing from?"
-              value={departureLocation}
-              onChange={(e) => setDepartureLocation(e.target.value)}
-              className="planner-input"
-            />
+           <LocationAutocomplete
+  placeholder="Where are you departing from?"
+  value={departureLocation}
+  onChange={setDepartureLocation}
+/>
+
           </div>
 
           <div className="planner-input-container">
             <span className="material-symbols-outlined">place</span>
-            <input
-              type="text"
-              placeholder="Where are you going?"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              className="planner-input"
-            />
+           <LocationAutocomplete
+  placeholder="Where are you going?"
+  value={destination}
+  onChange={setDestination}
+/>
           </div>
 
           <div className="planner-section">
@@ -255,12 +255,15 @@ Return only this JSON.`;
             <span className="material-symbols-outlined">interests</span>
             <input
               type="text"
-              placeholder="Type an activity (e.g. Lebanese restaurant)"
+placeholder="Add an activity (e.g. hiking, museum), then press enter, comma, or space"
               value={activityInput}
               onChange={(e) => setActivityInput(e.target.value)}
               onKeyDown={handleAddActivity}
               className="planner-input"
             />
+            <p className="input-helper-text">
+  Press <strong>Enter</strong> or click <strong>Add</strong> to confirm an activity.
+</p>
           </div>
 
           {activities.length > 0 && (

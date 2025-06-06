@@ -1,5 +1,5 @@
 .planner-container {
- flex: 1; /* Grow to fill parent .App */
+  flex: 1; /* Grow to fill parent .App */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,12 +9,11 @@
   justify-content: center;
 }
 
- .planner-content{
-    min-width: 70%;
+.planner-content {
+  min-width: 70%;
+}
 
- }
-
-.planner-subcontainer{
+.planner-subcontainer {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -42,11 +41,10 @@
   margin-left: 6px;
   background: none;
   border: none;
-  color: var(--error-color) ;
+  color: var(--error-color);
   cursor: pointer;
   font-size: 14px;
 }
-
 
 .planner-input-container {
   display: flex;
@@ -58,15 +56,15 @@
   padding: 12px;
 }
 
-.planner-input, .calendar-select-button {
-  border:none;
+.planner-input,
+.calendar-select-button {
+  border: none;
   width: 100%;
   font-size: 0.95rem;
   transition: all 0.2s ease-in-out;
   text-align: left;
   background-color: transparent;
 }
-
 
 .planner-input:focus {
   outline: none;
@@ -79,7 +77,7 @@
 }
 
 .planner-subtitle {
-  font-family: 'AcuminPro', sans-serif;
+  font-family: "AcuminPro", sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-color);
@@ -183,7 +181,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-
 .planner-response-text {
   white-space: pre-wrap;
   font-size: 0.95rem;
@@ -191,8 +188,70 @@
   color: #444;
 }
 
-@media (min-width: 768px) {
+.autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+}
 
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  background-color: #fff;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.autocomplete-dropdown li {
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #eee;
+}
+
+.autocomplete-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-dropdown li:hover,
+.autocomplete-dropdown li.active-suggestion {
+  background-color: #f1f3f5;
+}
+
+.autocomplete-dropdown strong {
+  font-weight: bold;
+}
+.activity-input-wrapper {
+  display: flex;
+  flex-grow: 1;
+  gap: 8px;
+}
+
+.add-activity-button {
+  padding: 8px 14px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-activity-button:hover {
+  background-color: #0f3078;
+}
+
+
+@media (min-width: 768px) {
   .planner-input {
     font-size: 0.9rem;
     padding: 12px;
@@ -219,7 +278,7 @@
   .people-count {
     font-size: 0.95rem;
   }
-  .planner-container{
+  .planner-container {
     margin: 0 auto;
   }
 }
