@@ -255,7 +255,7 @@ const Profile = () => {
                 <div className="profile-left">
                   <div className="profile-image-wrapper">
                     <img
-                      src="/assets/images/default-profile.png"
+                      src="/assets/images/avatar.jpg"
                       alt=""
                       className="profile-image"
                     />

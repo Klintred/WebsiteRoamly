@@ -23,7 +23,7 @@ h2 {
 }
 
 .packages-grid.options-grid {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
 }
 
 .profile-top-box {
@@ -188,7 +188,7 @@ h2 {
 
 .packages-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 32px;
   width: 100%;
   margin-bottom: 40px;
@@ -496,6 +496,9 @@ h2 {
   .points-content {
     grid-template-columns: repeat(2, 1fr);
   }
+.packages-grid.options-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
 }
 
 @media (min-width: 1024px) {

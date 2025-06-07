@@ -33,8 +33,7 @@
 }
 
 .login-link {
-  color: #e26011;
-  font-weight: 600;
+  font-weight: bold;
   cursor: pointer;
 }
 
