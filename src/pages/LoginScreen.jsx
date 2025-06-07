@@ -137,7 +137,7 @@ const LoginScreen = () => {
               <PrimaryButton text="Login" type="submit" />
             </form>
 
-    
+
           </div>
 
           <div className="register-redirect">

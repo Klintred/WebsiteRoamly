@@ -183,10 +183,12 @@ const Profile = () => {
                       <div className="modal-content">
         <h1>Error</h1>
         <p>{error}</p>
+        <div className="container">
 
         <button className="logout-button" onClick={handleLogout}>
           <FaSignOutAlt /> Log in again
         </button>
+        </div>
       </div>
       </div>
     );

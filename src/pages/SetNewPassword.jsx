@@ -81,31 +81,35 @@ const SetNewPassword = () => {
             <p className="subheading-text">Enter and confirm your new password.</p>
 
             <form className="reset-form" onSubmit={handleSubmit}>
-              <label htmlFor="newPassword">New password</label>
-              <input
-                type="password"
-                id="newPassword"
-                placeholder="Enter new password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-              />
+              <div className="flex-row">
+                <label htmlFor="newPassword">New password</label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  placeholder="Enter new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex-row">
 
-              <label htmlFor="confirmPassword">Confirm password</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                placeholder="Confirm new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
+                <label htmlFor="confirmPassword">Confirm password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Confirm new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
 
               {error && <div className="error-message">{error}</div>}
               {successMessage && <div className="success-message">{successMessage}</div>}
 
               <div className="full-width-button">
-                <PrimaryButton text="Reset Password" type="submit" />
+                <PrimaryButton text="Reset password" type="submit" />
               </div>
             </form>
           </div>

@@ -76,7 +76,7 @@
   gap: 24px;
 }
 
-.login-form input {
+.login-form input, .reset-form input {
   padding: 12px;
   border-radius: 10px;
   display: flex;
@@ -88,7 +88,7 @@
   color: var(--text-color);
   border: 3px solid var(--primary-color);
 }
-.login-form label {
+.login-form label, .reset-form label {
   font-weight: 600;
   color: var(--text-color);
   display: block;
