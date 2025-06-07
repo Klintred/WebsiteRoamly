@@ -68,8 +68,8 @@ const Navbar = () => {
       <div className={`nav-links-mobile-container ${menuOpen ? 'open' : ''}`}>
         <ul className="nav-links-mobile">
           <li><Link to="/home" className='nav-link' onClick={() => setMenuOpen(false)}>Home</Link></li>
-          <li><Link to="/my-trips-overview" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
           <li><Link to="/trip-planner" className='nav-link' onClick={() => setMenuOpen(false)}>Create a Trip</Link></li>
+          <li><Link to="/my-trips-overview" className='nav-link' onClick={() => setMenuOpen(false)}>My Trips</Link></li>
           <li className="profile-link">
             <PrimaryButton
               text="Profile"
