@@ -241,7 +241,7 @@ const PlaceDetailPage = () => {
             width="100%"
             height="400px"
             style={{ border: 0, borderRadius: "8px" }}
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBlpxT86DXT-8ugulNwJke4Oncf7yu7UcQ&q=${coordinates}`}
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBY-Z0gGYR4XzB_viSuu5ZzAQoHez3qjLc&q=${coordinates}`}
             allowFullScreen
           />
         )}
