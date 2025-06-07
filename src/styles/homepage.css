@@ -337,7 +337,7 @@
   margin: 20px auto;
   border-radius: 8px;
   border: 3px solid var(--primary-color);
-  padding: 15px 50px;
+  padding: 20px;
 }
 
 .search-filter-content {
@@ -410,6 +410,11 @@
   background-color: var(--background-color);
   position: relative;
 }
+
+.home-header h1 {
+ text-align: center;
+}
+
 .filter-buttons-container {
   margin-left: 10px;
   display: flex;
