@@ -2,6 +2,24 @@ import React, { useState } from 'react';
 import "../../styles/addpopup.css";
 import PrimaryButton from '../Buttons/PrimaryButton';
 import { FaTimes } from 'react-icons/fa';
+
+// Array met de bestandsnamen van vakantie-foto's
+const LOCAL_VACATION_IMAGES = [
+  "ethan-robertson-SYx3UCHZJlo-unsplash.jpg",
+  "haseeb-jamil-zbg2-gyo_hM-unsplash.jpg",
+  "link-hoang-UoqAR2pOxMo-unsplash.jpg",
+  "marissa-grootes-TVllFyGaLEA-unsplash.jpg",
+  "natalya-zaritskaya-SIOdjcYotms-unsplash.jpg",
+  "tron-le-JsuBKjHGDMM-unsplash.jpg",
+  "upgraded-points-KVym2PAn1gA-unsplash.jpg",
+];
+
+// Hulpfunctie voor random afbeelding
+const getRandomImage = () => {
+  const randomIndex = Math.floor(Math.random() * LOCAL_VACATION_IMAGES.length);
+  return `/assets/images/vacation_pictures/${LOCAL_VACATION_IMAGES[randomIndex]}`;
+};
+
 const Popup = ({
   showModal,
   selectedPlace,
@@ -35,37 +53,43 @@ const Popup = ({
           </button>
         )}
 
-        <button className="close-button" onClick={onClose}>   <FaTimes /></button>
+        <button className="close-button" onClick={onClose}> <FaTimes /></button>
         <h1>Add {selectedPlace?.name} to a trip</h1>
 
         {step === 1 && (
           <>
             <h2>Select a trip:</h2>
-            <div
-              className={`trip-cards-popup ${userTrips.length === 1 ? 'align-left' : ''
-                }`}
-            >
-             {[...userTrips].reverse().map(trip => (
-                <div
-                  key={trip._id}
-                  className={`trip-card ${selectedTripId === trip._id ? 'selected' : ''
-                    }`}
-                >
-                  <img src="../assets/images/loginImage.png" alt="Trip" />
-                  <div className="trip-details">
-                    <h3>{trip.TripName}</h3>
-                    <p>{trip.Place}</p>
-                    <p>
-                      {new Date(trip.StartDate).toLocaleDateString()} -{" "}
-                      {new Date(trip.EndDate).toLocaleDateString()}
-                    </p>
-                    <PrimaryButton
-                      text="Choose"
-                      onClick={() => handleTripSelect(trip._id)}
+            <div className={`trip-cards-popup ${userTrips.length === 1 ? 'align-left' : ''}`}>
+              {[...userTrips].reverse().map(trip => {
+                const randomImage = getRandomImage();
+                return (
+                  <div
+                    key={trip._id}
+                    className={`trip-card ${selectedTripId === trip._id ? 'selected' : ''}`}
+                  >
+                    <img
+                      src={randomImage}
+                      alt="Trip"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
+                      }}
                     />
+                    <div className="trip-details">
+                      <h3>{trip.TripName}</h3>
+                      <p>{trip.Place}</p>
+                      <p>
+                        {new Date(trip.StartDate).toLocaleDateString()} -{" "}
+                        {new Date(trip.EndDate).toLocaleDateString()}
+                      </p>
+                      <PrimaryButton
+                        text="Choose"
+                        onClick={() => handleTripSelect(trip._id)}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}
