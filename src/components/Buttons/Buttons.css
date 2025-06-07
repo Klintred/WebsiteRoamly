@@ -26,7 +26,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 40px;
+  padding: 20px;
   border-radius: 5px;
   color: #002766;
   text-decoration: none;
@@ -255,5 +255,8 @@
 @media screen and (min-width: 768px) {
 .accessibility-container span.material-symbols-outlined {
   display: flex;
+}
+.booking-affiliate-btn{
+
 }
 }

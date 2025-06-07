@@ -173,7 +173,6 @@
 }
 .login-image-wrapper {
   display: none;
-  flex: 1;
 }
 
 @media (min-width: 1024px) {
