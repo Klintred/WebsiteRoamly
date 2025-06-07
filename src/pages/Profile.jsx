@@ -229,13 +229,13 @@ const Profile = () => {
                 About me
               </div>
             </Link>
-            <Link className="profile-action-link" to="/profile">
+            <Link className="profile-action-link" to="/my-reviews">
               <div className="profile-action-subcontainer">
                 <span className="material-symbols-outlined">reviews</span>
                 My reviews
               </div>
             </Link>
-            <Link className="profile-action-link" to="/profile">
+            <Link className="profile-action-link" to="/my-points">
               <div className="profile-action-subcontainer">
                 <span className="material-symbols-outlined">star_rate</span>
                 My points
