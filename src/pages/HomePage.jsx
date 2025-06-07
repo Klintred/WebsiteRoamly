@@ -278,7 +278,7 @@ const HomePage = () => {
                 id="location-input"
                 type="text"
                 className="location-input"
-                placeholder="Where are you going or name of place?"
+                placeholder="Search by city, country, or place name..."
                 value={location}
                 onChange={handleSearchInputChange}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
@@ -294,7 +294,7 @@ const HomePage = () => {
                 value={accessibilityFilter}
                 onChange={(e) => setAccessibilityFilter(e.target.value)}
               >
-                <option value="all">All</option>
+                <option value="Select accessibility level">All</option>
                 <option value="Fully accessible">Fully accessible</option>
                 <option value="Adjustments needed">Adjustments needed</option>
                 <option value="Not accessible">Not accessible</option>
