@@ -31,7 +31,7 @@ const Footer = () => {
             <li><Link to="/home" className='footer-link'>Home</Link></li>
             <li><Link to="/my-trips" className='footer-link'>My Trips</Link></li>
             <li><Link to="/points" className='footer-link'>My Points</Link></li>
-            <li><Link to="/trip-planner" className='footer-link'>Create a Trip</Link></li>
+            <li><Link to="/trip-planner" className='footer-link'>Create a trip</Link></li>
             <li><Link to="/profile" className='footer-link'>Profile</Link></li>
           </ul>
           <ul className="footer-links-desktop">
@@ -39,7 +39,7 @@ const Footer = () => {
             <li><Link to="/home" className='footer-link'>Home</Link></li>
             <li><Link to="/my-trips" className='footer-link'>My Trips</Link></li>
             <li><Link to="/points" className='footer-link'>My Points</Link></li>
-            <li><Link to="/trip-planner" className='footer-link'>Create a Trip</Link></li>
+            <li><Link to="/trip-planner" className='footer-link'>Create a trip</Link></li>
             <li><Link to="/profile" className='footer-link'>Profile</Link></li>
           </ul>
           <ul className="footer-links-mobile">

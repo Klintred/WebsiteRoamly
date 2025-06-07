@@ -123,21 +123,10 @@
 
 .success-message {
   color: green;
-  font-size: 15px;
-  margin-top: -10px;
-  margin-bottom: -10px;
   text-align: center;
   font-weight: 600;
 }
 
-.error-message {
-  color: red;
-  font-size: 15px;
-  margin-top: -10px;
-  margin-bottom: -10px;
-  text-align: center;
-  font-weight: 600;
-}
 
 .input-error {
   border: 2px solid red !important;

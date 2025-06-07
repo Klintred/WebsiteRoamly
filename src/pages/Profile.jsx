@@ -242,6 +242,7 @@ const Profile = () => {
               </div>
             </Link>
           </div>
+          <div className="flex-row-container">
           <div className="flex-row">
             <div className="profile-header-container">
               <div className="profile-header">
@@ -255,7 +256,7 @@ const Profile = () => {
                 <div className="profile-left">
                   <div className="profile-image-wrapper">
                     <img
-                      src="/assets/images/default-profile.png"
+                      src="/assets/images/avatar.jpg"
                       alt=""
                       className="profile-image"
                     />
@@ -414,7 +415,7 @@ const Profile = () => {
               </div>
             )}
           </div>
-
+</div>
           {showPasswordModal && (
             <div className="modal-overlay">
               <div className="password-modal">
