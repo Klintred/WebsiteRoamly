@@ -5,16 +5,24 @@ import PrimaryButton from "../components/Buttons/PrimaryButton";
 
 const API_BASE_URL = "https://roamly-api.onrender.com/api";
 
+// Array met de bestandsnamen van jouw vakantie-foto's
+const LOCAL_VACATION_IMAGES = [
+    "ethan-robertson-SYx3UCHZJlo-unsplash.jpg",
+    "haseeb-jamil-zbg2-gyo_hM-unsplash.jpg",
+    "link-hoang-UoqAR2pOxMo-unsplash.jpg",
+    "marissa-grootes-TVllFyGaLEA-unsplash.jpg",
+    "natalya-zaritskaya-SIOdjcYotms-unsplash.jpg",
+    "tron-le-JsuBKjHGDMM-unsplash.jpg",
+    "upgraded-points-KVym2PAn1gA-unsplash.jpg",
+];
+
 const MyTripsOverviewPage = () => {
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [tripToDelete, setTripToDelete] = useState(null);
-
 
     useEffect(() => {
         const fetchTrips = async () => {
@@ -80,6 +88,11 @@ const MyTripsOverviewPage = () => {
         }
     };
 
+    // Hulpfunctie voor een random afbeelding
+    const getRandomImage = () => {
+        const randomIndex = Math.floor(Math.random() * LOCAL_VACATION_IMAGES.length);
+        return `/assets/images/vacation_pictures/${LOCAL_VACATION_IMAGES[randomIndex]}`;
+    };
 
     return (
         <div className="container">
@@ -94,10 +107,20 @@ const MyTripsOverviewPage = () => {
             <div className="all-trips-container">
                 {trips.map((trip) => {
                     const planData = trip.parsedPlan || {};
+                    const randomImage = getRandomImage();
 
                     return (
                         <div key={trip._id} className="trip-card">
-                            <img src="./assets/images/loginImage.png" alt="" />
+                            <img
+                                src={randomImage}
+                                alt="Vacation"
+                                loading="lazy"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src =
+                                        "https://via.placeholder.com/400x300?text=No+Image";
+                                }}
+                            />
                             <div className="trip-details">
                                 <h2 className="trip-title">{trip.TripName}</h2>
                                 <h3 className="trip-country">
@@ -106,7 +129,8 @@ const MyTripsOverviewPage = () => {
                                         : ""}
                                 </h3>
                                 <p className="trip-dates">
-                                    from {new Date(trip.StartDate).toLocaleDateString()} until {new Date(trip.EndDate).toLocaleDateString()}
+                                    from {new Date(trip.StartDate).toLocaleDateString()} until{" "}
+                                    {new Date(trip.EndDate).toLocaleDateString()}
                                 </p>
                                 <div className="button-group">
                                     <PrimaryButton
@@ -125,15 +149,13 @@ const MyTripsOverviewPage = () => {
                     );
                 })}
             </div>
+
             {showModal && (
                 <div className="modal-container">
                     <div className="modal-content">
                         <h1>Are you sure you want to delete this trip?</h1>
                         <div className="modal-container-buttons">
-                            <PrimaryButton
-                                text="Yes, delete"
-                                onClick={handleDeleteConfirmed}
-                            />
+                            <PrimaryButton text="Yes, delete" onClick={handleDeleteConfirmed} />
                             <PrimaryButton
                                 text="Cancel"
                                 variant="secondary"
@@ -143,7 +165,6 @@ const MyTripsOverviewPage = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
