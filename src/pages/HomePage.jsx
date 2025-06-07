@@ -413,7 +413,6 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
             <p className="location-text">{extractCityCountry(place.address)}</p>
           </div>
         </div>
-      </div>
       <div className="button-container">
         {placeId ? (
           <Link to={`/${detailType}/${placeId}`}>
@@ -431,6 +430,7 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
         >
           Add to Trip
         </button>
+      </div>
       </div>
     </div>
   );
