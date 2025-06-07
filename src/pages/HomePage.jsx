@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Popup from '../components/Cards/Popup';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE_URL = 'https://roamly-api.onrender.com';
-
-// Teller om API-requests bij te houden
-let apiRequestCount = 0;
 
 const extractCityCountry = (fullAddress) => {
   if (!fullAddress) return '';
@@ -38,6 +36,7 @@ const HomePage = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+  // Modal state management
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [userTrips, setUserTrips] = useState([]);
@@ -93,6 +92,7 @@ const HomePage = () => {
         console.error("Error fetching user trips:", error);
       }
     };
+
     fetchUserTrips();
   }, []);
 
@@ -171,59 +171,38 @@ const HomePage = () => {
     setError(null);
     setLoading(true);
     try {
-      const cachedData = localStorage.getItem('placesData');
-      const cachedTimestamp = localStorage.getItem('placesDataTimestamp');
-      const now = Date.now();
-      const isCacheValid = cachedData && cachedTimestamp && (now - cachedTimestamp < 24 * 60 * 60 * 1000);
+      const radius = 50000;
+      let hotelData = [], restaurantData = [], activityData = [];
 
-      if (isCacheValid) {
-        const parsedData = JSON.parse(cachedData);
-        setHotels(parsedData.hotels);
-        setRestaurants(parsedData.restaurants);
-        setActivities(parsedData.activities);
-        console.log('📦 Loaded places from localStorage cache!');
-      } else {
-        const radius = 50000;
-        let hotelData = [], restaurantData = [], activityData = [];
+      const fetchHotelPromise = (filter === 'all' || filter === 'hotel')
+        ? fetchPlaces(`hotels ${searchQuery}`, coordinates, radius)
+        : Promise.resolve([]);
 
-        const fetchHotelPromise = (filter === 'all' || filter === 'hotel')
-          ? fetchPlaces(`hotels ${searchQuery}`, coordinates, radius)
-          : Promise.resolve([]);
+      const fetchRestaurantPromise = (filter === 'all' || filter === 'restaurant')
+        ? fetchPlaces(`restaurants ${searchQuery}`, coordinates, radius)
+        : Promise.resolve([]);
 
-        const fetchRestaurantPromise = (filter === 'all' || filter === 'restaurant')
-          ? fetchPlaces(`restaurants ${searchQuery}`, coordinates, radius)
-          : Promise.resolve([]);
+      const fetchActivityPromise = (filter === 'all' || filter === 'activity')
+        ? fetchPlaces(`tourist attractions ${searchQuery}`, coordinates, radius)
+        : Promise.resolve([]);
 
-        const fetchActivityPromise = (filter === 'all' || filter === 'activity')
-          ? fetchPlaces(`tourist attractions ${searchQuery}`, coordinates, radius)
-          : Promise.resolve([]);
+      [hotelData, restaurantData, activityData] = await Promise.all([
+        fetchHotelPromise,
+        fetchRestaurantPromise,
+        fetchActivityPromise
+      ]);
 
-        [hotelData, restaurantData, activityData] = await Promise.all([
-          fetchHotelPromise,
-          fetchRestaurantPromise,
-          fetchActivityPromise
-        ]);
+      const dummyHotel = {
+        id: 'dummy-hotel-1',
+        name: 'Demo Hotel Example',
+        address: '123 Example Street, Amsterdam, Netherlands',
+        photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
+        price: '€120 per night',
+      };
 
-        const dummyHotel = {
-          id: 'dummy-hotel-1',
-          name: 'Demo Hotel Example',
-          address: '123 Example Street, Amsterdam, Netherlands',
-          photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
-          price: '€120 per night',
-        };
-
-        setHotels([dummyHotel, ...hotelData]);
-        setRestaurants(restaurantData);
-        setActivities(activityData);
-
-        localStorage.setItem('placesData', JSON.stringify({
-          hotels: [dummyHotel, ...hotelData],
-          restaurants: restaurantData,
-          activities: activityData
-        }));
-        localStorage.setItem('placesDataTimestamp', now.toString());
-        console.log('✅ Fetched new data from API and cached it!');
-      }
+      setHotels([dummyHotel, ...hotelData]);
+      setRestaurants(restaurantData);
+      setActivities(activityData);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -233,15 +212,12 @@ const HomePage = () => {
 
   const fetchPlaces = async (query, location, radius) => {
     try {
-      apiRequestCount++;
-      console.log(`🔍 API Request #${apiRequestCount} for query: "${query}"`);
       const cleanedQuery = query.trim();
       const locationParam = location ? `&location=${location}` : '';
       const response = await fetch(`${API_BASE_URL}/api/places?query=${encodeURIComponent(cleanedQuery)}${locationParam}&radius=${radius}`);
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error(`❌ API Request failed for query: "${query}"`, error);
       return [];
     }
   };
@@ -278,7 +254,7 @@ const HomePage = () => {
                 id="location-input"
                 type="text"
                 className="location-input"
-                placeholder="Search by city, country, or place name..."
+                placeholder="Where are you going or name of place?"
                 value={location}
                 onChange={handleSearchInputChange}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
@@ -294,7 +270,7 @@ const HomePage = () => {
                 value={accessibilityFilter}
                 onChange={(e) => setAccessibilityFilter(e.target.value)}
               >
-                <option value="Select accessibility level">All</option>
+                <option value="all">All</option>
                 <option value="Fully accessible">Fully accessible</option>
                 <option value="Adjustments needed">Adjustments needed</option>
                 <option value="Not accessible">Not accessible</option>
@@ -340,6 +316,8 @@ const HomePage = () => {
         setSelectedPlace={setSelectedPlace}
         setShowModal={setShowModal}
       />
+
+      {/* Popup Component */}
       <Popup
         showModal={showModal}
         selectedPlace={selectedPlace}
@@ -363,6 +341,7 @@ const HomePage = () => {
                 activity: selectedPlace.name
               })
             });
+            
             setShowModal(false);
             navigate(`/trip-details/${selectedTripId}`);
           } catch (error) {
@@ -377,17 +356,21 @@ const HomePage = () => {
 
 const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loading, getOverallAccessibilityScore, getLabelColor, setSelectedPlace, setShowModal }) => {
   if ((filter !== 'all' && filter !== type)) return null;
+
   const filteredData = data.filter(place => {
     const score = getOverallAccessibilityScore(place.name);
     if (accessibilityFilter === 'all') return true;
     return score === accessibilityFilter;
   });
+
   return (
     <>
       <div className='line'></div>
       <h2>{title}</h2>
       <div className={`search-results-wrapper ${filter === 'all' ? 'wide' : ''}`}>
+
         <div className={`search-results ${filter !== 'all' ? 'wrapped' : 'scrollable'}`}>
+
           {loading
             ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
             : filteredData.map((place) => (
@@ -400,7 +383,8 @@ const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loadin
                 setSelectedPlace={setSelectedPlace}
                 setShowModal={setShowModal}
               />
-            ))}
+            ))
+          }
         </div>
       </div>
     </>
@@ -422,7 +406,6 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
         <img src={place.photo || "https://via.placeholder.com/300x200?text=No+Image"} alt={place.name} className="place-image" />
       </div>
       <div className="content">
-        <div className="content-header-homepage">
         <h3>{place.name}</h3>
         <div className='flex-row'>
           <div className='flex-column'>
@@ -430,7 +413,7 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
             <p className="location-text">{extractCityCountry(place.address)}</p>
           </div>
         </div>
-        </div>
+      </div>
       <div className="button-container">
         {placeId ? (
           <Link to={`/${detailType}/${placeId}`}>
@@ -450,7 +433,6 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
         </button>
       </div>
     </div>
-      </div>
   );
 };
 
