@@ -422,6 +422,7 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
         <img src={place.photo || "https://via.placeholder.com/300x200?text=No+Image"} alt={place.name} className="place-image" />
       </div>
       <div className="content">
+        <div className="content-header-homepage">
         <h3>{place.name}</h3>
         <div className='flex-row'>
           <div className='flex-column'>
@@ -429,7 +430,7 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
             <p className="location-text">{extractCityCountry(place.address)}</p>
           </div>
         </div>
-      </div>
+        </div>
       <div className="button-container">
         {placeId ? (
           <Link to={`/${detailType}/${placeId}`}>
@@ -449,6 +450,7 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
         </button>
       </div>
     </div>
+      </div>
   );
 };
 

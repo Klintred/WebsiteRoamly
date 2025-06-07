@@ -46,7 +46,7 @@
   width: 100%;
   color: var(--primary-color);
   border: 3px solid var(--primary-color);
-  padding: 15px 100px;
+  padding: 12px 0;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, box-shadow 0.3s ease-in-out;
@@ -166,7 +166,7 @@
   width: 100%;
   color: white;
   border: 3px solid var(--primary-color);
-  padding: 15px 100px;
+  padding: 12px 0;
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
@@ -185,6 +185,14 @@
   font-weight: bold;
   margin-top: 10px;
   color: var(--text-color);
+}
+
+.content-header-homepage{
+  display: flex;
+  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100px;
 }
 
 @media (max-width: 768px) {
@@ -303,24 +311,6 @@
     justify-content: center;
   }
 
-  .view-details-button {
-    background-color: var(--primary-color);
-    font-weight: 700;
-    width: 100%;
-    color: white;
-    border: none;
-    padding: 15px 100px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s ease-in-out;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-    text-align: center;
-  }
-
-  .view-details-button:hover {
-    background-color: #0056b3;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
-  }
 
   .place-card:hover {
     transform: scale(1.05);
@@ -531,17 +521,10 @@ button.search-input {
   .accessibility-label {
     padding: 6px 10px;
   }
-
-  .view-details-button {
-    padding: 12px 40px;
-  }
   .accessibility-label {
     padding: 6px 10px;
   }
 
-  .view-details-button {
-    padding: 12px 40px;
-  }
 }
 
 @media (min-width: 768px) {
@@ -564,7 +547,4 @@ button.search-input {
     height: 180px;
   }
 
-  .view-details-button {
-    padding: 12px 60px;
-  }
 }
