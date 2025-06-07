@@ -180,12 +180,15 @@ const Profile = () => {
 
   if (error) {
     return (
-      <div className="profile-wrapper">
+        <div className="modal-container">
+                      <div className="modal-content">
         <h1>Error</h1>
         <p>{error}</p>
+
         <button className="logout-button" onClick={handleLogout}>
           <FaSignOutAlt /> Log in again
         </button>
+      </div>
       </div>
     );
   }
