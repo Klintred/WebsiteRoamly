@@ -27,6 +27,7 @@ const MyTripsDetailPage = () => {
   const [apiKey, setApiKey] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [activityToDelete, setActivityToDelete] = useState(null);
+  const [addedPlaceIds, setAddedPlaceIds] = useState([]);
 
   useEffect(() => {
     const fetchApiKey = async () => {
@@ -93,7 +94,12 @@ const MyTripsDetailPage = () => {
           : `things to do in ${country}`;
     try {
       const results = await fetchPlaceDetails(query);
-      setSuggestedPlaces(results.slice(0, 3));
+      const added = new Set(
+        trip?.parsedPlan?.itinerary?.flatMap(day => day.activities || []) || []
+      );
+
+      const filtered = results.filter(place => !added.has(place.name));
+      setSuggestedPlaces(filtered.slice(0, 3));
     } catch (e) {
       console.error("Suggestion fetch failed", e);
     }
@@ -142,6 +148,31 @@ const MyTripsDetailPage = () => {
       alert("Failed to add activity. Please try again.");
     }
   };
+
+  const handleAddToTrip = async (placeId, activityData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/trips/add-activity`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // or however you handle auth
+        },
+        body: JSON.stringify({
+          tripId,
+          dayIndex,
+          activity: activityData,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to add activity");
+
+      // Remove from suggestions locally
+      setAddedPlaceIds(prev => [...prev, placeId]);
+    } catch (error) {
+      console.error("Error adding to trip:", error);
+    }
+  };
+
 
   const handleRemoveActivity = async (activity) => {
     try {
