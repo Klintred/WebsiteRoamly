@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../../styles/addpopup.css";
 import PrimaryButton from '../Buttons/PrimaryButton';
-
+import { FaTimes } from 'react-icons/fa';
 const Popup = ({
   showModal,
   selectedPlace,
@@ -35,7 +35,7 @@ const Popup = ({
           </button>
         )}
 
-        <button className="close-button" onClick={onClose}>X</button>
+        <button className="close-button" onClick={onClose}>   <FaTimes /></button>
         <h1>Add {selectedPlace?.name} to a trip</h1>
 
         {step === 1 && (

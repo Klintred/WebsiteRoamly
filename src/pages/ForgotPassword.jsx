@@ -34,10 +34,7 @@ const ForgotPassword = () => {
         throw new Error(data.message || "Something went wrong.");
       }
 
-      // ✅ Save the email for use in ResetPassword.jsx
       localStorage.setItem("resetEmail", email);
-
-      setMessage("Recovery code sent! Please check your email.");
 
       setTimeout(() => {
         navigate("/reset-password");
@@ -56,37 +53,40 @@ const ForgotPassword = () => {
 
       <div className="login-form-wrapper">
         <div className="login-screen-container">
-          <button className="back-button" onClick={() => navigate(-1)}>
-            ←
-          </button>
+          <div className="login-screen-subcontainer">
 
-          <h1 className="welcome-heading">Forgot password?</h1>
-          <p className="subheading-text">Please enter your email to recover your account.</p>
+            <button className="back-button" onClick={() => navigate(-1)}>
+              Go back
+            </button>
+            <h1 className="welcome-heading">Forgot password?</h1>
+            <p className="subheading-text">Please enter your email to recover your account.</p>
 
-          <form className="login-form" onSubmit={handleSendCode}>
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <form className="login-form" onSubmit={handleSendCode}>
+              <div className="flex-row">
+                <label htmlFor="email">E-mail</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              {error && <div className="error-message">{error}</div>}
+              {message && <div className="success-message">{message}</div>}
 
-            {error && <div className="error-message">{error}</div>}
-            {message && <div className="success-message">{message}</div>}
+              <div className="full-width-button">
+                <PrimaryButton text="Send code" type="submit" />
+              </div>
+            </form>
 
-            <div className="full-width-button">
-              <PrimaryButton text="Send code" type="submit" />
+            <div className="bottom-login-redirect">
+              Remember password?{" "}
+              <span className="login-link" onClick={() => navigate("/login-screen")}>
+                Login
+              </span>
             </div>
-          </form>
-
-          <div className="bottom-login-redirect">
-            Remember password?{" "}
-            <span className="login-link" onClick={() => navigate("/login-screen")}>
-              Login
-            </span>
           </div>
         </div>
       </div>

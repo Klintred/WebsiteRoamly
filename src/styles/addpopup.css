@@ -169,6 +169,10 @@ h3 {
   left: 0;
 }
 
+.back-button:hover {
+  background-color: rgba(113, 113, 113, 0.2);
+}
+
 .back-button span {
   display: flex;
   align-items: center;

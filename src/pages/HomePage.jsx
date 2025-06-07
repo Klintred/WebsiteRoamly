@@ -343,7 +343,7 @@ const HomePage = () => {
             });
             
             setShowModal(false);
-            navigate("/my-trips-overview");
+            navigate(`/trip-details/${selectedTripId}`);
           } catch (error) {
             alert("Failed to add activity. Please try again.");
           }
