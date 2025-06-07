@@ -100,7 +100,7 @@ h2 {
 .info-input.editable {
   background-color: #f0f4ff;
   color: var(--text-color);
-  border: 2px solid var(--primary-color);
+  border: 3px solid var(--primary-color);
 }
 
 .info-input input {
@@ -190,7 +190,7 @@ h2 {
 
 .package-card {
   background-color: var(--background-color);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--shadow-color);
   border-radius: 20px;
   padding: 32px 24px;
   color: var(--text-color);
@@ -332,7 +332,7 @@ h2 {
   cursor: pointer;
   background-color: var(--background-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--shadow-color);
 }
 
 .profile-action-subcontainer:hover {
@@ -370,7 +370,7 @@ h2 {
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--shadow-color);
   gap: 10px;
   justify-content: space-between;
   align-items: center;

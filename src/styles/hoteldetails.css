@@ -376,6 +376,13 @@ h2 {
   width: 100%;
 }
 
+.review-button-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
 @media (min-width: 768px) {
   .book-button-container-mobile {
     display: none;

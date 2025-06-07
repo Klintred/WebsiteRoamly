@@ -66,9 +66,9 @@ const EntranceReviewPage = () => {
                         <Tag text="No" color="red" isSelected={responses.doorWidthOK === "No"} onClick={(val) => handleTagClick("doorWidthOK", val)} />
                     </QuestionGroup>
                     <QuestionGroup label={questionLabelMap.stepsOrThresholds} field="stepsOrThresholds" required>
-                        <Tag text="No steps/tresholds" color="red" isSelected={responses.stepsOrThresholds === "No steps/tresholds"} onClick={(val) => handleTagClick("stepsOrThresholds", val)} />
-                        <Tag text="Small treshold (less than 2 cm)" color="orange" isSelected={responses.stepsOrThresholds === "Small treshold (less than 2 cm)"} onClick={(val) => handleTagClick("stepsOrThresholds", val)} />
                         <Tag text="Steps present" color="green" isSelected={responses.stepsOrThresholds === "Steps present"} onClick={(val) => handleTagClick("stepsOrThresholds", val)} />
+                        <Tag text="Small treshold (less than 2 cm)" color="orange" isSelected={responses.stepsOrThresholds === "Small treshold (less than 2 cm)"} onClick={(val) => handleTagClick("stepsOrThresholds", val)} />
+                        <Tag text="No steps/tresholds" color="red" isSelected={responses.stepsOrThresholds === "No steps/tresholds"} onClick={(val) => handleTagClick("stepsOrThresholds", val)} />
                     </QuestionGroup>
                     <QuestionGroup label={questionLabelMap.rampAvailable} field="rampAvailable" required>
                         <Tag text="Yes" color="green" isSelected={responses.rampAvailable === "Yes"} onClick={(val) => handleTagClick("rampAvailable", val)} />

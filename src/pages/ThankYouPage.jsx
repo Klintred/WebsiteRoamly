@@ -9,7 +9,7 @@ const ThankYouPage = () => {
   return (
     <div className="thank-you-container">
       <div className="thank-you-card">
-        <h1>🎉 Thank you for your review!</h1>
+        <h1>Thank you for your review!</h1>
         <p>Your feedback helps us improve accessibility for everyone.</p>
 
         <div className="thank-you-buttons">

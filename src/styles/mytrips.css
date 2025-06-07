@@ -10,10 +10,32 @@ h3 {
 }
 
 .trip-card {
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--shadow-color);
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease;
+}
+
+.trip-card-detailpage {
+  border: 1px solid var(--shadow-color);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+  padding: 20px;
+}
+
+.trip-details-detailpage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trip-card-detailpage img,
+.trip-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .trip-card img,
@@ -28,10 +50,14 @@ h3 {
 .trip-details {
   display: flex;
   flex-direction: column;
-  padding: 20px;
   gap: 12px;
+  padding: 20px;
 }
-
+.trip-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
 .trip-title {
   font-size: 1.5rem;
@@ -78,7 +104,7 @@ h3 {
   gap: 20px;
 }
 
-.section-block{
+.section-block {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -100,6 +126,13 @@ h3 {
   gap: 12px;
 }
 
+.activity-item-content {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
 .activity-item {
   background: #fff;
   padding: 20px;
@@ -112,6 +145,7 @@ h3 {
   gap: 8px;
   cursor: grab;
   transition: box-shadow 0.2s ease;
+  justify-content: space-between;
 }
 
 .activity-item:hover {
@@ -166,10 +200,9 @@ h3 {
 .delete-button {
   background-color: var(--error-color);
   color: white;
-  padding: 6px 12px;
+  padding: 10px 20px;
   border: none;
   border-radius: 6px;
-  margin-left: 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
@@ -187,13 +220,32 @@ h3 {
 .activity-number-icon {
   flex-shrink: 0;
 }
-.button-group{
+.button-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+.add-button {
+  margin-top: 0.5rem;
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  opacity: 0.8;
+}
 @media screen and (min-width: 768px) {
   .all-trips-container {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .all-trips-container {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

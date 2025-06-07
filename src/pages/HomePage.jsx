@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import '../styles/homepage.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import Popup from '../components/Cards/Popup'; 
+import Popup from '../components/Cards/Popup';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE_URL = 'https://roamly-api.onrender.com';
 
@@ -20,6 +21,7 @@ const extractCityCountry = (fullAddress) => {
 };
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [hotels, setHotels] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -339,8 +341,9 @@ const HomePage = () => {
                 activity: selectedPlace.name
               })
             });
-            alert(`Added "${selectedPlace.name}" to the trip!`);
+            
             setShowModal(false);
+            navigate(`/trip-details/${selectedTripId}`);
           } catch (error) {
             alert("Failed to add activity. Please try again.");
           }
@@ -364,25 +367,25 @@ const ResultsSection = ({ title, data, filter, accessibilityFilter, type, loadin
     <>
       <div className='line'></div>
       <h2>{title}</h2>
-     <div className={`search-results-wrapper ${filter === 'all' ? 'wide' : ''}`}>
+      <div className={`search-results-wrapper ${filter === 'all' ? 'wide' : ''}`}>
 
-      <div className={`search-results ${filter !== 'all' ? 'wrapped' : 'scrollable'}`}>
+        <div className={`search-results ${filter !== 'all' ? 'wrapped' : 'scrollable'}`}>
 
-        {loading
-          ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
-          : filteredData.map((place) => (
-            <PlaceCard
-              key={place.id || place.place_id}
-              place={place}
-              type={type}
-              getOverallAccessibilityScore={getOverallAccessibilityScore}
-              getLabelColor={getLabelColor}
-              setSelectedPlace={setSelectedPlace}
-              setShowModal={setShowModal}
-            />
-          ))
-        }
-      </div>
+          {loading
+            ? [...Array(5)].map((_, i) => <SkeletonCard key={`${type}-skeleton-${i}`} />)
+            : filteredData.map((place) => (
+              <PlaceCard
+                key={place.id || place.place_id}
+                place={place}
+                type={type}
+                getOverallAccessibilityScore={getOverallAccessibilityScore}
+                getLabelColor={getLabelColor}
+                setSelectedPlace={setSelectedPlace}
+                setShowModal={setShowModal}
+              />
+            ))
+          }
+        </div>
       </div>
     </>
   );
@@ -408,10 +411,6 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
           <div className='flex-column'>
             <span className="material-symbols-outlined">location_on</span>
             <p className="location-text">{extractCityCountry(place.address)}</p>
-          </div>
-          <div className='flex-column'>
-            <span className="material-symbols-outlined">paid</span>
-            <p className="price-text">{place.price || 'Price not available'}</p>
           </div>
         </div>
       </div>

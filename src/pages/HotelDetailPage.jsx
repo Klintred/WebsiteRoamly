@@ -37,7 +37,6 @@ const PlaceDetailPage = () => {
     const fetchPlaceById = async () => {
       setLoading(true);
       try {
-        // ✅ Corrected endpoint here!
         const response = await fetch(`${API_BASE_URL}/api/place/${id}`);
         if (!response.ok) throw new Error("Failed to fetch place details");
         const data = await response.json();
@@ -190,7 +189,7 @@ const PlaceDetailPage = () => {
           />
         </div>
 
-        <div className="review-button-container" style={{ marginTop: "1rem" }}>
+        <div className="review-button-container">
           <PrimaryButton
             text="Write a review"
             to={`/write-review?name=${encodeURIComponent(placeDetails.name)}`}

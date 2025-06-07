@@ -15,7 +15,6 @@
   width: 100%;
   max-width: 400px;
 }
-
 .button-container-wrapper{
   display: flex;
   justify-content: center;
@@ -39,8 +38,7 @@
 }
 
 .booking-affiliate-btn:hover {
-  background-color: #c7c7c7;
-  transform: translateY(-2px);
+  background-color: var(--other-hover-color);
 }
 
 .booking-affiliate-btn .booking-icon {
@@ -54,6 +52,10 @@
   color: var(--background-color) !important;
 }
 
+.login-btn:hover{
+  opacity: 0.9;
+}
+
 .register-btn {
   background-color: var(--background-color);
   color: var(--primary-color);
@@ -61,7 +63,9 @@
   max-width: 400px;
 
 }
-
+.register-btn:hover {
+  background-color: var(--other-hover-color);
+}
 .guest-btn {
   background: none;
   color: var(--text-color);

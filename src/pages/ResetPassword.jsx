@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/resetpassword.css";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
@@ -10,7 +10,6 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
 
-  // On component mount, get email from localStorage
   useEffect(() => {
     const storedEmail = localStorage.getItem("resetEmail");
     if (!storedEmail) {
@@ -19,7 +18,6 @@ const ResetPassword = () => {
       setEmail(storedEmail);
     }
 
-    // Autofocus first input
     const firstInput = document.getElementById("code-0");
     if (firstInput) firstInput.focus();
   }, []);
@@ -96,50 +94,55 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="reset-page-wrapper">
-      <div className="reset-image-wrapper">
+    <div className="login-page-wrapper">
+      <div className="login-image-wrapper">
         <img src="/assets/images/loginImage.png" alt="Reset background" />
       </div>
 
-      <div className="reset-form-wrapper">
-        <div className="reset-screen-container">
-          <button className="back-button" onClick={() => navigate(-1)}>←</button>
+      <div className="login-form-wrapper">
+        <div className="login-screen-container">
+          <div className="login-screen-subcontainer">
 
-          <h1 className="reset-heading">Verification code</h1>
-          <p className="subheading-text">Enter the 6-digit code sent to your email.</p>
+            <button className="back-button" onClick={() => navigate(-1)}>
+              Go back
+            </button>
 
-          <form className="reset-form" onSubmit={handleSubmit}>
-            <div className="code-input-row">
-              {code.map((digit, index) => (
-                <input
-                  key={index}
-                  id={`code-${index}`}
-                  type="text"
-                  maxLength="1"
-                  className="code-input"
-                  value={digit}
-                  onChange={(e) => handleChange(index, e.target.value)}
-                  onPaste={handlePaste}
+            <h1 className="reset-heading">Verification code</h1>
+            <p className="subheading-text">Enter the 6-digit code sent to your email.</p>
+
+            <form className="reset-form" onSubmit={handleSubmit}>
+              <div className="code-input-row">
+                {code.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`code-${index}`}
+                    type="text"
+                    maxLength="1"
+                    className="code-input"
+                    value={digit}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                    onPaste={handlePaste}
+                  />
+                ))}
+              </div>
+
+              {error && <div className="error-message">{error}</div>}
+
+              <div className="full-width-button">
+                <PrimaryButton
+                  text={loading ? "Verifying..." : "Verify"}
+                  type="submit"
+                  disabled={loading}
                 />
-              ))}
+              </div>
+            </form>
+
+            <div className="bottom-login-redirect">
+              Remember password?{" "}
+              <span className="login-link" onClick={() => navigate("/login-screen")}>
+                Login
+              </span>
             </div>
-
-            {error && <div className="error-message">{error}</div>}
-
-            <div className="full-width-button">
-              <PrimaryButton
-                text={loading ? "Verifying..." : "Verify"}
-                type="submit"
-                disabled={loading}
-              />
-            </div>
-          </form>
-
-          <div className="bottom-login-redirect">
-            Remember password?{" "}
-            <span className="login-link" onClick={() => navigate("/login-screen")}>
-              Login
-            </span>
           </div>
         </div>
       </div>

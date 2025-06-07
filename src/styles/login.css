@@ -48,11 +48,9 @@
 }
 
 .login-box {
-  display: flex;
-  flex-direction: column;
+
   width: 100%;
-  max-width: 400px;
-  text-align: center;
+  padding: 20px;
 }
 
 .logo-image {

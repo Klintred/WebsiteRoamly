@@ -64,46 +64,51 @@ const SetNewPassword = () => {
   };
 
   return (
-    <div className="reset-page-wrapper">
-      <div className="reset-image-wrapper">
+    <div className="login-page-wrapper">
+      <div className="login-image-wrapper">
         <img src="/assets/images/loginImage.png" alt="Background" />
       </div>
 
-      <div className="reset-form-wrapper">
-        <div className="reset-screen-container">
-          <button className="back-button" onClick={() => navigate(-1)}>←</button>
+      <div className="login-form-wrapper">
+        <div className="login-screen-container">
+          <div className="login-screen-subcontainer">
 
-          <h1 className="reset-heading">Set a New Password</h1>
-          <p className="subheading-text">Enter and confirm your new password.</p>
+            <button className="back-button" onClick={() => navigate(-1)}>
+              Go back
+            </button>
 
-          <form className="reset-form" onSubmit={handleSubmit}>
-            <label htmlFor="newPassword">New Password</label>
-            <input
-              type="password"
-              id="newPassword"
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
+            <h1 className="reset-heading">Set a new Password</h1>
+            <p className="subheading-text">Enter and confirm your new password.</p>
 
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <form className="reset-form" onSubmit={handleSubmit}>
+              <label htmlFor="newPassword">New password</label>
+              <input
+                type="password"
+                id="newPassword"
+                placeholder="Enter new password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
 
-            {error && <div className="error-message">{error}</div>}
-            {successMessage && <div className="success-message">{successMessage}</div>}
+              <label htmlFor="confirmPassword">Confirm password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm new password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
 
-            <div className="full-width-button">
-              <PrimaryButton text="Reset Password" type="submit" />
-            </div>
-          </form>
+              {error && <div className="error-message">{error}</div>}
+              {successMessage && <div className="success-message">{successMessage}</div>}
+
+              <div className="full-width-button">
+                <PrimaryButton text="Reset Password" type="submit" />
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

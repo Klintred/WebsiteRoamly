@@ -418,14 +418,14 @@ const Profile = () => {
                 </a>
                 <h2>Change Password</h2>
                 <form onSubmit={handlePasswordChange}>
-                  <label>New Password</label>
+                  <label>New password</label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
                   />
-                  <label>Confirm Password</label>
+                  <label>Confirm password</label>
                   <input
                     type="password"
                     value={confirmPassword}
@@ -439,7 +439,7 @@ const Profile = () => {
                     <div className="success-message">{passwordSuccess}</div>
                   )}
                   <button type="submit" className="edit-profile-button">
-                    <FaLockOpen /> Update Password
+                    <FaLockOpen /> Update password
                   </button>
                 </form>
 

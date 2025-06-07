@@ -23,7 +23,7 @@
 .subheading-text {
   color: var(--text-color);
   margin-bottom: 24px;
-  text-align: left;
+  text-align: center;
 }
 
 .bottom-login-redirect {

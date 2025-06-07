@@ -7,13 +7,15 @@
 :root {
   --primary-color: #134097;
   --secondary-color: #6c63ff;
+  --other-hover-color: rgba(19, 64, 151, 0.2);
   --accent-color: #ff9b42;
   --background-color: #fcfcfc;
   --text-color: #231f20;
   --success-color: #4caf50;
   --error-color: #e74c3c;
   --warning-color: #f39c12;
-  --border-color: #dadada;
+  --border-color: #717171;
+  --shadow-color: #dadada;
 }
 
 .App {
@@ -64,6 +66,10 @@ h2 {
   font-size: 1.25rem;
   font-weight: 400;
   margin-bottom: 0.5rem;
+}
+
+h4{
+  margin: 0;
 }
 
 p {
@@ -177,4 +183,19 @@ a {
 input {
   font-size: 16px;
 }
+.view-maps-link{
+  text-decoration: none;
+  color: var(--primary-color);
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--primary-color);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  width: fit-content;
+}
+button{
+ font-size: 16px;
+   font-family: "AcuminPro";
 
+}
