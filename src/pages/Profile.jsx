@@ -38,7 +38,6 @@ const Profile = () => {
         throw new Error(data.message || "Failed to add trips.");
       }
 
-      // After updating tripcount, refetch user data
       await fetchUser();
     } catch (err) {
       console.error("Upgrade failed:", err);
@@ -363,28 +362,35 @@ const Profile = () => {
 
               <div className="packages-grid ">
                 {[
-                  { title: "Free", description: "Free access to the accessibility reviews." },
+                  { title: "Free", price: "€0", description: "Free access to the accessibility reviews." },
                   { title: "Pay-per-use", price: "€1.49 per trip", description: "Ideal for occasional users who want AI-powered trip planning without a subscription.", amount: 1 },
                   { title: "Trip Bundle", price: "€9.99 for 10 trips", description: "Great for frequent users who want affordable access to AI trip planning.", amount: 10 },
                   { title: "Trip Bundle", price: "€19.99 for 25 trips", description: "Great for frequent users who want affordable access to AI trip planning.", amount: 25 },
-
-                ].map((pkg) => (
-                  <div key={pkg.title} className="package-card">
-                    <p className="package-price">{pkg.price}</p>
-                    <div className="package-info">
-                      <h3>{pkg.title}</h3>
-                      <p className="package-description">
-                        {pkg.description}
-                      </p>
+                ].map((pkg) => {
+                  const isFree = pkg.title === "Free";
+                  return (
+                    <div key={pkg.title} className="package-card">
+                      {pkg.price && <p className="package-price">{pkg.price}</p>}
+                      <div className="package-info">
+                        <h3>{pkg.title}</h3>
+                        <p className="package-description">{pkg.description}</p>
+                      </div>
+                      {isFree ? (
+                        <button className="package-button current-plan" disabled>
+                          Current plan
+                        </button>
+                      ) : (
+                        <button
+                          className="package-button"
+                          onClick={() => handleUpgrade(pkg.amount)}
+                        >
+                          Upgrade
+                        </button>
+                      )}
                     </div>
-                    <button
-                      className="package-button"
-                      onClick={() => handleUpgrade(pkg.amount)}
-                    >
-                      Upgrade
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
+
               </div>
             )}
             {packageType === "company" && (

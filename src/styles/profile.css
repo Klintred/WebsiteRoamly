@@ -6,7 +6,13 @@ h2 {
   display: flex;
   justify-content: center;
 }
-
+.package-button:disabled,
+.package-button.current-plan {
+  cursor: not-allowed;
+  border: none;
+  font-weight: bold;
+  opacity: 0.8;
+}
 .profile-wrapper {
   background-color: var(--background-color);
   padding: 40px 20px;
@@ -204,7 +210,8 @@ h2 {
   justify-content: space-between;
 }
 
-.package-card h3, .package-card p{
+.package-card h3,
+.package-card p {
   text-align: center;
 }
 
