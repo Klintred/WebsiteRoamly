@@ -1,8 +1,33 @@
-# React + Vite
+# Roamly - Accessible Travel Planner
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> ⚠️ **Note:** Logging in might take a few seconds, especially when the server is waking up from idle (Render free tier).
 
-Currently, two official plugins are available:
+Roamly is a web application that helps users discover hotels, restaurants, and activities with accessibility in mind. Users can search for places, view accessibility ratings, and plan trips accordingly.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+
+- 🔍 **Search** for hotels, restaurants, and tourist attractions based on location.
+- ♿ **Accessibility filtering** by overall accessibility score.
+- 🏨 View **details** and accessibility scores of each place.
+- 🧳 **Add places to your trip** with an integrated trip planner.
+- 🌍 Support for map-based location search.
+- 🔒 User authentication for managing trips.
+
+## Tech Stack
+
+- **Frontend:** React, React Router, react-loading-skeleton
+- **Backend API:** Hosted at [`https://roamly-api.onrender.com`](https://roamly-api.onrender.com)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or newer)
+- npm or yarn
+
+### Installation
+
+```bash
+git clone https://github.com/Klintred/WebsiteRoamly
+cd WebsiteRoamly
+npm install
