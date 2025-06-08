@@ -44,17 +44,6 @@ const HomePage = () => {
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
   useEffect(() => {
-    const dummyHotel = {
-      id: 'dummy-hotel-1',
-      name: 'Demo Hotel Example',
-      address: '123 Example Street, Amsterdam, Netherlands',
-      photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
-      price: '€120 per night',
-    };
-    setHotels([dummyHotel]);
-  }, []);
-
-  useEffect(() => {
     if (location) {
       fetchCoordinates(location);
     }
@@ -192,15 +181,7 @@ const HomePage = () => {
         fetchActivityPromise
       ]);
 
-      const dummyHotel = {
-        id: 'dummy-hotel-1',
-        name: 'Demo Hotel Example',
-        address: '123 Example Street, Amsterdam, Netherlands',
-        photo: 'https://via.placeholder.com/300x200?text=Demo+Hotel',
-        price: '€120 per night',
-      };
-
-      setHotels([dummyHotel, ...hotelData]);
+      setHotels(hotelData);
       setRestaurants(restaurantData);
       setActivities(activityData);
     } catch (error) {
@@ -341,7 +322,7 @@ const HomePage = () => {
                 activity: selectedPlace.name
               })
             });
-            
+
             setShowModal(false);
             navigate(`/trip-details/${selectedTripId}`);
           } catch (error) {
@@ -413,24 +394,24 @@ const PlaceCard = ({ place, type, getOverallAccessibilityScore, getLabelColor, s
             <p className="location-text">{extractCityCountry(place.address)}</p>
           </div>
         </div>
-      <div className="button-container">
-        {placeId ? (
-          <Link to={`/${detailType}/${placeId}`}>
-            <button className="view-details-button">View details</button>
-          </Link>
-        ) : (
-          <button className="view-details-button" disabled>No details available</button>
-        )}
-        <button
-          className="add-to-trip-button"
-          onClick={() => {
-            setSelectedPlace(place);
-            setShowModal(true);
-          }}
-        >
-          Add to Trip
-        </button>
-      </div>
+        <div className="button-container">
+          {placeId ? (
+            <Link to={`/${detailType}/${placeId}`}>
+              <button className="view-details-button">View details</button>
+            </Link>
+          ) : (
+            <button className="view-details-button" disabled>No details available</button>
+          )}
+          <button
+            className="add-to-trip-button"
+            onClick={() => {
+              setSelectedPlace(place);
+              setShowModal(true);
+            }}
+          >
+            Add to Trip
+          </button>
+        </div>
       </div>
     </div>
   );

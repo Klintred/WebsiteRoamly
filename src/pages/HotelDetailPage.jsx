@@ -17,21 +17,6 @@ const PlaceDetailPage = () => {
   const [error, setError] = useState(null);
   const [averageAnswers, setAverageAnswers] = useState({});
 
-  const dummyPlaces = {
-    'dummy-hotel-1': {
-      id: 'dummy-hotel-1',
-      name: 'Demo Hotel Example',
-      address: '123 Example Street, Amsterdam, Netherlands',
-      photo: './assets/images/loginImage.jpg',
-      price: '€120 per night',
-      description: 'This is a demo hotel used for preview and testing purposes.',
-      accessibilityScore: 'Good',
-      location: {
-        lat: 52.3676,
-        lng: 4.9041
-      }
-    }
-  };
 
   useEffect(() => {
     const fetchPlaceById = async () => {
