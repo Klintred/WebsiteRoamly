@@ -17,7 +17,6 @@ const PlaceDetailPage = () => {
   const [error, setError] = useState(null);
   const [averageAnswers, setAverageAnswers] = useState({});
 
-
   useEffect(() => {
     const fetchPlaceById = async () => {
       setLoading(true);
@@ -51,13 +50,8 @@ const PlaceDetailPage = () => {
       }
     };
 
-    if (id in dummyPlaces) {
-      setPlaceDetails(dummyPlaces[id]);
-      setCoordinates(`${dummyPlaces[id].location.lat},${dummyPlaces[id].location.lng}`);
-      setLoading(false);
-    } else {
-      fetchPlaceById();
-    }
+    // ✅ Alleen deze regel is nodig
+    fetchPlaceById();
   }, [id]);
 
   useEffect(() => {
